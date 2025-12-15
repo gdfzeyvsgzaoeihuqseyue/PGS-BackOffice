@@ -14,49 +14,63 @@ export const useBlogStore = defineStore('blog', {
 
     // --- Articles ---
     async fetchArticles() {
-      // Placeholder endpoint - verify if there is a list endpoint
-      const { data } = await useAPI<BlogArticle[]>('/blog/articles-list') // Verify URL
-      if (data.value) this.articles = data.value
+      const { data } = await useAPI<any>('/public/blog/get-article')
+      // Map response assuming it might be wrapped or direct array
+      if (data.value) {
+        this.articles = Array.isArray(data.value) ? data.value : (data.value.items || [])
+      }
     },
     async addArticle(article: Partial<BlogArticle>) {
       await useAPI('/admin/blog/add-article', { method: 'POST', body: article })
+      await this.fetchArticles()
     },
     async updateArticle(id: string, article: Partial<BlogArticle>) {
       await useAPI(`/admin/blog/update-article/${id}`, { method: 'PUT', body: article })
+      await this.fetchArticles()
     },
     async deleteArticle(id: string) {
       await useAPI(`/admin/blog/delete-article/${id}`, { method: 'DELETE' })
+      await this.fetchArticles()
     },
 
     // --- Authors ---
     async fetchAuthors() {
-      // Placeholder endpoint
-      const { data } = await useAPI<BlogAuthor[]>('/blog/authors') // Verify URL
-      if (data.value) this.authors = data.value
+      const { data } = await useAPI<any>('/public/blog/get-author')
+      if (data.value) {
+        this.authors = Array.isArray(data.value) ? data.value : (data.value.items || [])
+      }
     },
     async addAuthor(author: Partial<BlogAuthor>) {
       await useAPI('/admin/blog/add-author', { method: 'POST', body: author })
+      await this.fetchAuthors()
     },
     async updateAuthor(id: string, author: Partial<BlogAuthor>) {
       await useAPI(`/admin/blog/update-author/${id}`, { method: 'PUT', body: author })
+      await this.fetchAuthors()
     },
     async deleteAuthor(id: string) {
       await useAPI(`/blog/delete-author/${id}`, { method: 'DELETE' })
+      await this.fetchAuthors()
     },
 
     // --- Categories ---
     async fetchCategories() {
-      const { data } = await useAPI<BlogCategory[]>('/blog/categories') // Verify URL
-      if (data.value) this.categories = data.value
+      const { data } = await useAPI<any>('/public/blog/get-category')
+      if (data.value) {
+        this.categories = Array.isArray(data.value) ? data.value : (data.value.items || [])
+      }
     },
     async addCategory(item: Partial<BlogCategory>) {
       await useAPI('/admin/blog/add-category', { method: 'POST', body: item })
+      await this.fetchCategories()
     },
     async updateCategory(id: string, item: Partial<BlogCategory>) {
       await useAPI(`/admin/blog/update-category/${id}`, { method: 'PUT', body: item })
+      await this.fetchCategories()
     },
     async deleteCategory(id: string) {
       await useAPI(`/admin/blog/delete-category/${id}`, { method: 'DELETE' })
+      await this.fetchCategories()
     }
   }
 })

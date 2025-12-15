@@ -3,46 +3,125 @@
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 fade-in-up">
       <div>
         <h2 class="text-2xl font-bold text-slate-800">Auteurs</h2>
-        <p class="text-slate-500 mt-1">Gérer les auteurs du blog</p>
+        <p class="text-slate-500 mt-1">Gérer les auteurs</p>
       </div>
-      <button
+      <button @click="openModal"
         class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 shadow-sm hover:shadow-md">
         <IconPlus size="20" />
         <span>Nouvel Auteur</span>
       </button>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-8 text-center text-slate-500">
-      <IconUsers size="48" class="mx-auto text-slate-300 mb-4" />
-      <p>Fonctionnalité en cours de développement.</p>
+    <!-- Data List -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div v-if="blogStore.loading && !authors.length" class="p-8 text-center text-slate-500">Chargement...</div>
+      <div v-else-if="!authors.length" class="p-8 text-center text-slate-500">Aucun auteur trouvé.</div>
+
+      <table v-else class="w-full text-left">
+        <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-bold">
+          <tr>
+            <th class="px-6 py-4">Nom</th>
+            <th class="px-6 py-4">Rôle</th>
+            <th class="px-6 py-4 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          <tr v-for="author in authors" :key="author.id" class="hover:bg-slate-50/50">
+            <td class="px-6 py-4 font-medium text-slate-800">{{ author.name }}</td>
+            <td class="px-6 py-4 text-slate-500">{{ author.role }}</td>
+            <td class="px-6 py-4 text-right flex justify-end gap-2">
+              <button @click="edit(author)" class="p-1 text-slate-400 hover:text-blue-500">
+                <IconPencil size="18" />
+              </button>
+              <button @click="remove(author.id)" class="p-1 text-slate-400 hover:text-red-500">
+                <IconTrash size="18" />
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+
+    <!-- Modal -->
+    <BaseModal :is-open="isModalOpen" :title="editingId ? 'Modifier Auteur' : 'Nouvel Auteur'" @close="closeModal">
+      <form @submit.prevent="save" class="space-y-4">
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-1">Nom</label>
+          <input v-model="form.name" type="text" required
+            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-1">Slug</label>
+          <input v-model="form.slug" type="text" required
+            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-1">Rôle</label>
+          <input v-model="form.role" type="text"
+            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
+        </div>
+
+        <div class="flex justify-end gap-3 mt-6">
+          <button type="button" @click="closeModal"
+            class="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg">Annuler</button>
+          <button type="submit"
+            class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700">Enregistrer</button>
+        </div>
+      </form>
+    </BaseModal>
   </div>
 </template>
 
 <script setup>
-import { IconUsers, IconPlus } from '@tabler/icons-vue'
+import { IconArticle, IconPlus, IconPencil, IconTrash } from '@tabler/icons-vue'
+import { useBlogStore } from '~/stores/blog'
 
 definePageMeta({
   layout: 'admin',
   title: 'Blog - Auteurs'
 })
+
+const blogStore = useBlogStore()
+const { authors } = storeToRefs(blogStore)
+
+await blogStore.fetchAuthors()
+
+const isModalOpen = ref(false)
+const editingId = ref(null)
+const form = reactive({ name: '', slug: '', role: 'Rédacteur' })
+
+const openModal = () => {
+  editingId.value = null
+  form.name = ''
+  form.slug = ''
+  form.role = 'Rédacteur'
+  isModalOpen.value = true
+}
+
+const closeModal = () => isModalOpen.value = false
+
+const edit = (author) => {
+  editingId.value = author.id
+  form.name = author.name
+  form.slug = author.slug
+  form.role = author.role
+  isModalOpen.value = true
+}
+
+const save = async () => {
+  try {
+    if (editingId.value) {
+      await blogStore.updateAuthor(editingId.value, { ...form })
+    } else {
+      await blogStore.addAuthor({ ...form })
+    }
+    closeModal()
+  } catch (e) {
+    alert('Erreur: ' + e.message)
+  }
+}
+
+const remove = async (id) => {
+  if (confirm('Supprimer ?')) await blogStore.deleteAuthor(id)
+}
 </script>
-
-<style scoped>
-.fade-in-up {
-  animation: fadeInUp 0.4s ease-out forwards;
-  opacity: 0;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>
