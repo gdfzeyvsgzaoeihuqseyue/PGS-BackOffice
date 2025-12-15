@@ -7,6 +7,11 @@
         <span>Retour</span>
       </button>
       <div class="flex gap-2">
+        <button @click="openModal"
+          class="text-emerald-600 bg-emerald-50 hover:bg-emerald-100 px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2">
+          <IconPencil size="20" />
+          <span>Modifier</span>
+        </button>
         <button @click="remove"
           class="text-red-600 bg-red-50 hover:bg-red-100 px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2">
           <IconTrash size="20" />
@@ -35,16 +40,34 @@
         </div>
         <div class="flex justify-between items-center py-3 border-b border-slate-100">
           <span class="text-slate-500 font-medium">Articles associés</span>
-          <span class="font-bold text-slate-800">{{ category.articles?.length || 0 }}</span>
+          <span class="font-bold text-slate-800">{{ computedArticleCount }}</span>
         </div>
       </div>
     </div>
+
+    <!-- Edit Modal -->
+    <BaseModal :is-open="isModalOpen" title="Modifier Catégorie" @close="closeModal">
+      <form @submit.prevent="save" class="space-y-4">
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-1">Nom</label>
+          <input v-model="form.name" type="text" required
+            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all" />
+        </div>
+        <div class="flex justify-end gap-3 mt-6 pt-4 border-t">
+          <button type="button" @click="closeModal"
+            class="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg">Annuler</button>
+          <button type="submit"
+            class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 shadow-sm font-medium">Enregistrer</button>
+        </div>
+      </form>
+    </BaseModal>
+
   </div>
   <div v-else class="text-center p-12 text-slate-500">Catégorie introuvable...</div>
 </template>
 
 <script setup>
-import { IconArrowLeft, IconCategory, IconTrash } from '@tabler/icons-vue'
+import { IconArrowLeft, IconCategory, IconTrash, IconPencil } from '@tabler/icons-vue'
 import { useBlogStore } from '~/stores/blog'
 
 definePageMeta({
@@ -55,14 +78,47 @@ definePageMeta({
 const route = useRoute()
 const router = useRouter()
 const blogStore = useBlogStore()
-const { categories } = storeToRefs(blogStore)
+const { categories, articles } = storeToRefs(blogStore)
+
+await Promise.all([
+  blogStore.fetchCategories(),
+  blogStore.fetchArticles()
+])
 
 const category = computed(() => {
   return categories.value.find(c => c.slug === route.params.slug)
 })
 
-if (!category.value && !categories.value.length) {
-  await blogStore.fetchCategories()
+const computedArticleCount = computed(() => {
+  if (!category.value || !articles.value) return 0
+  return articles.value.filter(a => {
+    const catRef = a.category
+    if (!catRef) return false
+    if (typeof catRef === 'object') return catRef.id === category.value.id || catRef.slug === category.value.slug
+    return catRef === category.value.id
+  }).length
+})
+
+// Edit Logic
+const isModalOpen = ref(false)
+const form = reactive({ name: '' })
+
+const openModal = () => {
+  if (!category.value) return
+  form.name = category.value.name
+  isModalOpen.value = true
+}
+
+const closeModal = () => isModalOpen.value = false
+
+const save = async () => {
+  try {
+    await blogStore.updateCategory(category.value.id, { ...form })
+    closeModal()
+    await blogStore.fetchCategories()
+  } catch (e) {
+    alert('Erreur: ' + e.message)
+  }
 }
 
 const remove = async () => {

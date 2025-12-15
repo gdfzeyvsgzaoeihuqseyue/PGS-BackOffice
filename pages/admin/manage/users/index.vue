@@ -5,7 +5,10 @@
             <h2 class="text-2xl font-bold text-slate-800">Gestion Utilisateurs</h2>
             <p class="text-slate-500 mt-1">Liste complète des utilisateurs enregistrés</p>
          </div>
-         <div class="flex gap-3">
+         <div class="flex items-center gap-4">
+            <div class="px-4 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm font-medium text-slate-600">
+               Total: <span class="font-bold text-slate-800">{{ userStore.total || users.length }}</span>
+            </div>
             <div class="relative group">
                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                   <IconSearch size="18" />
