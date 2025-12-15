@@ -1,0 +1,26 @@
+{
+  "name": "bo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@headlessui/vue": "^1.7.23",
+    "@pinia/nuxt": "^0.11.3",
+    "@tabler/icons-vue": "^3.36.0",
+    "nuxt": "^3.20.2",
+    "pinia": "^3.0.4",
+    "vue": "^3.5.25",
+    "vue-router": "^4.6.3"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "@types/node": "^25.0.2",
+    "vue-tsc": "^3.1.8"
+  }
+}
