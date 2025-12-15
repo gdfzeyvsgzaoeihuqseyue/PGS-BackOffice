@@ -29,9 +29,20 @@ export const useUserStore = defineStore('user', {
         // Helper to normalize response structure
         const responseData = data.value
         if (responseData) {
-          this.users = responseData.items || responseData.users || []
-          this.total = responseData.total || 0
-          this.totalPages = responseData.totalPages || 1
+          const rawUsers = responseData.users || responseData.items || []
+          this.users = rawUsers.map((u: any) => ({
+            ...u,
+            fullName: u.fullName || `${u.firstName || ''} ${u.lastName || ''}`.trim()
+          }))
+
+          // Handle pagination structure from listUser.json: { pagination: { total, totalPages, ... } }
+          if (responseData.pagination) {
+            this.total = responseData.pagination.total || 0
+            this.totalPages = responseData.pagination.totalPages || 1
+          } else {
+            this.total = responseData.total || 0
+            this.totalPages = responseData.totalPages || 1
+          }
         }
       } catch (e) {
         // Handle error

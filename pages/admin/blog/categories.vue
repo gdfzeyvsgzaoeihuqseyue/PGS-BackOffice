@@ -27,7 +27,11 @@
         </thead>
         <tbody class="divide-y divide-slate-100">
           <tr v-for="cat in categories" :key="cat.id" class="hover:bg-slate-50/50">
-            <td class="px-6 py-4 font-medium text-slate-800">{{ cat.name }}</td>
+            <td class="px-6 py-4 font-medium text-slate-800">
+              <NuxtLink :to="`/admin/blog/categories/${cat.slug}`" class="hover:text-emerald-600 transition-colors">
+                {{ cat.name }}
+              </NuxtLink>
+            </td>
             <td class="px-6 py-4 text-slate-500">{{ cat.slug }}</td>
             <td class="px-6 py-4 text-right flex justify-end gap-2">
               <button @click="edit(cat)" class="p-1 text-slate-400 hover:text-blue-500">

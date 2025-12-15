@@ -1,0 +1,32 @@
+{
+  "success": true,
+  "message": "Liste des auteurs récupérée avec succès.",
+  "nb": 2,
+  "nbOnPage": 2,
+  "currentPage": 1,
+  "totalPages": 1,
+  "data": [
+    {
+      "createdAt": 1759458220653,
+      "updatedAt": 1759458220653,
+      "id": "68df33ac605c6ce8ac0a5588",
+      "slug": "contributeur-externe",
+      "name": "Contributeur externe",
+      "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=Brooklynn",
+      "role": "Proposer des articles, ou en généré.",
+      "bio": "Autre contributeurs, y compris les articles généré par IA.",
+      "social": {}
+    },
+    {
+      "createdAt": 1755771503191,
+      "updatedAt": 1755772651660,
+      "id": "68a6f26fb286ce0dfb5cf572",
+      "slug": "equipe-technique",
+      "name": "Équipe technique",
+      "avatar": "https://api.dicebear.com/9.x/avataaars/svg?seed=Destiny",
+      "role": "Développeurs principaux",
+      "bio": "Notre équipe d'ingénieurs passionnés qui construisent les solutions PGS.",
+      "social": {}
+    }
+  ]
+}

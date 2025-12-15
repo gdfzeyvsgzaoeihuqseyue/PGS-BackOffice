@@ -36,16 +36,19 @@
                <tbody class="divide-y divide-slate-100">
                   <tr v-for="user in users" :key="user.id" class="hover:bg-slate-50/50 transition-colors group">
                      <td class="px-6 py-4">
-                        <div class="flex items-center gap-3">
+                        <NuxtLink :to="`/admin/users/${user.id}`"
+                           class="flex items-center gap-3 group/link hover:opacity-80 transition-opacity">
                            <div
                               class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-600 flex items-center justify-center font-bold text-sm">
                               {{ user.fullName ? user.fullName.charAt(0).toUpperCase() : 'U' }}
                            </div>
                            <div>
-                              <div class="font-medium text-slate-900">{{ user.fullName || 'Sans nom' }}</div>
+                              <div
+                                 class="font-medium text-slate-900 group-hover/link:text-emerald-600 transition-colors">
+                                 {{ user.fullName || 'Sans nom' }}</div>
                               <div class="text-xs text-slate-400">@{{ user.username }}</div>
                            </div>
-                        </div>
+                        </NuxtLink>
                      </td>
                      <td class="px-6 py-4 text-slate-600 text-sm font-medium">{{ user.email }}</td>
                      <td class="px-6 py-4">

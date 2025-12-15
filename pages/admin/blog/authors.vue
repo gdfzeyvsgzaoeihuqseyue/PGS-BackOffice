@@ -27,7 +27,11 @@
         </thead>
         <tbody class="divide-y divide-slate-100">
           <tr v-for="author in authors" :key="author.id" class="hover:bg-slate-50/50">
-            <td class="px-6 py-4 font-medium text-slate-800">{{ author.name }}</td>
+            <td class="px-6 py-4 font-medium text-slate-800">
+              <NuxtLink :to="`/admin/blog/authors/${author.slug}`" class="hover:text-emerald-600 transition-colors">
+                {{ author.name }}
+              </NuxtLink>
+            </td>
             <td class="px-6 py-4 text-slate-500">{{ author.role }}</td>
             <td class="px-6 py-4 text-right flex justify-end gap-2">
               <button @click="edit(author)" class="p-1 text-slate-400 hover:text-blue-500">

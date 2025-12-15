@@ -15,9 +15,10 @@ export const useBlogStore = defineStore('blog', {
     // --- Articles ---
     async fetchArticles() {
       const { data } = await useAPI<any>('/public/blog/get-article')
-      // Map response assuming it might be wrapped or direct array
-      if (data.value) {
-        this.articles = Array.isArray(data.value) ? data.value : (data.value.items || [])
+      if (data.value && data.value.data) {
+        this.articles = data.value.data
+      } else if (Array.isArray(data.value)) {
+        this.articles = data.value
       }
     },
     async addArticle(article: Partial<BlogArticle>) {
@@ -36,8 +37,10 @@ export const useBlogStore = defineStore('blog', {
     // --- Authors ---
     async fetchAuthors() {
       const { data } = await useAPI<any>('/public/blog/get-author')
-      if (data.value) {
-        this.authors = Array.isArray(data.value) ? data.value : (data.value.items || [])
+      if (data.value && data.value.data) {
+        this.authors = data.value.data
+      } else if (Array.isArray(data.value)) {
+        this.authors = data.value
       }
     },
     async addAuthor(author: Partial<BlogAuthor>) {
@@ -56,8 +59,10 @@ export const useBlogStore = defineStore('blog', {
     // --- Categories ---
     async fetchCategories() {
       const { data } = await useAPI<any>('/public/blog/get-category')
-      if (data.value) {
-        this.categories = Array.isArray(data.value) ? data.value : (data.value.items || [])
+      if (data.value && data.value.data) {
+        this.categories = data.value.data
+      } else if (Array.isArray(data.value)) {
+        this.categories = data.value
       }
     },
     async addCategory(item: Partial<BlogCategory>) {

@@ -27,7 +27,11 @@
         </thead>
         <tbody class="divide-y divide-slate-100">
           <tr v-for="article in articles" :key="article.id" class="hover:bg-slate-50/50">
-            <td class="px-6 py-4 font-medium text-slate-800">{{ article.title }}</td>
+            <td class="px-6 py-4 font-medium text-slate-800">
+              <NuxtLink :to="`/admin/blog/articles/${article.slug}`" class="hover:text-emerald-600 transition-colors">
+                {{ article.title }}
+              </NuxtLink>
+            </td>
             <td class="px-6 py-4"><span
                 class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold">Publié</span></td>
             <td class="px-6 py-4 text-right flex justify-end gap-2">

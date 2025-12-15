@@ -28,9 +28,19 @@ export const useLearnerStore = defineStore('learner', {
 
         const responseData = data.value
         if (responseData) {
-          this.learners = responseData.items || responseData.learners || []
-          this.total = responseData.total || 0
-          this.totalPages = responseData.totalPages || 1
+          const rawLearners = responseData.learners || responseData.items || []
+          this.learners = rawLearners.map((u: any) => ({
+            ...u,
+            fullName: u.fullName || `${u.firstName || ''} ${u.lastName || ''}`.trim()
+          }))
+
+          if (responseData.pagination) {
+            this.total = responseData.pagination.total || 0
+            this.totalPages = responseData.pagination.totalPages || 1
+          } else {
+            this.total = responseData.total || 0
+            this.totalPages = responseData.totalPages || 1
+          }
         }
       } catch (e) {
         console.error('Fetch learners error', e)
