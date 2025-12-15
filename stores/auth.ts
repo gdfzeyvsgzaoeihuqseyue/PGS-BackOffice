@@ -1,42 +1,57 @@
 import { defineStore } from 'pinia'
-
-interface User {
-  id: number | string
-  email: string
-  fullName: string
-  role: string
-  // Add other fields as needed
-}
+import type { SuperAdmin, LoginCredentials, AuthResponse } from '~/types/auth'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: null as User | null,
-    loading: true // Start loading to block until checked
+    user: null as SuperAdmin | null,
+    loading: false,
+    initialized: false
   }),
   actions: {
     async fetchUser() {
+      // Avoid fetching if already loading
+      if (this.loading) return
+
       this.loading = true
       try {
-        const { data, error } = await useAPI<User>('/superadmin/profile')
+        const { data, error } = await useAPI<{ superAdmin: SuperAdmin }>('/superadmin/profile')
+
         if (error.value) {
           this.user = null
-        } else {
-          this.user = data.value
+        } else if (data.value?.superAdmin) {
+          this.user = data.value.superAdmin
         }
       } catch (e) {
         this.user = null
       } finally {
         this.loading = false
+        this.initialized = true
       }
     },
-    async login(body: any) {
-      const { data, error } = await useAPI('/superadmin/auth/login', {
-        method: 'POST',
-        body
-      })
-      if (error.value) throw error.value
-      // Fetch user profile after successful login to populate state
-      await this.fetchUser()
+    async login(credentials: LoginCredentials) {
+      this.loading = true
+      try {
+        const { data, error } = await useAPI<AuthResponse>('/superadmin/auth/login', {
+          method: 'POST',
+          body: credentials
+        })
+
+        if (error.value) throw error.value
+
+        // Update user state immediately from login response if provided
+        if (data.value?.superAdmin) {
+          this.user = data.value.superAdmin
+        } else {
+          // Otherwise fetch it
+          await this.fetchUser()
+        }
+
+        return true
+      } catch (e) {
+        throw e
+      } finally {
+        this.loading = false
+      }
     },
     async logout() {
       try {
@@ -50,6 +65,7 @@ export const useAuthStore = defineStore('auth', {
     }
   },
   getters: {
-    isAuthenticated: (state) => !!state.user
+    isAuthenticated: (state) => !!state.user,
+    fullName: (state) => state.user ? `${state.user.firstName} ${state.user.lastName}` : ''
   }
 })
