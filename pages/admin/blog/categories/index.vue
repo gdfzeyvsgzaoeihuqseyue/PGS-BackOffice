@@ -5,19 +5,27 @@
         <h2 class="text-2xl font-bold text-slate-800">Catégories</h2>
         <p class="text-slate-500 mt-1">Gérer les catégories</p>
       </div>
-      <button @click="openModal"
-        class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 shadow-sm hover:shadow-md">
-        <IconPlus size="20" />
-        <span>Nouvelle Catégorie</span>
-      </button>
+
+      <div class="flex items-center gap-4">
+        <div class="px-4 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm font-medium text-slate-600">
+          Total: <span class="font-bold text-slate-800">{{ categories.length }}</span>
+        </div>
+        <button @click="openModal"
+          class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 shadow-sm hover:shadow-md">
+          <IconPlus size="20" />
+          <span>Nouvelle Catégorie</span>
+        </button>
+      </div>
     </div>
 
     <!-- Data List -->
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <div v-if="blogStore.loading && !categories.length" class="p-8 text-center text-slate-500">Chargement...</div>
-      <div v-else-if="!categories.length" class="p-8 text-center text-slate-500">Aucune catégorie trouvée.</div>
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden text-center"
+      v-if="!categories.length && !blogStore.loading">
+      <div class="p-12 text-slate-500">Aucune catégorie trouvée.</div>
+    </div>
 
-      <table v-else class="w-full text-left">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" v-else>
+      <table class="w-full text-left">
         <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-bold">
           <tr>
             <th class="px-6 py-4">Nom</th>
@@ -32,7 +40,7 @@
                 {{ cat.name }}
               </NuxtLink>
             </td>
-            <td class="px-6 py-4 text-slate-500">{{ cat.slug }}</td>
+            <td class="px-6 py-4 text-slate-500 bg-slate-50/50 font-mono text-sm">{{ cat.slug }}</td>
             <td class="px-6 py-4 text-right flex justify-end gap-2">
               <button @click="edit(cat)" class="p-1 text-slate-400 hover:text-blue-500">
                 <IconPencil size="18" />
@@ -53,19 +61,16 @@
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-1">Nom</label>
           <input v-model="form.name" type="text" required
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
-        </div>
-        <div>
-          <label class="block text-sm font-bold text-slate-700 mb-1">Slug</label>
-          <input v-model="form.slug" type="text" required
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
+            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all" />
         </div>
 
-        <div class="flex justify-end gap-3 mt-6">
+        <!-- Slug removed -->
+
+        <div class="flex justify-end gap-3 mt-6 pt-4 border-t">
           <button type="button" @click="closeModal"
             class="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg">Annuler</button>
           <button type="submit"
-            class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700">Enregistrer</button>
+            class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 shadow-sm font-medium">Enregistrer</button>
         </div>
       </form>
     </BaseModal>
@@ -88,12 +93,11 @@ await blogStore.fetchCategories()
 
 const isModalOpen = ref(false)
 const editingId = ref(null)
-const form = reactive({ name: '', slug: '' })
+const form = reactive({ name: '' })
 
 const openModal = () => {
   editingId.value = null
   form.name = ''
-  form.slug = ''
   isModalOpen.value = true
 }
 
@@ -102,16 +106,20 @@ const closeModal = () => isModalOpen.value = false
 const edit = (cat) => {
   editingId.value = cat.id
   form.name = cat.name
-  form.slug = cat.slug
   isModalOpen.value = true
 }
 
+const slugify = (text) => text.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-').replace(/^-+/, '').replace(/-+$/, '');
+
 const save = async () => {
   try {
+    const payload = { ...form }
+    if (!editingId.value) payload.slug = slugify(form.name)
+
     if (editingId.value) {
-      await blogStore.updateCategory(editingId.value, { ...form })
+      await blogStore.updateCategory(editingId.value, payload)
     } else {
-      await blogStore.addCategory({ ...form })
+      await blogStore.addCategory(payload)
     }
     closeModal()
   } catch (e) {
@@ -120,6 +128,6 @@ const save = async () => {
 }
 
 const remove = async (id) => {
-  if (confirm('Supprimer ?')) await blogStore.deleteCategory(id)
+  if (confirm('Supprimer cet élément ?')) await blogStore.deleteCategory(id)
 }
 </script>

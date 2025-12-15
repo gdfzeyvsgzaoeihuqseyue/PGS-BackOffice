@@ -1,11 +1,18 @@
 <template>
   <div v-if="category">
-    <div class="mb-6">
+    <div class="mb-6 flex items-center justify-between">
       <button @click="$router.back()"
-        class="flex items-center gap-2 text-slate-500 hover:text-slate-700 transition-colors mb-4">
+        class="flex items-center gap-2 text-slate-500 hover:text-slate-700 transition-colors">
         <IconArrowLeft size="18" />
         <span>Retour</span>
       </button>
+      <div class="flex gap-2">
+        <button @click="remove"
+          class="text-red-600 bg-red-50 hover:bg-red-100 px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2">
+          <IconTrash size="20" />
+          <span>Supprimer</span>
+        </button>
+      </div>
     </div>
 
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-8 max-w-lg mx-auto">
@@ -37,7 +44,7 @@
 </template>
 
 <script setup>
-import { IconArrowLeft, IconCategory } from '@tabler/icons-vue'
+import { IconArrowLeft, IconCategory, IconTrash } from '@tabler/icons-vue'
 import { useBlogStore } from '~/stores/blog'
 
 definePageMeta({
@@ -46,6 +53,7 @@ definePageMeta({
 })
 
 const route = useRoute()
+const router = useRouter()
 const blogStore = useBlogStore()
 const { categories } = storeToRefs(blogStore)
 
@@ -55,5 +63,13 @@ const category = computed(() => {
 
 if (!category.value && !categories.value.length) {
   await blogStore.fetchCategories()
+}
+
+const remove = async () => {
+  if (!category.value) return
+  if (confirm('Supprimer cette catégorie ?')) {
+    await blogStore.deleteCategory(category.value.id)
+    router.push('/admin/blog/categories')
+  }
 }
 </script>
