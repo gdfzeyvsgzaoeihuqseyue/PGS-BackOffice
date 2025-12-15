@@ -16,8 +16,8 @@
 
       <!-- Gestion Group -->
       <SidebarGroup label="Gestion Utilisateurs" :collapsed="collapsed" :icon="IconUsers">
-        <NavItem to="/admin/users" icon="IconUsers" label="Utilisateurs" :collapsed="collapsed" />
-        <NavItem to="/admin/learners" icon="IconSchool" label="Apprenants" :collapsed="collapsed" />
+        <NavItem to="/admin/manage/users" icon="IconUsers" label="Utilisateurs" :collapsed="collapsed" />
+        <NavItem to="/admin/manage/learners" icon="IconSchool" label="Apprenants" :collapsed="collapsed" />
       </SidebarGroup>
 
       <!-- Blog Group -->

@@ -17,6 +17,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   // Guest Redirect
   if (isLoginRoute && authStore.isAuthenticated) {
-    return navigateTo('/admin/users') // Default landing
+    return navigateTo('/admin/manage/users') // Default landing
   }
 })

@@ -2,15 +2,15 @@
    <div>
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 fade-in-up">
          <div>
-            <h2 class="text-2xl font-bold text-slate-800">Gestion Apprenants</h2>
-            <p class="text-slate-500 mt-1">Liste des apprenants</p>
+            <h2 class="text-2xl font-bold text-slate-800">Gestion Utilisateurs</h2>
+            <p class="text-slate-500 mt-1">Liste complète des utilisateurs enregistrés</p>
          </div>
          <div class="flex gap-3">
             <div class="relative group">
                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                   <IconSearch size="18" />
                </div>
-               <input v-model="search" type="text" placeholder="Rechercher..."
+               <input v-model="search" type="text" placeholder="Rechercher un utilisateur..."
                   class="pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none w-64 transition-all shadow-sm group-hover:shadow-md" />
             </div>
          </div>
@@ -26,7 +26,7 @@
                <thead>
                   <tr
                      class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-bold tracking-wider">
-                     <th class="px-6 py-4">Apprenant</th>
+                     <th class="px-6 py-4">Utilisateur</th>
                      <th class="px-6 py-4">Email</th>
                      <th class="px-6 py-4">Statut</th>
                      <th class="px-6 py-4">Date Inscription</th>
@@ -34,13 +34,13 @@
                   </tr>
                </thead>
                <tbody class="divide-y divide-slate-100">
-                  <tr v-for="user in learners" :key="user.id" class="hover:bg-slate-50/50 transition-colors group">
+                  <tr v-for="user in users" :key="user.id" class="hover:bg-slate-50/50 transition-colors group">
                      <td class="px-6 py-4">
-                        <NuxtLink :to="`/admin/learners/${user.id}`"
+                        <NuxtLink :to="`/admin/manage/users/${user.id}`"
                            class="flex items-center gap-3 group/link hover:opacity-80 transition-opacity">
                            <div
-                              class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-cyan-100 text-blue-600 flex items-center justify-center font-bold text-sm">
-                              {{ user.fullName ? user.fullName.charAt(0).toUpperCase() : 'L' }}
+                              class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-600 flex items-center justify-center font-bold text-sm">
+                              {{ user.fullName ? user.fullName.charAt(0).toUpperCase() : 'U' }}
                            </div>
                            <div>
                               <div
@@ -87,6 +87,13 @@
                                        {{ user.isActive ? 'Suspendre' : 'Activer' }}
                                     </button>
                                     </MenuItem>
+                                    <MenuItem v-slot="{ active }">
+                                    <button @click="handleVerifyEmail(user)"
+                                       :class="[active ? 'bg-blue-50 text-blue-900' : 'text-slate-700', 'group flex w-full items-center rounded-lg px-2 py-2 text-sm transition-colors']">
+                                       <IconMailCheck class="mr-2 h-4 w-4 text-blue-500" />
+                                       Vérifier Email
+                                    </button>
+                                    </MenuItem>
                                  </div>
                                  <div class="px-1 py-1">
                                     <MenuItem v-slot="{ active }">
@@ -102,9 +109,9 @@
                         </Menu>
                      </td>
                   </tr>
-                  <tr v-if="learners.length === 0 && !loading">
+                  <tr v-if="users.length === 0 && !loading">
                      <td colspan="5" class="px-6 py-12 text-center text-slate-500">
-                        <p class="text-sm">Aucun apprenant trouvé.</p>
+                        <p class="text-sm">Aucun utilisateur trouvé pour cette recherche.</p>
                      </td>
                   </tr>
                </tbody>
@@ -114,13 +121,13 @@
          <!-- Pagination -->
          <div class="px-6 py-4 border-t border-slate-200 flex items-center justify-between bg-slate-50/50"
             v-if="totalPages > 1">
-            <button @click="learnerStore.setPage(page - 1)" :disabled="page <= 1"
+            <button @click="userStore.setPage(page - 1)" :disabled="page <= 1"
                class="flex items-center px-4 py-2 border border-slate-200 bg-white rounded-lg hover:bg-slate-50 hover:border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-medium text-slate-600 shadow-sm">
                Précédent
             </button>
             <span class="text-sm font-medium text-slate-600">Page {{ page }} <span class="text-slate-400">/</span> {{
                totalPages }}</span>
-            <button @click="learnerStore.setPage(page + 1)" :disabled="page >= totalPages"
+            <button @click="userStore.setPage(page + 1)" :disabled="page >= totalPages"
                class="flex items-center px-4 py-2 border border-slate-200 bg-white rounded-lg hover:bg-slate-50 hover:border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-medium text-slate-600 shadow-sm">
                Suivant
             </button>
@@ -131,48 +138,59 @@
 
 <script setup lang="ts">
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
-import { IconDotsVertical, IconBan, IconCheck, IconTrash, IconSearch } from '@tabler/icons-vue'
-import { useLearnerStore } from '~/stores/learner'
+import { IconDotsVertical, IconBan, IconCheck, IconTrash, IconMailCheck, IconSearch } from '@tabler/icons-vue'
+import { useUserStore } from '~/stores/user'
 import { useToast } from '~/composables/useToast'
-import type { Learner } from '~/types/user'
+import type { User } from '~/types/user'
 
 definePageMeta({
    layout: 'admin',
-   title: 'Apprenants'
+   title: 'Utilisateurs'
 })
 
-const learnerStore = useLearnerStore()
-const { learners, totalPages, page, loading } = storeToRefs(learnerStore)
+const userStore = useUserStore()
+const { users, totalPages, page, loading } = storeToRefs(userStore)
 const { add: notify } = useToast()
 
 const search = ref('')
 let searchTimeout: NodeJS.Timeout
 
-await learnerStore.fetchLearners()
+// Initialize data
+await userStore.fetchUsers()
 
+// Debounce search
 watch(search, (val) => {
    clearTimeout(searchTimeout)
    searchTimeout = setTimeout(() => {
-      learnerStore.fetchLearners(val)
+      userStore.fetchUsers(val)
    }, 300)
 })
 
-const handleStatusToggle = async (user: Learner) => {
+const handleStatusToggle = async (user: User) => {
    try {
       const action = user.isActive ? 'suspend' : 'activate'
-      await learnerStore.manageLearner(user.id, action)
-      notify(`Apprenant ${user.isActive ? 'suspendu' : 'activé'} avec succès`)
+      await userStore.manageUser(user.id, action)
+      notify(`Utilisateur ${user.isActive ? 'suspendu' : 'activé'} avec succès`)
    } catch (e) {
       notify('Erreur lors de la mise à jour', 'error')
    }
 }
 
-const handleDelete = async (user: Learner) => {
-   if (!confirm('Êtes-vous sûr de vouloir supprimer cet apprenant ?')) return
+const handleVerifyEmail = async (user: User) => {
+   try {
+      await userStore.manageUser(user.id, 'verify_email')
+      notify('Email vérifié avec succès')
+   } catch (e) {
+      notify('Erreur lors de la vérification', 'error')
+   }
+}
+
+const handleDelete = async (user: User) => {
+   if (!confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.')) return
 
    try {
-      await learnerStore.manageLearner(user.id, 'delete')
-      notify('Apprenant supprimé avec succès')
+      await userStore.manageUser(user.id, 'delete')
+      notify('Utilisateur supprimé avec succès')
    } catch (e) {
       notify('Erreur lors de la suppression', 'error')
    }
