@@ -41,8 +41,26 @@
 
       <div class="w-px h-6 bg-slate-300 mx-1 self-center"></div>
 
-      <!-- Groupe : Couleurs (Fond bloc, Texte, Surlignage) -->
+      <!-- Groupe : Couleurs (Fond bloc, Texte, Surlignage) + Taille -->
       <div class="flex items-center gap-1">
+        <!-- Taille de police -->
+        <div class="flex items-center mx-1 relative group" title="Taille de police">
+          <IconTypography size="18" class="text-slate-600 mr-1" />
+          <select @change="editor.chain().focus().setFontSize($event.target.value).run()"
+            class="border border-slate-300 rounded text-xs p-1 bg-white text-slate-700 outline-none hover:border-emerald-500 focus:border-emerald-500 w-16">
+            <option value="" selected>Auto</option>
+            <option value="12px">12px</option>
+            <option value="14px">14px</option>
+            <option value="16px">16px</option>
+            <option value="18px">18px</option>
+            <option value="20px">20px</option>
+            <option value="24px">24px</option>
+            <option value="30px">30px</option>
+          </select>
+        </div>
+
+        <div class="w-px h-4 bg-slate-300 mx-1 self-center"></div>
+
         <!-- Arrière-plan Bloc (Custom Div) -->
         <label class="cursor-pointer p-1.5 rounded hover:bg-slate-200 flex items-center justify-center relative group"
           title="Arrière-plan Bloc (Card)">
@@ -83,18 +101,18 @@
         <button type="button" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
           :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
           class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors font-black text-sm" title="Titre H1">
-          H1
+          <IconH1 size="18" />
         </button>
         <button type="button" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
           :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
           class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors font-bold text-sm" title="Titre H2">
-          H2
+          <IconH2 size="18" />
         </button>
         <button type="button" @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
           :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
           class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors font-semibold text-sm"
           title="Titre H3">
-          H3
+          <IconH3 size="18" />
         </button>
       </div>
 
@@ -202,7 +220,6 @@
 </template>
 
 <script setup>
-// --- Imports des dépendances Vue et Tiptap ---
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import { Node, Extension, mergeAttributes } from '@tiptap/core'
 
@@ -227,7 +244,8 @@ import {
   IconList, IconListNumbers, IconArrowBackUp, IconArrowForwardUp,
   IconPalette, IconHighlight, IconLetterCaseLower,
   IconCode, IconQuote, IconSeparator, IconAlignLeft, IconAlignCenter, IconAlignRight, IconAlignJustified,
-  IconLink, IconPhoto, IconTable
+  IconLink, IconPhoto, IconTable, IconTypography,
+  IconH1, IconH2, IconH3
 } from '@tabler/icons-vue'
 
 // --- Props ---
@@ -307,6 +325,55 @@ const addImage = () => {
 // --- Extensions Personnalisées ---
 
 /**
+ * FontSize Extension
+ * Permet de définir la taille de la police via un style inline ou un attribut.
+ */
+const FontSize = Extension.create({
+  name: 'fontSize',
+  addOptions() {
+    return {
+      types: ['textStyle'],
+    }
+  },
+  addGlobalAttributes() {
+    return [
+      {
+        types: this.options.types,
+        attributes: {
+          fontSize: {
+            default: null,
+            parseHTML: element => element.style.fontSize.replace(/['"]+/g, ''),
+            renderHTML: attributes => {
+              if (!attributes.fontSize) {
+                return {}
+              }
+              return {
+                style: `font-size: ${attributes.fontSize}`,
+              }
+            },
+          },
+        },
+      },
+    ]
+  },
+  addCommands() {
+    return {
+      setFontSize: fontSize => ({ chain }) => {
+        return chain()
+          .setMark('textStyle', { fontSize })
+          .run()
+      },
+      unsetFontSize: () => ({ chain }) => {
+        return chain()
+          .setMark('textStyle', { fontSize: null })
+          .removeEmptyTextStyle()
+          .run()
+      },
+    }
+  },
+})
+
+/**
  * DivNode: Noeud personnalisé pour supporter les conteneurs DIV génériques
  * Permet de styliser des blocs de contenu.
  */
@@ -382,7 +449,8 @@ const editor = useEditor({
     TableHeader,
     TableCell,
     DivNode, // Notre noeud Div personnalisé
-    StyleAttribute // Notre attribut Style personnalisé
+    StyleAttribute, // Notre attribut Style personnalisé
+    FontSize // Extension personnalisée pour la taille de police
   ],
   editorProps: {
     attributes: {
@@ -419,6 +487,101 @@ onBeforeUnmount(() => {
   /* slate-300 */
   color: #0f172a;
   /* slate-900 */
+}
+
+/* Styles pour les titres */
+.ProseMirror h1 {
+  font-size: 2em;
+  font-weight: 800;
+  margin-top: 0.8em;
+  margin-bottom: 0.4em;
+  line-height: 1.2;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin-top: 0.8em;
+  margin-bottom: 0.4em;
+  line-height: 1.3;
+}
+
+.ProseMirror h3 {
+  font-size: 1.25em;
+  font-weight: 600;
+  margin-top: 0.6em;
+  margin-bottom: 0.4em;
+  line-height: 1.4;
+}
+
+.ProseMirror h4 {
+  font-size: 1em;
+  font-weight: 600;
+  margin-top: 0.6em;
+  margin-bottom: 0.4em;
+  line-height: 1.5;
+}
+
+/* Styles pour les listes */
+.ProseMirror ul {
+  list-style-type: disc;
+  padding-left: 1.5em;
+  margin: 1em 0;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+  padding-left: 1.5em;
+  margin: 1em 0;
+}
+
+.ProseMirror li {
+  margin-bottom: 0.25em;
+}
+
+/* Styles pour les liens */
+.ProseMirror a {
+  color: #059669;
+  /* emerald-600 */
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ProseMirror a:hover {
+  color: #047857;
+  /* emerald-700 */
+}
+
+/* Styles pour les citations (blockquotes) */
+.ProseMirror blockquote {
+  border-left: 4px solid #cbd5e1;
+  /* slate-300 */
+  padding-left: 1em;
+  margin: 1em 0;
+  font-style: italic;
+  color: #475569;
+  /* slate-600 */
+  background: #f8fafc;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  padding-right: 0.5em;
+}
+
+/* Styles pour les blocs de code */
+.ProseMirror pre {
+  background: #1e293b;
+  color: #f8fafc;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  margin: 1rem 0;
+}
+
+.ProseMirror code {
+  color: inherit;
+  padding: 0;
+  background: none;
+  font-size: 0.8rem;
 }
 
 /* Styles des tableaux dans l'éditeur */
