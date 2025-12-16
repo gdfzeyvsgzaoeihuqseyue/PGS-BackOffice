@@ -77,7 +77,12 @@ module.exports = {
       return exits.success({
         logs: logs.map(log => ({
           id: log.id,
-          // Pas besoin de populate admin complexe car c'est soi-même
+          admin: this.req.admin ? {
+            id: this.req.admin.id,
+            firstName: this.req.admin.firstName,
+            lastName: this.req.admin.lastName,
+            role: this.req.admin.role
+          } : null,
           action: log.action,
           targetType: log.targetType,
           targetId: log.targetId,
