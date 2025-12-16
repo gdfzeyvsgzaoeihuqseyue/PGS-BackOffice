@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <AppLoader v-if="loading" />
+  <AppError v-else-if="error" :message="error" @retry="refresh" />
+  <div v-else>
     <div class="mb-6 flex items-center justify-between">
       <button @click="$router.back()"
         class="flex items-center gap-2 text-slate-500 hover:text-slate-700 transition-colors">
@@ -132,7 +134,7 @@
     </BaseModal>
 
     <div v-if="!article" class="text-center p-12 text-slate-500">
-      Chargement ou article introuvable...
+      Article introuvable...
     </div>
   </div>
 </template>
@@ -149,13 +151,15 @@ definePageMeta({
 const route = useRoute()
 const router = useRouter()
 const blogStore = useBlogStore()
-const { articles, authors, categories } = storeToRefs(blogStore)
+const { articles, authors, categories, loading, error } = storeToRefs(blogStore)
 
-await Promise.all([
-  blogStore.fetchArticles(),
-  blogStore.fetchAuthors(),
+const refresh = () => {
+  blogStore.fetchArticles()
+  blogStore.fetchAuthors()
   blogStore.fetchCategories()
-])
+}
+
+refresh()
 
 const article = computed(() => {
   return articles.value.find(a => a.slug === route.params.slug)

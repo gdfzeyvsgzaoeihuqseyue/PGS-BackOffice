@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <AppLoader v-if="loading" />
+  <AppError v-else-if="error" :message="error" @retry="refresh" />
+  <div v-else>
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 fade-in-up">
       <div>
         <h2 class="text-2xl font-bold text-slate-800">Articles de Blog</h2>
@@ -81,7 +83,7 @@
 
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-1">Contenu (HTML)</label>
-          <RichTextEditor v-model="form.content" />
+          <!-- <RichTextEditor v-model="form.content" /> -->
         </div>
 
         <div>
@@ -138,14 +140,16 @@ definePageMeta({
 })
 
 const blogStore = useBlogStore()
-const { articles, authors, categories } = storeToRefs(blogStore)
+const { articles, authors, categories, loading, error } = storeToRefs(blogStore)
 
 // Fetch all necessary data
-await Promise.all([
-  blogStore.fetchArticles(),
-  blogStore.fetchAuthors(),
+const refresh = () => {
+  blogStore.fetchArticles()
+  blogStore.fetchAuthors()
   blogStore.fetchCategories()
-])
+}
+
+refresh()
 
 const isModalOpen = ref(false)
 const editingId = ref(null)

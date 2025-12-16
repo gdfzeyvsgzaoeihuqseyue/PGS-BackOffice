@@ -91,9 +91,16 @@
               <span class="text-slate-500">IP Source</span>
               <span class="font-mono text-slate-700">{{ log.ipAddress || 'N/A' }}</span>
             </li>
-            <li class="flex justify-between">
+            <li class="flex justify-between items-center">
               <span class="text-slate-500">Status</span>
-              <span class="font-mono text-slate-700">{{ log.status || 'N/A' }}</span>
+              <span class="px-2 py-1 rounded text-xs font-bold uppercase tracking-wide" :class="{
+                'bg-emerald-100 text-emerald-800': log.status === 'success',
+                'bg-red-100 text-red-800': log.status === 'failed',
+                'bg-amber-100 text-amber-800': log.status === 'pending',
+                'bg-slate-100 text-slate-800': !['success', 'failed', 'pending'].includes(log.status)
+              }">
+                {{ log.status || 'N/A' }}
+              </span>
             </li>
           </ul>
         </div>
