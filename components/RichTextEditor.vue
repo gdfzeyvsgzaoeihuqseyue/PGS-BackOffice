@@ -2,35 +2,52 @@
   <div
     class="rich-text-editor border rounded-lg overflow-hidden bg-white focus-within:ring-2 focus-within:ring-emerald-500 transition-shadow">
     <div v-if="editor" class="toolbar bg-slate-50 border-b p-2 flex flex-wrap gap-1 items-center">
-      <button type="button" @click="editor.chain().focus().toggleBold().run()"
-        :class="{ 'is-active': editor.isActive('bold') }"
-        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors" title="Gras">
-        <IconBold size="18" />
-      </button>
-      <button type="button" @click="editor.chain().focus().toggleItalic().run()"
-        :class="{ 'is-active': editor.isActive('italic') }"
-        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors" title="Italique">
-        <IconItalic size="18" />
-      </button>
-      <button type="button" @click="editor.chain().focus().toggleStrike().run()"
-        :class="{ 'is-active': editor.isActive('strike') }"
-        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors" title="Barré">
-        <IconStrikethrough size="18" />
-      </button>
+      <div class="flex items-center gap-1">
+        <button type="button" @click="editor.chain().focus().toggleBold().run()"
+          :class="{ 'is-active': editor.isActive('bold') }"
+          class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors" title="Gras">
+          <IconBold size="18" />
+        </button>
+        <button type="button" @click="editor.chain().focus().toggleItalic().run()"
+          :class="{ 'is-active': editor.isActive('italic') }"
+          class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors" title="Italique">
+          <IconItalic size="18" />
+        </button>
+        <button type="button" @click="editor.chain().focus().toggleStrike().run()"
+          :class="{ 'is-active': editor.isActive('strike') }"
+          class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors" title="Barré">
+          <IconStrikethrough size="18" />
+        </button>
+      </div>
 
       <div class="w-px h-6 bg-slate-300 mx-1 self-center"></div>
 
       <!-- Color Pickers -->
       <div class="flex items-center gap-1">
+        <!-- Block Background -->
+        <label class="cursor-pointer p-1.5 rounded hover:bg-slate-200 flex items-center justify-center relative group"
+          title="Arrière-plan Bloc (Card)">
+          <IconPalette size="18" class="text-slate-600" />
+          <input type="color" @input="updateBlockBackground($event.target.value)"
+            class="absolute opacity-0 w-full h-full cursor-pointer top-0 left-0" />
+
+          <div class="absolute bottom-0 right-0 min-w-[8px] h-2 rounded-full border border-white"
+            :style="{ backgroundColor: getBlockBackgroundColor() }"></div>
+        </label>
+
+        <!-- Text Color -->
         <label class="cursor-pointer p-1.5 rounded hover:bg-slate-200 flex items-center justify-center relative group"
           title="Couleur du texte">
-          <IconPalette size="18" class="text-slate-600" />
+          <IconLetterCaseLower size="18" class="text-slate-600" />
           <input type="color" @input="editor.chain().focus().setColor($event.target.value).run()"
             :value="editor.getAttributes('textStyle').color || '#000000'"
             class="absolute opacity-0 w-full h-full cursor-pointer top-0 left-0" />
+
           <div class="absolute bottom-0 right-0 w-2 h-2 rounded-full border border-white"
             :style="{ backgroundColor: editor.getAttributes('textStyle').color || '#000000' }"></div>
         </label>
+
+        <!-- Highlight -->
         <label class="cursor-pointer p-1.5 rounded hover:bg-slate-200 flex items-center justify-center relative group"
           title="Surlignage (Fond)">
           <IconHighlight size="18" class="text-slate-600" />
@@ -44,16 +61,30 @@
 
       <div class="w-px h-6 bg-slate-300 mx-1 self-center"></div>
 
-      <button type="button" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-        :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
-        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors font-bold" title="Titre H2">
-        H2
-      </button>
-      <button type="button" @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
-        :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
-        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors font-semibold" title="Titre H3">
-        H3
-      </button>
+
+      <div class="flex items-center gap-1">
+        <button type="button" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
+          :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
+          class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors font-black" title="Titre H1">
+          H1
+        </button>
+
+        <button type="button" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
+          :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
+          class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors font-bold" title="Titre H2">
+          H2
+        </button>
+        <button type="button" @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
+          :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
+          class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors font-semibold" title="Titre H3">
+          H3
+        </button>
+        <button type="button" @click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
+          :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
+          class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors font-medium" title="Titre H4">
+          H4
+        </button>
+      </div>
 
       <div class="w-px h-6 bg-slate-300 mx-1 self-center"></div>
 
@@ -92,7 +123,7 @@ import { TextStyle } from '@tiptap/extension-text-style'
 import { Color } from '@tiptap/extension-color'
 import Highlight from '@tiptap/extension-highlight'
 
-import { IconBold, IconItalic, IconStrikethrough, IconList, IconListNumbers, IconArrowBackUp, IconArrowForwardUp, IconPalette, IconHighlight } from '@tabler/icons-vue'
+import { IconBold, IconItalic, IconStrikethrough, IconList, IconListNumbers, IconArrowBackUp, IconArrowForwardUp, IconPalette, IconHighlight, IconLetterCaseLower } from '@tabler/icons-vue'
 
 const props = defineProps({
   modelValue: {
@@ -102,6 +133,31 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
+
+const updateBlockBackground = (color) => {
+  if (!editor.value) return
+
+  // Wrap selection in a styled div or update existing
+  if (editor.value.isActive('div')) {
+    editor.value.chain().focus().updateAttributes('div', { style: `background-color: ${color}; padding: 1rem; border-radius: 0.5rem;` }).run()
+  } else {
+    // If not in a div, wrap current selection
+    // Note: setNode for 'div' might be tricky if schema requires specific content. 
+    // Usually 'wrapIn' is better for container nodes.
+    // Our 'div' node has content 'block+'.
+    editor.value.chain().focus().wrapIn('div', { style: `background-color: ${color}; padding: 1rem; border-radius: 0.5rem;` }).run()
+  }
+}
+
+const getBlockBackgroundColor = () => {
+  if (!editor.value) return 'transparent'
+  const attrs = editor.value.getAttributes('div')
+  if (!attrs.style) return 'transparent'
+
+  // Simple regex to extract color
+  const match = attrs.style.match(/background-color:\s*([^;]+)/)
+  return match ? match[1] : 'transparent'
+}
 
 // Custom Node for DIV support
 const DivNode = Node.create({
