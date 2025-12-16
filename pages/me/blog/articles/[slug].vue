@@ -207,7 +207,7 @@ const remove = async () => {
   if (!article.value) return
   if (confirm('Supprimer cet article ?')) {
     await blogStore.deleteArticle(article.value.id)
-    router.push('/admin/blog/articles')
+    router.push('/me/blog/articles')
   }
 }
 </script>

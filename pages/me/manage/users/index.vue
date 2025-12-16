@@ -37,7 +37,7 @@
                <tbody class="divide-y divide-slate-100">
                   <tr v-for="user in users" :key="user.id" class="hover:bg-slate-50/50 transition-colors group">
                      <td class="px-6 py-4">
-                        <NuxtLink :to="`/admin/manage/users/${user.id}`"
+                        <NuxtLink :to="`/me/manage/users/${user.id}`"
                            class="flex items-center gap-3 group/link hover:opacity-80 transition-opacity">
                            <div
                               class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-600 flex items-center justify-center font-bold text-sm">

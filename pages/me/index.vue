@@ -78,11 +78,11 @@
         <p class="text-slate-500 mb-6">Sélectionnez un module dans la barre latérale pour commencer à gérer votre
           application.</p>
         <div class="flex justify-center gap-4">
-          <NuxtLink to="/admin/blog/articles"
+          <NuxtLink to="/me/blog/articles"
             class="px-4 py-2 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-bold hover:bg-emerald-100 transition-colors">
             Gérer le Blog
           </NuxtLink>
-          <NuxtLink to="/admin/manage/users"
+          <NuxtLink to="/me/manage/users"
             class="px-4 py-2 bg-slate-50 text-slate-700 rounded-lg text-sm font-bold hover:bg-slate-100 transition-colors">
             Gérer les Utilisateurs
           </NuxtLink>

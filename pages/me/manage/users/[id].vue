@@ -153,7 +153,7 @@ const handleDelete = async () => {
   try {
     await userStore.manageUser(user.value.id, 'delete')
     notify('Utilisateur supprimé avec succès')
-    router.push('/admin/manage/users')
+    router.push('/me/manage/users')
   } catch (e) {
     notify('Erreur lors de la suppression', 'error')
   }

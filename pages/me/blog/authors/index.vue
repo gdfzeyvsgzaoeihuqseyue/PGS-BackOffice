@@ -39,7 +39,7 @@
         <tbody class="divide-y divide-slate-100">
           <tr v-for="author in authors" :key="author.id" class="hover:bg-slate-50/50">
             <td class="px-6 py-4 font-medium text-slate-800">
-              <NuxtLink :to="`/admin/blog/authors/${author.slug}`"
+              <NuxtLink :to="`/me/blog/authors/${author.slug}`"
                 class="flex items-center gap-3 hover:text-emerald-600 transition-colors group">
                 <img :src="author.avatar" class="w-8 h-8 rounded-full border border-slate-100" />
                 <span>{{ author.name }}</span>

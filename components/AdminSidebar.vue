@@ -16,16 +16,16 @@
 
       <!-- Gestion Group -->
       <SidebarGroup label="Gestion Utilisateurs" :collapsed="collapsed" :icon="IconUsers">
-        <NavItem to="/admin/manage/users" icon="IconUsers" label="Utilisateurs" :collapsed="collapsed" />
-        <NavItem to="/admin/manage/learners" icon="IconSchool" label="Apprenants" :collapsed="collapsed" />
-        <NavItem to="/admin/activity" icon="IconHistory" label="Journal" :collapsed="collapsed" />
+        <NavItem to="/me/manage/users" icon="IconUsers" label="Utilisateurs" :collapsed="collapsed" />
+        <NavItem to="/me/manage/learners" icon="IconSchool" label="Apprenants" :collapsed="collapsed" />
+        <NavItem to="/me/activity" icon="IconHistory" label="Journal" :collapsed="collapsed" />
       </SidebarGroup>
 
       <!-- Blog Group -->
       <SidebarGroup label="Blog" :collapsed="collapsed" :icon="IconArticle">
-        <NavItem to="/admin/blog/articles" icon="IconArticle" label="Articles" :collapsed="collapsed" />
-        <NavItem to="/admin/blog/authors" icon="IconPencil" label="Auteurs" :collapsed="collapsed" />
-        <NavItem to="/admin/blog/categories" icon="IconCategory" label="Catégories" :collapsed="collapsed" />
+        <NavItem to="/me/blog/articles" icon="IconArticle" label="Articles" :collapsed="collapsed" />
+        <NavItem to="/me/blog/authors" icon="IconPencil" label="Auteurs" :collapsed="collapsed" />
+        <NavItem to="/me/blog/categories" icon="IconCategory" label="Catégories" :collapsed="collapsed" />
       </SidebarGroup>
     </div>
 

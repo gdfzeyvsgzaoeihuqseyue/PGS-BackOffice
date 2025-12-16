@@ -64,7 +64,7 @@
               </div>
             </div>
             <div>
-              <NuxtLink :to="`/admin/blog/articles/${article.slug}`"
+              <NuxtLink :to="`/me/blog/articles/${article.slug}`"
                 class="font-medium text-slate-800 hover:text-emerald-600 block transition-colors">
                 {{ article.title }}
               </NuxtLink>
@@ -75,7 +75,7 @@
               </div>
             </div>
           </div>
-          <NuxtLink :to="`/admin/blog/articles/${article.slug}`"
+          <NuxtLink :to="`/me/blog/articles/${article.slug}`"
             class="p-2 text-slate-300 group-hover:text-emerald-500 transition-colors">
             <IconArrowRight size="20" />
           </NuxtLink>
@@ -200,7 +200,7 @@ const remove = async () => {
   if (!category.value) return
   if (confirm('Supprimer cette catégorie ?')) {
     await blogStore.deleteCategory(category.value.id)
-    router.push('/admin/blog/categories')
+    router.push('/me/blog/categories')
   }
 }
 </script>

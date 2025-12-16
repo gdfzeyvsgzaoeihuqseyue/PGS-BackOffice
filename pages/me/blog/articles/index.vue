@@ -40,7 +40,7 @@
         <tbody class="divide-y divide-slate-100">
           <tr v-for="article in articles" :key="article.id" class="hover:bg-slate-50/50">
             <td class="px-6 py-4 font-medium text-slate-800">
-              <NuxtLink :to="`/admin/blog/articles/${article.slug}`" class="hover:text-emerald-600 transition-colors">
+              <NuxtLink :to="`/me/blog/articles/${article.slug}`" class="hover:text-emerald-600 transition-colors">
                 {{ article.title }}
               </NuxtLink>
             </td>

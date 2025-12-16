@@ -59,7 +59,7 @@
                 class="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-xl bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none py-1 z-50">
                 <div class="px-1 py-1">
                   <MenuItem v-slot="{ active }">
-                  <NuxtLink to="/admin/profile"
+                  <NuxtLink to="/me/profile"
                     :class="[active ? 'bg-emerald-50 text-emerald-900' : 'text-slate-700', 'group flex w-full items-center rounded-lg px-2 py-2 text-sm transition-colors']">
                     <IconUser class="mr-2 h-4 w-4 text-emerald-500" aria-hidden="true" />
                     Mon Profil

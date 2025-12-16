@@ -124,7 +124,7 @@ const handleDelete = async () => {
   try {
     await learnerStore.manageLearner(user.value.id, 'delete')
     notify('Apprenant supprimé avec succès')
-    router.push('/admin/manage/learners')
+    router.push('/me/manage/learners')
   } catch (e) {
     notify('Erreur lors de la suppression', 'error')
   }
