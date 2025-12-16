@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import type { SuperAdmin, LoginCredentials, AuthResponse } from '~/types/auth'
+import type { Admin, LoginCredentials, AuthResponse } from '~/types/auth'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: null as SuperAdmin | null,
+    user: null as Admin | null,
     loading: false,
     initialized: false
   }),
@@ -14,12 +14,12 @@ export const useAuthStore = defineStore('auth', {
 
       this.loading = true
       try {
-        const { data, error } = await useAPI<{ superAdmin: SuperAdmin }>('/superadmin/profile')
+        const { data, error } = await useAPI<{ admin: Admin }>('/admin/profile')
 
         if (error.value) {
           this.user = null
-        } else if (data.value?.superAdmin) {
-          this.user = data.value.superAdmin
+        } else if (data.value?.admin) {
+          this.user = data.value.admin
         }
       } catch (e) {
         this.user = null
@@ -31,7 +31,7 @@ export const useAuthStore = defineStore('auth', {
     async login(credentials: LoginCredentials) {
       this.loading = true
       try {
-        const { data, error } = await useAPI<AuthResponse>('/superadmin/auth/login', {
+        const { data, error } = await useAPI<AuthResponse>('/admin/auth/login', {
           method: 'POST',
           body: credentials
         })
@@ -39,8 +39,8 @@ export const useAuthStore = defineStore('auth', {
         if (error.value) throw error.value
 
         // Update user state immediately from login response if provided
-        if (data.value?.superAdmin) {
-          this.user = data.value.superAdmin
+        if (data.value?.admin) {
+          this.user = data.value.admin
         } else {
           // Otherwise fetch it
           await this.fetchUser()
@@ -55,7 +55,7 @@ export const useAuthStore = defineStore('auth', {
     },
     async logout() {
       try {
-        await useAPI('/superadmin/auth/logout', { method: 'POST' })
+        await useAPI('/admin/auth/logout', { method: 'POST' })
       } catch (e) {
         console.error('Logout error', e)
       } finally {

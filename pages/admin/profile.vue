@@ -13,8 +13,8 @@
                   }}</h3>
                <div class="flex items-center gap-2 mt-1">
                   <span
-                     class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-700 uppercase tracking-wide">{{
-                        authStore.user?.role || 'SuperAdmin' }}</span>
+                     class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-700 uppercase tracking-wide">
+                     {{ authStore.user?.role }}</span>
                </div>
             </div>
          </div>
@@ -72,7 +72,7 @@ const form = reactive({
    email: ''
 })
 
-// Correctly map the fields from the user store (which now matches SuperAdmin type)
+// Correctly map the fields from the user store
 watchEffect(() => {
    if (authStore.user) {
       form.firstName = authStore.user.firstName || ''
@@ -87,7 +87,7 @@ const loading = ref(false)
 const updateProfile = async () => {
    loading.value = true
    try {
-      const { error } = await useAPI('/superadmin/profile', {
+      const { error } = await useAPI('/admin/profile', {
          method: 'PUT',
          body: {
             firstName: form.firstName,

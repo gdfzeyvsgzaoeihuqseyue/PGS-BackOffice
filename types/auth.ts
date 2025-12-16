@@ -1,4 +1,4 @@
-export interface SuperAdmin {
+export interface Admin {
   id: string
   firstName: string
   lastName: string
@@ -21,7 +21,7 @@ export interface AuthResponse {
   accessToken?: string
   refreshToken?: string
   expiresIn?: number
-  superAdmin?: SuperAdmin
+  admin?: Admin
 }
 
 export interface LoginCredentials {

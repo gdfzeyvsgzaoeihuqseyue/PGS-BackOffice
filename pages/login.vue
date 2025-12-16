@@ -50,7 +50,7 @@ const handleLogin = async () => {
           <IconLock size="32" stroke-width="2" />
         </div>
         <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Bienvenue</h1>
-        <p class="text-slate-500 mt-3 font-medium">Panneau d'administration SuperAdmin</p>
+        <p class="text-slate-500 mt-3 font-medium">Panneau d'administration Administrateur</p>
       </div>
 
       <form @submit.prevent="handleLogin" class="space-y-6">

@@ -16,7 +16,7 @@ export const useUserStore = defineStore('user', {
       this.loading = true
       this.search = search
       try {
-        const { data, error } = await useAPI<any>('/superadmin/user/list', {
+        const { data, error } = await useAPI<any>('/admin/user/list', {
           query: {
             page: this.page,
             limit: this.limit,
@@ -53,7 +53,7 @@ export const useUserStore = defineStore('user', {
     },
     async manageUser(id: string, action: 'suspend' | 'activate' | 'delete' | 'verify_email') {
       try {
-        await useAPI('/superadmin/user/manage', {
+        await useAPI('/admin/user/manage', {
           method: 'POST',
           body: { id, action }
         })

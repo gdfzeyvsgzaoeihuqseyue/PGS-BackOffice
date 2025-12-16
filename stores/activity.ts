@@ -14,19 +14,19 @@ export const useActivityStore = defineStore('activity', {
       this.loading = true
       try {
         const query = {
-             page: this.currentPage,
-             limit: this.limit,
-             ...filters
+          page: this.currentPage,
+          limit: this.limit,
+          ...filters
         }
-        
-        const { data } = await useAPI<any>('/superadmin/activity-logs', { query })
-        
+
+        const { data } = await useAPI<any>('/admin/activity-logs', { query })
+
         if (data.value) {
-            this.logs = data.value.logs || []
-            if (data.value.pagination) {
-                this.total = data.value.pagination.total || 0
-                this.totalPages = data.value.pagination.totalPages || 1
-            }
+          this.logs = data.value.logs || []
+          if (data.value.pagination) {
+            this.total = data.value.pagination.total || 0
+            this.totalPages = data.value.pagination.totalPages || 1
+          }
         }
       } catch (error) {
         console.error('Failed to fetch logs', error)
@@ -34,10 +34,10 @@ export const useActivityStore = defineStore('activity', {
         this.loading = false
       }
     },
-    
+
     setPage(page: number) {
-        this.currentPage = page
-        this.fetchLogs()
+      this.currentPage = page
+      this.fetchLogs()
     }
   }
 })

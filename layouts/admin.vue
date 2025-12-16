@@ -21,7 +21,7 @@
               </div>
               <div class="hidden sm:flex flex-col items-start translate-y-[1px]">
                 <span class="text-sm font-medium text-slate-700 leading-tight">{{ user?.firstName || 'Admin' }}</span>
-                <span class="text-[10px] text-slate-500 uppercase font-bold">{{ user?.role || 'SuperAdmin' }}</span>
+                <span class="text-[10px] text-slate-500 uppercase font-bold">{{ user?.role || 'admin' }}</span>
               </div>
               <!-- <IconChevronDown class="w-4 h-4 text-slate-400" /> -->
             </MenuButton>
