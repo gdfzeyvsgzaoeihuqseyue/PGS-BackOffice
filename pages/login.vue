@@ -16,9 +16,7 @@ const handleLogin = async () => {
   error.value = ''
   try {
     await authStore.login({ ...form })
-    // If successful, redirect to dashboard.
-    // Middleware should also handle this but explicit redirect is safe.
-    await navigateTo('/admin')
+    await navigateTo('/me')
   } catch (e) {
     error.value = e.data?.message || 'Identifiants incorrects. Veuillez réessayer.'
   } finally {

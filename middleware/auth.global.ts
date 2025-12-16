@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     await authStore.fetchUser()
   }
 
-  const isAdminRoute = to.path.startsWith('/admin')
+  const isAdminRoute = to.path.startsWith('/me')
   const isLoginRoute = to.path === '/login'
 
   // Protect Admin Routes
@@ -17,6 +17,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   // Guest Redirect
   if (isLoginRoute && authStore.isAuthenticated) {
-    return navigateTo('/me/manage/users') // Default landing
+    return navigateTo('/me') // Default landing
   }
 })

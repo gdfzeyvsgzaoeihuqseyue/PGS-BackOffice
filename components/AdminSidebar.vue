@@ -11,7 +11,7 @@
     <div class="flex-1 overflow-y-auto py-4 space-y-2 scrollbar-hide">
       <!-- General (Toujours visible ou groupé) -->
       <div class="px-3 space-y-1 mb-4">
-        <NavItem to="/admin" icon="IconDashboard" label="Dashboard" :collapsed="collapsed" />
+        <NavItem to="/me" icon="IconDashboard" label="Dashboard" :collapsed="collapsed" />
       </div>
 
       <!-- Gestion Group -->

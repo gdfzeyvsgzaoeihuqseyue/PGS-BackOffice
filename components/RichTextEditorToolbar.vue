@@ -118,7 +118,7 @@
         :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
         class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors font-semibold text-sm"
         title="Titre H4">
-        <span class="font-bold text-xs">H4</span>
+        <IconH4 size="18" />
       </button>
     </div>
 
@@ -227,7 +227,8 @@ import {
   IconPalette, IconHighlight, IconLetterCaseLower,
   IconCode, IconQuote, IconSeparator, IconAlignLeft, IconAlignCenter, IconAlignRight, IconAlignJustified,
   IconLink, IconPhoto, IconTable, IconTypography,
-  IconH1, IconH2, IconH3
+  IconH1, IconH2, IconH3,
+  IconH4
 } from '@tabler/icons-vue'
 
 const props = defineProps({

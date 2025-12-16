@@ -68,6 +68,15 @@
                 </div>
                 <div class="px-1 py-1">
                   <MenuItem v-slot="{ active }">
+                  <NuxtLink to="/me/sessions"
+                    :class="[active ? 'bg-emerald-50 text-emerald-900' : 'text-slate-700', 'group flex w-full items-center rounded-lg px-2 py-2 text-sm transition-colors']">
+                    <IconDeviceDesktop class="mr-2 h-4 w-4 text-emerald-500" aria-hidden="true" />
+                    Sessions
+                  </NuxtLink>
+                  </MenuItem>
+                </div>
+                <div class="px-1 py-1">
+                  <MenuItem v-slot="{ active }">
                   <button @click="handleLogout"
                     :class="[active ? 'bg-red-50 text-red-900' : 'text-slate-700', 'group flex w-full items-center rounded-lg px-2 py-2 text-sm transition-colors']">
                     <IconLogout class="mr-2 h-4 w-4 text-red-500" aria-hidden="true" />
@@ -91,7 +100,7 @@
 
 <script setup>
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
-import { IconUser, IconLogout, IconMenu2, IconX } from '@tabler/icons-vue'
+import { IconUser, IconLogout, IconMenu2, IconX, IconDeviceDesktop } from '@tabler/icons-vue'
 import { useAuthStore } from '~/stores/auth'
 
 const mobileMenuOpen = ref(false)

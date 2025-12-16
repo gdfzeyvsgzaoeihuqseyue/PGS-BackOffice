@@ -10,7 +10,7 @@
             </div>
             <div>
                <h3 class="text-xl font-bold text-slate-900">{{ authStore.user?.firstName }} {{ authStore.user?.lastName
-               }}</h3>
+                  }}</h3>
                <div class="flex items-center gap-2 mt-1">
                   <span
                      class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-700 uppercase tracking-wide">
@@ -63,6 +63,7 @@ definePageMeta({
 })
 
 const authStore = useAuthStore()
+const profileStore = useProfileStore()
 const { add: notify } = useToast()
 
 const form = reactive({
@@ -82,27 +83,18 @@ watchEffect(() => {
    }
 })
 
-const loading = ref(false)
+const loading = computed(() => profileStore.loading)
 
 const updateProfile = async () => {
-   loading.value = true
    try {
-      const { error } = await useAPI('/admin/profile', {
-         method: 'PUT',
-         body: {
-            firstName: form.firstName,
-            lastName: form.lastName,
-            username: form.username
-         }
+      await profileStore.updateProfile({
+         firstName: form.firstName,
+         lastName: form.lastName,
+         username: form.username
       })
-      if (error.value) throw error.value
-
-      await authStore.fetchUser()
       notify('Profil mis à jour avec succès')
    } catch (e) {
       notify('Erreur lors de la mise à jour', 'error')
-   } finally {
-      loading.value = false
    }
 }
 </script>
