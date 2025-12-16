@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <AppLoader v-if="loading" />
+  <AppError v-else-if="error" :message="error" @retry="blogStore.fetchCategories()" />
+  <div v-else>
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 fade-in-up">
       <div>
         <h2 class="text-2xl font-bold text-slate-800">Catégories</h2>
@@ -91,9 +93,9 @@ definePageMeta({
 })
 
 const blogStore = useBlogStore()
-const { categories } = storeToRefs(blogStore)
+const { categories, loading, error } = storeToRefs(blogStore)
 
-await blogStore.fetchCategories()
+blogStore.fetchCategories()
 
 const isModalOpen = ref(false)
 const editingId = ref(null)

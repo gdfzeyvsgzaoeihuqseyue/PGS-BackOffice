@@ -6,19 +6,25 @@ export const useBlogStore = defineStore('blog', {
     articles: [] as BlogArticle[],
     authors: [] as BlogAuthor[],
     categories: [] as BlogCategory[],
-    loading: false
+    loading: false,
+    error: null as string | null
   }),
   actions: {
-    // Note: Assuming there are GET endpoints for these based on conventions. 
-    // If not, we might need to adjust endpoint paths.
-
     // --- Articles ---
     async fetchArticles() {
-      const { data } = await useAPI<any>('/public/blog/get-article')
-      if (data.value && data.value.data) {
-        this.articles = data.value.data
-      } else if (Array.isArray(data.value)) {
-        this.articles = data.value
+      this.loading = true
+      this.error = null
+      try {
+        const { data } = await useAPI<any>('/public/blog/get-article')
+        if (data.value && data.value.data) {
+          this.articles = data.value.data
+        } else if (Array.isArray(data.value)) {
+          this.articles = data.value
+        }
+      } catch (e: any) {
+        this.error = e.message || 'Erreur lors du chargement des articles'
+      } finally {
+        this.loading = false
       }
     },
     async addArticle(article: Partial<BlogArticle>) {
@@ -36,11 +42,19 @@ export const useBlogStore = defineStore('blog', {
 
     // --- Authors ---
     async fetchAuthors() {
-      const { data } = await useAPI<any>('/public/blog/get-author')
-      if (data.value && data.value.data) {
-        this.authors = data.value.data
-      } else if (Array.isArray(data.value)) {
-        this.authors = data.value
+      this.loading = true
+      this.error = null
+      try {
+        const { data } = await useAPI<any>('/public/blog/get-author')
+        if (data.value && data.value.data) {
+          this.authors = data.value.data
+        } else if (Array.isArray(data.value)) {
+          this.authors = data.value
+        }
+      } catch (e: any) {
+        this.error = e.message || 'Erreur lors du chargement des auteurs'
+      } finally {
+        this.loading = false
       }
     },
     async addAuthor(author: Partial<BlogAuthor>) {
@@ -52,17 +66,25 @@ export const useBlogStore = defineStore('blog', {
       await this.fetchAuthors()
     },
     async deleteAuthor(id: string) {
-      await useAPI(`/blog/delete-author/${id}`, { method: 'DELETE' })
+      await useAPI(`/admin/blog/delete-author/${id}`, { method: 'DELETE' })
       await this.fetchAuthors()
     },
 
     // --- Categories ---
     async fetchCategories() {
-      const { data } = await useAPI<any>('/public/blog/get-category')
-      if (data.value && data.value.data) {
-        this.categories = data.value.data
-      } else if (Array.isArray(data.value)) {
-        this.categories = data.value
+      this.loading = true
+      this.error = null
+      try {
+        const { data } = await useAPI<any>('/public/blog/get-category')
+        if (data.value && data.value.data) {
+          this.categories = data.value.data
+        } else if (Array.isArray(data.value)) {
+          this.categories = data.value
+        }
+      } catch (e: any) {
+        this.error = e.message || 'Erreur lors du chargement des catégories'
+      } finally {
+        this.loading = false
       }
     },
     async addCategory(item: Partial<BlogCategory>) {

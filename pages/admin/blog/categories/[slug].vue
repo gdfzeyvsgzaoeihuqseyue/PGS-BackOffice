@@ -1,5 +1,7 @@
 <template>
-  <div v-if="category">
+  <AppLoader v-if="loading" />
+  <AppError v-else-if="error" :message="error" @retry="retryFetch" />
+  <div v-else-if="category">
     <div class="mb-6 flex items-center justify-between">
       <button @click="$router.back()"
         class="flex items-center gap-2 text-slate-500 hover:text-slate-700 transition-colors">
@@ -133,12 +135,16 @@ definePageMeta({
 const route = useRoute()
 const router = useRouter()
 const blogStore = useBlogStore()
-const { categories, articles } = storeToRefs(blogStore)
+const { categories, articles, loading, error } = storeToRefs(blogStore)
 
-await Promise.all([
-  blogStore.fetchCategories(),
+const retryFetch = () => {
+  blogStore.fetchCategories()
   blogStore.fetchArticles()
-])
+}
+
+// Fetch both parallel
+blogStore.fetchCategories()
+blogStore.fetchArticles()
 
 const category = computed(() => {
   return categories.value.find(c => c.slug === route.params.slug)

@@ -1,5 +1,7 @@
 <template>
-  <div v-if="author">
+  <AppLoader v-if="loading" />
+  <AppError v-else-if="error" :message="error" @retry="retryFetch" />
+  <div v-else-if="author">
     <div class="mb-6 flex items-center justify-between">
       <button @click="$router.back()"
         class="flex items-center gap-2 text-slate-500 hover:text-slate-700 transition-colors">
@@ -146,13 +148,17 @@ definePageMeta({
 const route = useRoute()
 const router = useRouter()
 const blogStore = useBlogStore()
-const { authors, articles } = storeToRefs(blogStore)
+const { authors, articles, loading, error } = storeToRefs(blogStore)
+
+const retryFetch = () => {
+  blogStore.fetchAuthors()
+  blogStore.fetchArticles()
+}
 
 // Fetch both so we can count articles
-await Promise.all([
-  blogStore.fetchAuthors(),
-  blogStore.fetchArticles()
-])
+// Fetch both so we can count articles
+blogStore.fetchAuthors()
+blogStore.fetchArticles()
 
 const author = computed(() => {
   return authors.value.find(a => a.slug === route.params.slug)

@@ -9,11 +9,13 @@ export const useUserStore = defineStore('user', {
     limit: 20,
     totalPages: 1,
     loading: false,
+    error: null as string | null,
     search: ''
   }),
   actions: {
     async fetchUsers(search = '') {
       this.loading = true
+      this.error = null
       this.search = search
       try {
         const { data, error } = await useAPI<any>('/admin/user/list', {
@@ -44,9 +46,10 @@ export const useUserStore = defineStore('user', {
             this.totalPages = responseData.totalPages || 1
           }
         }
-      } catch (e) {
+      } catch (e: any) {
         // Handle error
         console.error('Fetch users error', e)
+        this.error = e.message || 'Erreur lors du chargement des utilisateurs'
       } finally {
         this.loading = false
       }

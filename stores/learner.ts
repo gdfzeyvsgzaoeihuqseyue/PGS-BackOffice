@@ -9,11 +9,13 @@ export const useLearnerStore = defineStore('learner', {
     limit: 20,
     totalPages: 1,
     loading: false,
+    error: null as string | null,
     search: ''
   }),
   actions: {
     async fetchLearners(search = '') {
       this.loading = true
+      this.error = null
       this.search = search
       try {
         const { data, error } = await useAPI<any>('/admin/leaner/list', {
@@ -42,8 +44,9 @@ export const useLearnerStore = defineStore('learner', {
             this.totalPages = responseData.totalPages || 1
           }
         }
-      } catch (e) {
+      } catch (e: any) {
         console.error('Fetch learners error', e)
+        this.error = e.message || 'Erreur lors du chargement des apprenants'
       } finally {
         this.loading = false
       }

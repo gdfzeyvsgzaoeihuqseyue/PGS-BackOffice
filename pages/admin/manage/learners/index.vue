@@ -1,5 +1,7 @@
 <template>
-   <div>
+   <AppLoader v-if="loading" />
+   <AppError v-else-if="error" :message="error" @retry="learnerStore.fetchLearners()" />
+   <div v-else>
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 fade-in-up">
          <div>
             <h2 class="text-2xl font-bold text-slate-800">Gestion Apprenants</h2>
@@ -21,10 +23,6 @@
 
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden fade-in-up delay-100">
          <div class="overflow-x-auto relative">
-            <div v-if="loading"
-               class="absolute inset-0 bg-white/50 backdrop-blur-sm z-10 flex items-center justify-center">
-               <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
-            </div>
             <table class="w-full text-left border-collapse">
                <thead>
                   <tr
@@ -145,13 +143,13 @@ definePageMeta({
 })
 
 const learnerStore = useLearnerStore()
-const { learners, totalPages, page, loading } = storeToRefs(learnerStore)
+const { learners, totalPages, page, loading, error } = storeToRefs(learnerStore)
 const { add: notify } = useToast()
 
 const search = ref('')
 let searchTimeout: NodeJS.Timeout
 
-await learnerStore.fetchLearners()
+learnerStore.fetchLearners()
 
 watch(search, (val) => {
    clearTimeout(searchTimeout)

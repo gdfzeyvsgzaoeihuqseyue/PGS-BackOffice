@@ -1,5 +1,7 @@
 <template>
-  <div v-if="user">
+  <AppLoader v-if="loading" />
+  <AppError v-else-if="error" :message="error" @retry="learnerStore.fetchLearners()" />
+  <div v-else-if="user">
     <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div class="flex items-center gap-4">
         <button @click="$router.back()" class="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-500">
@@ -76,7 +78,7 @@
     </div>
   </div>
   <div v-else class="text-center p-12 text-slate-500">
-    Chargement ou apprenant introuvable...
+    Apprenant introuvable...
   </div>
 </template>
 
@@ -93,7 +95,7 @@ definePageMeta({
 const route = useRoute()
 const router = useRouter()
 const learnerStore = useLearnerStore()
-const { learners } = storeToRefs(learnerStore)
+const { learners, loading, error } = storeToRefs(learnerStore)
 const { add: notify } = useToast()
 
 const user = computed(() => {
@@ -101,7 +103,7 @@ const user = computed(() => {
 })
 
 if (!user.value && !learners.value.length) {
-  await learnerStore.fetchLearners()
+  learnerStore.fetchLearners()
 }
 
 const handleStatusToggle = async () => {
