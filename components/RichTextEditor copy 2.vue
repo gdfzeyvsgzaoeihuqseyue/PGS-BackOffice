@@ -26,19 +26,19 @@
           title="Couleur du texte">
           <IconPalette size="18" class="text-slate-600" />
           <input type="color" @input="editor.chain().focus().setColor($event.target.value).run()"
-            :value="editor.getAttributes('textStyle').color || '#000000'"
+            :value="editor.getAttributes('textStyle')?.color || '#000000'"
             class="absolute opacity-0 w-full h-full cursor-pointer top-0 left-0" />
           <div class="absolute bottom-0 right-0 w-2 h-2 rounded-full border border-white"
-            :style="{ backgroundColor: editor.getAttributes('textStyle').color || '#000000' }"></div>
+            :style="{ backgroundColor: editor.getAttributes('textStyle')?.color || '#000000' }"></div>
         </label>
         <label class="cursor-pointer p-1.5 rounded hover:bg-slate-200 flex items-center justify-center relative group"
           title="Surlignage (Fond)">
           <IconHighlight size="18" class="text-slate-600" />
           <input type="color" @input="editor.chain().focus().toggleHighlight({ color: $event.target.value }).run()"
-            :value="editor.getAttributes('highlight').color || '#ffffff'"
+            :value="editor.getAttributes('highlight')?.color || '#ffffff'"
             class="absolute opacity-0 w-full h-full cursor-pointer top-0 left-0" />
           <div class="absolute bottom-0 right-0 w-2 h-2 rounded-full border border-white"
-            :style="{ backgroundColor: editor.getAttributes('highlight').color || 'transparent' }"></div>
+            :style="{ backgroundColor: editor.getAttributes('highlight')?.color || 'transparent' }"></div>
         </label>
       </div>
 
@@ -86,9 +86,8 @@
 
 <script setup>
 import { useEditor, EditorContent } from '@tiptap/vue-3'
-import { Node, Extension, mergeAttributes } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
-import { TextStyle } from '@tiptap/extension-text-style'
+import TextStyle from '@tiptap/extension-text-style'
 import { Color } from '@tiptap/extension-color'
 import Highlight from '@tiptap/extension-highlight'
 
@@ -103,53 +102,6 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
-// Custom Node for DIV support
-const DivNode = Node.create({
-  name: 'div',
-  group: 'block',
-  content: 'block+',
-  addAttributes() {
-    return {
-      style: {
-        default: null,
-        parseHTML: element => element.getAttribute('style'),
-        renderHTML: attributes => {
-          if (!attributes.style) return {}
-          return { style: attributes.style }
-        },
-      },
-    }
-  },
-  parseHTML() {
-    return [{ tag: 'div' }]
-  },
-  renderHTML({ HTMLAttributes }) {
-    return ['div', mergeAttributes(HTMLAttributes), 0]
-  },
-})
-
-// Extension to add style attribute to Headers and Paragraphs
-const StyleAttribute = Extension.create({
-  name: 'styleAttribute',
-  addGlobalAttributes() {
-    return [
-      {
-        types: ['heading', 'paragraph'],
-        attributes: {
-          style: {
-            default: null,
-            parseHTML: element => element.getAttribute('style'),
-            renderHTML: attributes => {
-              if (!attributes.style) return {}
-              return { style: attributes.style }
-            },
-          },
-        },
-      },
-    ]
-  },
-})
-
 const editor = useEditor({
   content: props.modelValue,
   extensions: [
@@ -158,9 +110,7 @@ const editor = useEditor({
     Color,
     Highlight.configure({
       multicolor: true
-    }),
-    DivNode,
-    StyleAttribute
+    })
   ],
   editorProps: {
     attributes: {

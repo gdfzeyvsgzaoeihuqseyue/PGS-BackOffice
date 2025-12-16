@@ -86,9 +86,8 @@
 
 <script setup>
 import { useEditor, EditorContent } from '@tiptap/vue-3'
-import { Node, Extension, mergeAttributes } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
-import { TextStyle } from '@tiptap/extension-text-style'
+import TextStyle from '@tiptap/extension-text-style'
 import { Color } from '@tiptap/extension-color'
 import Highlight from '@tiptap/extension-highlight'
 
@@ -103,53 +102,6 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
-// Custom Node for DIV support
-const DivNode = Node.create({
-  name: 'div',
-  group: 'block',
-  content: 'block+',
-  addAttributes() {
-    return {
-      style: {
-        default: null,
-        parseHTML: element => element.getAttribute('style'),
-        renderHTML: attributes => {
-          if (!attributes.style) return {}
-          return { style: attributes.style }
-        },
-      },
-    }
-  },
-  parseHTML() {
-    return [{ tag: 'div' }]
-  },
-  renderHTML({ HTMLAttributes }) {
-    return ['div', mergeAttributes(HTMLAttributes), 0]
-  },
-})
-
-// Extension to add style attribute to Headers and Paragraphs
-const StyleAttribute = Extension.create({
-  name: 'styleAttribute',
-  addGlobalAttributes() {
-    return [
-      {
-        types: ['heading', 'paragraph'],
-        attributes: {
-          style: {
-            default: null,
-            parseHTML: element => element.getAttribute('style'),
-            renderHTML: attributes => {
-              if (!attributes.style) return {}
-              return { style: attributes.style }
-            },
-          },
-        },
-      },
-    ]
-  },
-})
-
 const editor = useEditor({
   content: props.modelValue,
   extensions: [
@@ -158,9 +110,7 @@ const editor = useEditor({
     Color,
     Highlight.configure({
       multicolor: true
-    }),
-    DivNode,
-    StyleAttribute
+    })
   ],
   editorProps: {
     attributes: {

@@ -83,7 +83,7 @@
 
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-1">Contenu (HTML)</label>
-          <!-- <RichTextEditor v-model="form.content" /> -->
+          <RichTextEditor v-model="form.content" />
         </div>
 
         <div>
