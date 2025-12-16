@@ -11,7 +11,7 @@
 definePageMeta({
   middleware: [
     function (to, from) {
-      return navigateTo('/login')
+      return navigateTo('/auth/login')
     }
   ]
 })

@@ -8,11 +8,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   const isAdminRoute = to.path.startsWith('/me')
-  const isLoginRoute = to.path === '/login'
+  const isLoginRoute = to.path === '/auth/login'
 
   // Protect Admin Routes
   if (isAdminRoute && !authStore.isAuthenticated) {
-    return navigateTo('/login')
+    return navigateTo('/auth/login')
   }
 
   // Guest Redirect

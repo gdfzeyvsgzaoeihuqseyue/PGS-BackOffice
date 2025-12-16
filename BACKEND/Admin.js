@@ -67,6 +67,14 @@ module.exports = {
       columnName: 'two_factor_secret',
       protect: true
     },
+    emailProofToken: {
+      type: 'string',
+      description: 'Jeton de vérification d\'email ou d\'invitation'
+    },
+    emailProofTokenExpiresAt: {
+      type: 'number',
+      description: 'Timestamp d\'expiration du jeton'
+    },
     activityLogs: {
       collection: 'AdminActivityLog',
       via: 'admin'

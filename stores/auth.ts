@@ -60,7 +60,7 @@ export const useAuthStore = defineStore('auth', {
         console.error('Logout error', e)
       } finally {
         this.user = null
-        navigateTo('/login')
+        navigateTo('/auth/login')
       }
     }
   },

@@ -19,8 +19,8 @@ export function useAPI<T>(url: string, options: UseFetchOptions<T> = {}) {
         // Handle unauthorized globally
         // Check if we are already on login to avoid loop
         const route = useRoute()
-        if (route.path !== '/login') {
-          navigateTo('/login')
+        if (route.path !== '/auth/login') {
+          navigateTo('/auth/login')
         }
       }
     }
