@@ -45,7 +45,7 @@
             </td>
             <td class="px-6 py-4 text-slate-500 bg-slate-50/50 font-mono text-sm">{{ cat.slug }}</td>
             <td class="px-6 py-4 text-sm text-slate-600 font-bold">
-              {{ cat.articles?.length || 0 }}
+              {{ getArticleCount(cat.id) }}
             </td>
             <td class="px-6 py-4 text-right flex justify-end gap-2">
               <button @click="edit(cat)" class="p-1 text-slate-400 hover:text-blue-500">
@@ -93,9 +93,20 @@ definePageMeta({
 })
 
 const blogStore = useBlogStore()
-const { categories, loading, error } = storeToRefs(blogStore)
+const { categories, articles, loading, error } = storeToRefs(blogStore)
 
 blogStore.fetchCategories()
+blogStore.fetchArticles()
+
+const getArticleCount = (catId) => {
+  if (!articles.value) return 0
+  return articles.value.filter(a => {
+    const catRef = a.category
+    if (!catRef) return false
+    if (typeof catRef === 'object') return catRef.id === catId || catRef._id === catId
+    return catRef === catId
+  }).length
+}
 
 const isModalOpen = ref(false)
 const editingId = ref(null)

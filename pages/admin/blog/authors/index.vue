@@ -50,7 +50,7 @@
               }}</span>
             </td>
             <td class="px-6 py-4 text-sm text-slate-600 font-bold">
-              {{ author.articles?.length || 0 }}
+              {{ getArticleCount(author.id) }}
             </td>
             <td class="px-6 py-4 text-right flex justify-end gap-2">
               <button @click="edit(author)" class="p-1 text-slate-400 hover:text-blue-500">
@@ -117,9 +117,20 @@ definePageMeta({
 })
 
 const blogStore = useBlogStore()
-const { authors, loading, error } = storeToRefs(blogStore)
+const { authors, articles, loading, error } = storeToRefs(blogStore)
 
 blogStore.fetchAuthors()
+blogStore.fetchArticles()
+
+const getArticleCount = (authorId) => {
+  if (!articles.value) return 0
+  return articles.value.filter(a => {
+    const authRef = a.author
+    if (!authRef) return false
+    if (typeof authRef === 'object') return authRef.id === authorId || authRef._id === authorId
+    return authRef === authorId
+  }).length
+}
 
 const isModalOpen = ref(false)
 const editingId = ref(null)

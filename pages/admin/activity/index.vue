@@ -1,5 +1,7 @@
 <template>
-    <div>
+    <AppLoader v-if="loading" />
+    <AppError v-else-if="error" :message="error" @retry="activityStore.fetchLogs()" />
+    <div v-else>
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 fade-in-up">
             <div>
                 <h2 class="text-2xl font-bold text-slate-800">Journal d'Activité</h2>
@@ -39,7 +41,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
-                    <tr v-for="log in logs" :key="log.id" class="hover:bg-slate-50/50">
+                    <tr v-for="log in logs" :key="log.id || log._id" class="hover:bg-slate-50/50">
                         <td class="px-6 py-4">
                             <div v-if="log.admin" class="flex items-center gap-2">
                                 <span class="font-medium text-slate-700 text-sm">{{ log.admin.firstName }} {{
@@ -63,10 +65,11 @@
                         <td class="px-6 py-4 text-sm text-slate-600">
                             {{ new Date(log.createdAt).toLocaleString() }}
                         </td>
-                        <td class="px-6 py-4 text-sm text-slate-500 max-w-xs truncate"
-                            :title="JSON.stringify(log.details)">
-                            {{ log.details ? JSON.stringify(log.details).substring(0, 50) +
-                                (JSON.stringify(log.details).length > 50 ? '...' : '') : '-' }}
+                        <td class="px-6 py-4 text-sm text-slate-500">
+                            <NuxtLink :to="`/admin/activity/${log.id || log._id}`"
+                                class="text-emerald-600 hover:underline text-xs font-bold uppercase">
+                                Voir Détail
+                            </NuxtLink>
                         </td>
                     </tr>
                 </tbody>
@@ -108,10 +111,10 @@ definePageMeta({
 })
 
 const activityStore = useActivityStore()
-const { logs } = storeToRefs(activityStore)
+const { logs, loading, error } = storeToRefs(activityStore)
 const filterType = ref('')
 
-await activityStore.fetchLogs()
+activityStore.fetchLogs()
 
 const refresh = () => activityStore.fetchLogs({ targetType: filterType.value })
 

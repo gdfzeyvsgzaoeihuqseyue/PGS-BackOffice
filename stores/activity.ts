@@ -7,11 +7,13 @@ export const useActivityStore = defineStore('activity', {
     total: 0,
     totalPages: 1,
     currentPage: 1,
-    limit: 20
+    limit: 20,
+    error: null as string | null
   }),
   actions: {
     async fetchLogs(filters: any = {}) {
       this.loading = true
+      this.error = null
       try {
         const query = {
           page: this.currentPage,
@@ -28,8 +30,9 @@ export const useActivityStore = defineStore('activity', {
             this.totalPages = data.value.pagination.totalPages || 1
           }
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('Failed to fetch logs', error)
+        this.error = error.message || 'Erreur lors du chargement de l\'historique'
       } finally {
         this.loading = false
       }
