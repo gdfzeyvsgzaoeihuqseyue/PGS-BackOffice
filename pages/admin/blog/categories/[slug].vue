@@ -40,8 +40,63 @@
         </div>
         <div class="flex justify-between items-center py-3 border-b border-slate-100">
           <span class="text-slate-500 font-medium">Articles associés</span>
-          <span class="font-bold text-slate-800">{{ computedArticleCount }}</span>
+          <span class="font-bold text-slate-800">{{ categoryArticles.length }}</span>
         </div>
+      </div>
+    </div>
+
+    <!-- Related Articles -->
+    <div class="mt-8 max-w-4xl mx-auto">
+      <h3 class="text-lg font-bold text-slate-800 mb-4 px-1">Articles dans cette catégorie ({{ categoryArticles.length
+      }})</h3>
+
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden"
+        v-if="paginatedArticles.length">
+        <div v-for="article in paginatedArticles" :key="article.id"
+          class="p-4 border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors flex items-center justify-between group">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-slate-100 rounded-lg shrink-0 overflow-hidden">
+              <img v-if="article.imageUrl" :src="article.imageUrl" class="w-full h-full object-cover" />
+              <div v-else class="w-full h-full flex items-center justify-center text-slate-400">
+                <IconArticle size="20" />
+              </div>
+            </div>
+            <div>
+              <NuxtLink :to="`/admin/blog/articles/${article.slug}`"
+                class="font-medium text-slate-800 hover:text-emerald-600 block transition-colors">
+                {{ article.title }}
+              </NuxtLink>
+              <div class="text-xs text-slate-500 mt-0.5 flex gap-2">
+                <span>{{ new Date(article.createdAt).toLocaleDateString() }}</span>
+                <span v-if="article.author">• {{ article.author.name }}</span>
+                <span>• {{ article.views || 0 }} vues</span>
+              </div>
+            </div>
+          </div>
+          <NuxtLink :to="`/admin/blog/articles/${article.slug}`"
+            class="p-2 text-slate-300 group-hover:text-emerald-500 transition-colors">
+            <IconArrowRight size="20" />
+          </NuxtLink>
+        </div>
+
+        <!-- Pagination -->
+        <div class="bg-slate-50 px-4 py-3 border-t border-slate-200 flex justify-between items-center"
+          v-if="totalPages > 1">
+          <span class="text-xs text-slate-500">Page {{ currentPage }} sur {{ totalPages }}</span>
+          <div class="flex gap-2">
+            <button @click="currentPage--" :disabled="currentPage === 1"
+              class="p-1 rounded hover:bg-slate-200 disabled:opacity-50">
+              <IconChevronLeft size="18" />
+            </button>
+            <button @click="currentPage++" :disabled="currentPage === totalPages"
+              class="p-1 rounded hover:bg-slate-200 disabled:opacity-50">
+              <IconChevronRight size="18" />
+            </button>
+          </div>
+        </div>
+      </div>
+      <div v-else class="text-center p-8 bg-slate-50 rounded-xl border border-dashed border-slate-300 text-slate-500">
+        Aucun article dans cette catégorie.
       </div>
     </div>
 
@@ -67,7 +122,7 @@
 </template>
 
 <script setup>
-import { IconArrowLeft, IconCategory, IconTrash, IconPencil } from '@tabler/icons-vue'
+import { IconArrowLeft, IconCategory, IconTrash, IconPencil, IconArticle, IconArrowRight, IconChevronLeft, IconChevronRight } from '@tabler/icons-vue'
 import { useBlogStore } from '~/stores/blog'
 
 definePageMeta({
@@ -89,15 +144,29 @@ const category = computed(() => {
   return categories.value.find(c => c.slug === route.params.slug)
 })
 
-const computedArticleCount = computed(() => {
-  if (!category.value || !articles.value) return 0
+// Articles Logic
+const currentPage = ref(1)
+const itemsPerPage = 5
+
+const categoryArticles = computed(() => {
+  if (!category.value || !articles.value) return []
   return articles.value.filter(a => {
     const catRef = a.category
     if (!catRef) return false
     if (typeof catRef === 'object') return catRef.id === category.value.id || catRef.slug === category.value.slug
     return catRef === category.value.id
-  }).length
+  })
 })
+
+const totalPages = computed(() => Math.ceil(categoryArticles.value.length / itemsPerPage))
+
+const paginatedArticles = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return categoryArticles.value.slice(start, end)
+})
+
+watch(() => route.params.slug, () => currentPage.value = 1)
 
 // Edit Logic
 const isModalOpen = ref(false)

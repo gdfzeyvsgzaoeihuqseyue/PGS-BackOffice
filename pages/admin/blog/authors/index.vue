@@ -30,6 +30,7 @@
           <tr>
             <th class="px-6 py-4">Nom & Avatar</th>
             <th class="px-6 py-4">Rôle</th>
+            <th class="px-6 py-4">Articles</th>
             <th class="px-6 py-4 text-right">Actions</th>
           </tr>
         </thead>
@@ -44,7 +45,10 @@
             </td>
             <td class="px-6 py-4 text-slate-500">
               <span class="px-2 py-1 bg-slate-100 rounded text-xs font-bold uppercase tracking-wide">{{ author.role
-                }}</span>
+              }}</span>
+            </td>
+            <td class="px-6 py-4 text-sm text-slate-600 font-bold">
+              {{ author.articles?.length || 0 }}
             </td>
             <td class="px-6 py-4 text-right flex justify-end gap-2">
               <button @click="edit(author)" class="p-1 text-slate-400 hover:text-blue-500">

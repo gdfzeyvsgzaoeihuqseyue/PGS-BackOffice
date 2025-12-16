@@ -31,6 +31,7 @@
             <th class="px-6 py-4">Titre</th>
             <th class="px-6 py-4">Auteur</th>
             <th class="px-6 py-4">Catégorie</th>
+            <th class="px-6 py-4">Vues</th>
             <th class="px-6 py-4 text-right">Actions</th>
           </tr>
         </thead>
@@ -47,6 +48,7 @@
                 article.category.name }}</span>
               <span v-else>-</span>
             </td>
+            <td class="px-6 py-4 text-sm text-slate-600 font-mono">{{ article.views || 0 }}</td>
             <td class="px-6 py-4 text-right flex justify-end gap-2">
               <button @click="edit(article)" class="p-1 text-slate-400 hover:text-blue-500">
                 <IconPencil size="18" />

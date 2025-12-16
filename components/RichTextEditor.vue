@@ -1,92 +1,81 @@
 <template>
-  <div class="rich-text-editor border rounded-lg overflow-hidden bg-white focus-within:ring-2 focus-within:ring-emerald-500 transition-shadow">
-    <div v-if="editor" class="toolbar bg-slate-50 border-b p-2 flex flex-wrap gap-1">
-      <button 
-        type="button"
-        @click="editor.chain().focus().toggleBold().run()" 
+  <div
+    class="rich-text-editor border rounded-lg overflow-hidden bg-white focus-within:ring-2 focus-within:ring-emerald-500 transition-shadow">
+    <div v-if="editor" class="toolbar bg-slate-50 border-b p-2 flex flex-wrap gap-1 items-center">
+      <button type="button" @click="editor.chain().focus().toggleBold().run()"
         :class="{ 'is-active': editor.isActive('bold') }"
-        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors"
-        title="Gras"
-      >
+        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors" title="Gras">
         <IconBold size="18" />
       </button>
-      <button 
-        type="button"
-        @click="editor.chain().focus().toggleItalic().run()" 
+      <button type="button" @click="editor.chain().focus().toggleItalic().run()"
         :class="{ 'is-active': editor.isActive('italic') }"
-        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors"
-        title="Italique"
-      >
+        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors" title="Italique">
         <IconItalic size="18" />
       </button>
-      <button 
-        type="button"
-        @click="editor.chain().focus().toggleStrike().run()" 
+      <button type="button" @click="editor.chain().focus().toggleStrike().run()"
         :class="{ 'is-active': editor.isActive('strike') }"
-        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors"
-        title="Barré"
-      >
+        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors" title="Barré">
         <IconStrikethrough size="18" />
       </button>
-      
+
       <div class="w-px h-6 bg-slate-300 mx-1 self-center"></div>
 
-      <button 
-        type="button"
-        @click="editor.chain().focus().toggleHeading({ level: 2 }).run()" 
+      <!-- Color Pickers -->
+      <div class="flex items-center gap-1">
+        <label class="cursor-pointer p-1.5 rounded hover:bg-slate-200 flex items-center justify-center relative group"
+          title="Couleur du texte">
+          <IconPalette size="18" class="text-slate-600" />
+          <input type="color" @input="editor.chain().focus().setColor($event.target.value).run()"
+            :value="editor.getAttributes('textStyle').color || '#000000'"
+            class="absolute opacity-0 w-full h-full cursor-pointer top-0 left-0" />
+          <div class="absolute bottom-0 right-0 w-2 h-2 rounded-full border border-white"
+            :style="{ backgroundColor: editor.getAttributes('textStyle').color || '#000000' }"></div>
+        </label>
+        <label class="cursor-pointer p-1.5 rounded hover:bg-slate-200 flex items-center justify-center relative group"
+          title="Surlignage (Fond)">
+          <IconHighlight size="18" class="text-slate-600" />
+          <input type="color" @input="editor.chain().focus().toggleHighlight({ color: $event.target.value }).run()"
+            :value="editor.getAttributes('highlight').color || '#ffffff'"
+            class="absolute opacity-0 w-full h-full cursor-pointer top-0 left-0" />
+          <div class="absolute bottom-0 right-0 w-2 h-2 rounded-full border border-white"
+            :style="{ backgroundColor: editor.getAttributes('highlight').color || 'transparent' }"></div>
+        </label>
+      </div>
+
+      <div class="w-px h-6 bg-slate-300 mx-1 self-center"></div>
+
+      <button type="button" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
         :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
-        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors font-bold"
-        title="Titre H2"
-      >
+        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors font-bold" title="Titre H2">
         H2
       </button>
-      <button 
-        type="button"
-        @click="editor.chain().focus().toggleHeading({ level: 3 }).run()" 
+      <button type="button" @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
         :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
-        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors font-semibold"
-        title="Titre H3"
-      >
+        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors font-semibold" title="Titre H3">
         H3
       </button>
-      
+
       <div class="w-px h-6 bg-slate-300 mx-1 self-center"></div>
 
-      <button 
-        type="button"
-        @click="editor.chain().focus().toggleBulletList().run()" 
+      <button type="button" @click="editor.chain().focus().toggleBulletList().run()"
         :class="{ 'is-active': editor.isActive('bulletList') }"
-        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors"
-        title="Liste à puces"
-      >
+        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors" title="Liste à puces">
         <IconList size="18" />
       </button>
-      <button 
-        type="button"
-        @click="editor.chain().focus().toggleOrderedList().run()" 
+      <button type="button" @click="editor.chain().focus().toggleOrderedList().run()"
         :class="{ 'is-active': editor.isActive('orderedList') }"
-        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors"
-        title="Liste numérotée"
-      >
+        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors" title="Liste numérotée">
         <IconListNumbers size="18" />
       </button>
 
       <div class="w-px h-6 bg-slate-300 mx-1 self-center"></div>
-      
-       <button 
-        type="button"
-        @click="editor.chain().focus().undo().run()" 
-        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors ml-auto"
-        title="Annuler"
-      >
+
+      <button type="button" @click="editor.chain().focus().undo().run()"
+        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors ml-auto" title="Annuler">
         <IconArrowBackUp size="18" />
       </button>
-       <button 
-        type="button"
-        @click="editor.chain().focus().redo().run()" 
-        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors"
-        title="Rétablir"
-      >
+      <button type="button" @click="editor.chain().focus().redo().run()"
+        class="p-1.5 rounded hover:bg-slate-200 text-slate-600 transition-colors" title="Rétablir">
         <IconArrowForwardUp size="18" />
       </button>
 
@@ -98,7 +87,11 @@
 <script setup>
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
-import { IconBold, IconItalic, IconStrikethrough, IconList, IconListNumbers, IconArrowBackUp, IconArrowForwardUp } from '@tabler/icons-vue'
+import TextStyle from '@tiptap/extension-text-style'
+import { Color } from '@tiptap/extension-color'
+import Highlight from '@tiptap/extension-highlight'
+
+import { IconBold, IconItalic, IconStrikethrough, IconList, IconListNumbers, IconArrowBackUp, IconArrowForwardUp, IconPalette, IconHighlight } from '@tabler/icons-vue'
 
 const props = defineProps({
   modelValue: {
@@ -113,11 +106,16 @@ const editor = useEditor({
   content: props.modelValue,
   extensions: [
     StarterKit,
+    TextStyle,
+    Color,
+    Highlight.configure({
+      multicolor: true
+    })
   ],
   editorProps: {
-      attributes: {
-          class: 'outline-none h-full min-h-[150px]'
-      }
+    attributes: {
+      class: 'outline-none h-full min-h-[150px]'
+    }
   },
   onUpdate: ({ editor }) => {
     emit('update:modelValue', editor.getHTML())
@@ -133,13 +131,15 @@ watch(() => props.modelValue, (newValue) => {
 })
 
 onBeforeUnmount(() => {
-    if(editor.value) editor.value.destroy()
+  if (editor.value) editor.value.destroy()
 })
 </script>
 
 <style scoped>
 .is-active {
-  background-color: #cbd5e1; /* slate-300 */
-  color: #0f172a; /* slate-900 */
+  background-color: #cbd5e1;
+  /* slate-300 */
+  color: #0f172a;
+  /* slate-900 */
 }
 </style>

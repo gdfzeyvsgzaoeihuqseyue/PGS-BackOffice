@@ -30,6 +30,7 @@
           <tr>
             <th class="px-6 py-4">Nom</th>
             <th class="px-6 py-4">Slug</th>
+            <th class="px-6 py-4">Articles</th>
             <th class="px-6 py-4 text-right">Actions</th>
           </tr>
         </thead>
@@ -41,6 +42,9 @@
               </NuxtLink>
             </td>
             <td class="px-6 py-4 text-slate-500 bg-slate-50/50 font-mono text-sm">{{ cat.slug }}</td>
+            <td class="px-6 py-4 text-sm text-slate-600 font-bold">
+              {{ cat.articles?.length || 0 }}
+            </td>
             <td class="px-6 py-4 text-right flex justify-end gap-2">
               <button @click="edit(cat)" class="p-1 text-slate-400 hover:text-blue-500">
                 <IconPencil size="18" />
