@@ -70,7 +70,12 @@
                     {{ (admin.firstName?.[0] || '') + (admin.lastName?.[0] || '') }}
                   </div>
                   <div>
-                    <div class="font-bold text-slate-800">{{ admin.firstName }} {{ admin.lastName }}</div>
+                    <div class="font-bold text-slate-800">
+                      <NuxtLink :to="`/me/manage/admins/${admin.id}`"
+                        class="hover:text-emerald-600 hover:underline transition-colors">
+                        {{ admin.firstName }} {{ admin.lastName }}
+                      </NuxtLink>
+                    </div>
                     <div class="text-xs text-slate-500">{{ admin.email }}</div>
                   </div>
                 </div>
@@ -128,14 +133,6 @@
                             aria-hidden="true" />
                           {{ admin.status === 'active' ? 'Désactiver' : 'Activer' }}
                         </button>
-                        </MenuItem>
-
-                        <MenuItem v-slot="{ active }">
-                        <NuxtLink :to="`/me/manage/admins/${admin.id}`"
-                          :class="[active ? 'bg-slate-50' : '', 'group flex w-full items-center rounded-lg px-2 py-2 text-sm text-slate-700']">
-                          <IconEye class="mr-2 h-4 w-4 text-slate-400" aria-hidden="true" />
-                          Détails
-                        </NuxtLink>
                         </MenuItem>
 
                         <MenuItem v-slot="{ active }">

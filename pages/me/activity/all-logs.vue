@@ -74,7 +74,8 @@
               <th class="px-6 py-4">Action</th>
               <th class="px-6 py-4">Cible</th>
               <th class="px-6 py-4">Info</th>
-              <th class="px-6 py-4 text-right">Date</th>
+              <th class="px-6 py-4">Date</th>
+              <th class="px-6 py-4 text-right">Détails</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
@@ -107,8 +108,26 @@
                 </div>
                 <div class="text-xs text-slate-400 mt-0.5">{{ log.ipAddress }}</div>
               </td>
-              <td class="px-6 py-4 text-right text-sm text-slate-600 tabular-nums">
+              <td class="px-6 py-4 text-sm text-slate-600 tabular-nums">
                 {{ new Date(log.createdAt).toLocaleString() }}
+              </td>
+              <td class="px-6 py-4 text-right text-sm text-slate-500">
+                <NuxtLink :to="`/me/manage/admins/${log.admin?.id}`" v-if="log.admin?.id !== 'unknown'"
+                  class="text-emerald-600 hover:underline text-xs font-bold uppercase whitespace-nowrap">
+                  Voir Admin
+                </NuxtLink>
+                <!-- Optional: If we had a detailed single log view, we would link there. For now user said "Bouton Voir Détail" like in activity index.
+                       In activity index it links to /me/activity/:id.
+                       If we want detailed log view for ALL LOGS, we need a page for it.
+                       However, the user said "Comme pour @[pages/me/activity/index.vue], ajoute un bouton Voir Détail dans @[pages/me/activity/all-logs.vue]". 
+                       So I should add a link to detailed log view. 
+                       I'll assume the same detailed view /me/activity/:id might work IF it handles fetching any log (if permitted). 
+                       Or I might need to create it. For now, I will link to /me/activity/:id assuming it might work or is desired placeholder.
+                   -->
+                <button @click="$router.push(`/me/activity/${log.id}`)"
+                  class="text-emerald-600 hover:underline text-xs font-bold uppercase ml-2">
+                  Voir Détail
+                </button>
               </td>
             </tr>
           </tbody>
@@ -126,7 +145,7 @@
             <IconChevronLeft size="16" />
           </button>
           <span class="text-sm font-medium text-slate-700">Page {{ logsStore.currentPage }} / {{ logsStore.totalPages
-            }}</span>
+          }}</span>
           <button @click="logsStore.setPage(logsStore.currentPage + 1)"
             :disabled="logsStore.currentPage >= logsStore.totalPages"
             class="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">

@@ -19,8 +19,12 @@
         <NavItem to="/me/manage/admins" icon="IconUserShield" label="Administrateurs" :collapsed="collapsed" />
         <NavItem to="/me/manage/users" icon="IconUsers" label="Utilisateurs" :collapsed="collapsed" />
         <NavItem to="/me/manage/learners" icon="IconSchool" label="Apprenants" :collapsed="collapsed" />
-        <NavItem to="/me/activity" icon="IconHistory" label="Journal (Perso)" :collapsed="collapsed" />
-        <NavItem to="/me/activity/all-logs" icon="IconClipboardList" label="Logs Système" :collapsed="collapsed" />
+      </SidebarGroup>
+
+      <!-- Journal Group -->
+      <SidebarGroup label="Journal" :collapsed="collapsed" :icon="IconHistory">
+        <NavItem to="/me/activity" icon="IconHistory" label="Personnel" :collapsed="collapsed" />
+        <NavItem to="/me/activity/all-logs" icon="IconClipboardList" label="Système" :collapsed="collapsed" />
       </SidebarGroup>
 
       <!-- Blog Group -->
