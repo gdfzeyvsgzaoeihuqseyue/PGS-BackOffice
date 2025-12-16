@@ -18,6 +18,7 @@
       <SidebarGroup label="Gestion Utilisateurs" :collapsed="collapsed" :icon="IconUsers">
         <NavItem to="/admin/manage/users" icon="IconUsers" label="Utilisateurs" :collapsed="collapsed" />
         <NavItem to="/admin/manage/learners" icon="IconSchool" label="Apprenants" :collapsed="collapsed" />
+        <NavItem to="/admin/activity" icon="IconHistory" label="Journal" :collapsed="collapsed" />
       </SidebarGroup>
 
       <!-- Blog Group -->
@@ -40,7 +41,7 @@
 
 <script setup>
 import {
-  IconDashboard, IconUsers, IconSchool, IconArticle, IconPencil, IconCategory,
+  IconDashboard, IconUsers, IconSchool, IconArticle, IconPencil, IconCategory, IconHistory,
   IconChevronsLeft, IconChevronsRight
 } from '@tabler/icons-vue'
 

@@ -1,0 +1,354 @@
+{
+  "logs": [
+    {
+      "id": "6940417fcf95d08db0a8accd",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "login",
+      "targetType": "system",
+      "targetId": "",
+      "details": {
+        "loginTime": "2025-12-15T17:12:31.014Z"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765818751015
+    },
+    {
+      "id": "69403ae1cf95d08db0a8accb",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "login",
+      "targetType": "system",
+      "targetId": "",
+      "details": {
+        "loginTime": "2025-12-15T16:44:16.887Z"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765817056921
+    },
+    {
+      "id": "69403ad7cf95d08db0a8acc9",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "login",
+      "targetType": "system",
+      "targetId": "",
+      "details": {
+        "loginTime": "2025-12-15T16:44:07.020Z"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765817047020
+    },
+    {
+      "id": "69403989cf95d08db0a8acc7",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "login",
+      "targetType": "system",
+      "targetId": "",
+      "details": {
+        "loginTime": "2025-12-15T16:38:33.049Z"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765816713049
+    },
+    {
+      "id": "694037aacf95d08db0a8acc5",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "login",
+      "targetType": "system",
+      "targetId": "",
+      "details": {
+        "loginTime": "2025-12-15T16:30:34.153Z"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765816234154
+    },
+    {
+      "id": "694035a8cf95d08db0a8acc3",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "login",
+      "targetType": "system",
+      "targetId": "",
+      "details": {
+        "loginTime": "2025-12-15T16:22:00.217Z"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765815720217
+    },
+    {
+      "id": "69402c8cc82003d5f892ebff",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "login",
+      "targetType": "system",
+      "targetId": "",
+      "details": {
+        "loginTime": "2025-12-15T15:43:08.955Z"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765813388956
+    },
+    {
+      "id": "69402c12c82003d5f892ebfd",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "login",
+      "targetType": "system",
+      "targetId": "",
+      "details": {
+        "loginTime": "2025-12-15T15:41:06.553Z"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765813266563
+    },
+    {
+      "id": "694028cdc82003d5f892ebfb",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "login",
+      "targetType": "system",
+      "targetId": "",
+      "details": {
+        "loginTime": "2025-12-15T15:27:09.200Z"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765812429200
+    },
+    {
+      "id": "69402762c82003d5f892ebf9",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "login",
+      "targetType": "system",
+      "targetId": "",
+      "details": {
+        "loginTime": "2025-12-15T15:21:06.686Z"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765812066686
+    },
+    {
+      "id": "693ffbbcc82003d5f892ebf7",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "user_verify_email",
+      "targetType": "user",
+      "targetId": "691f3a0d38a1937eda5cbef3",
+      "details": {
+        "userEmail": "ctraderarchimde@gmail.com",
+        "reason": "Non spécifiée",
+        "actionDescription": "Email vérifié"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765800892846
+    },
+    {
+      "id": "693ffb2ec82003d5f892ebf6",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "login",
+      "targetType": "system",
+      "targetId": "",
+      "details": {
+        "loginTime": "2025-12-15T12:12:30.793Z"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765800750793
+    },
+    {
+      "id": "693ffb15c82003d5f892ebf4",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "login",
+      "targetType": "system",
+      "targetId": "",
+      "details": {
+        "loginTime": "2025-12-15T12:12:05.265Z"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765800725266
+    },
+    {
+      "id": "693ffa28c82003d5f892ebf2",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "login",
+      "targetType": "system",
+      "targetId": "",
+      "details": {
+        "loginTime": "2025-12-15T12:08:08.480Z"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765800488481
+    },
+    {
+      "id": "693ff3ecc82003d5f892ebf0",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "login",
+      "targetType": "system",
+      "targetId": "",
+      "details": {
+        "loginTime": "2025-12-15T11:41:32.044Z"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765798892046
+    },
+    {
+      "id": "693ff281c82003d5f892ebee",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "login",
+      "targetType": "system",
+      "targetId": "",
+      "details": {
+        "loginTime": "2025-12-15T11:35:28.750Z"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765798528752
+    },
+    {
+      "id": "693ff1f0c82003d5f892ebec",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "login",
+      "targetType": "system",
+      "targetId": "",
+      "details": {
+        "loginTime": "2025-12-15T11:33:04.877Z"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765798384880
+    },
+    {
+      "id": "693fe848d3d79bbbb2ebbb8d",
+      "superAdmin": {
+        "id": "690419f516b2b0e70401fee7",
+        "firstName": "Steve Aster",
+        "lastName": "Afovo",
+        "email": "steveasterafovo@gmail.com",
+        "role": "main"
+      },
+      "action": "login",
+      "targetType": "system",
+      "targetId": "",
+      "details": {
+        "loginTime": "2025-12-15T10:51:52.132Z"
+      },
+      "ipAddress": "::1",
+      "status": "success",
+      "createdAt": 1765795912132
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 50,
+    "total": 18,
+    "totalPages": 1
+  }
+}
