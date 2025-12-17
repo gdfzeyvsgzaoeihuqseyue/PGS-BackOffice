@@ -177,6 +177,18 @@
             class="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
         </div>
 
+        <!-- Role Selection -->
+        <div>
+          <label class="block text-sm font-medium text-secondary-700 mb-1">Rôle</label>
+          <select v-model="editForm.role"
+            class="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white">
+            <option value="admin">Administrateur</option>
+            <option value="moderator">Modérateur</option>
+            <option value="support">Support</option>
+            <option value="analyst">Analyste</option>
+          </select>
+        </div>
+
         <div class="flex justify-end gap-3 pt-4">
           <button @click="closeEditModal"
             class="px-4 py-2 border border-secondary-300 rounded-lg text-secondary-700 hover:bg-secondary-50">
@@ -221,7 +233,8 @@ const isSaving = ref(false)
 const editForm = reactive({
   firstName: '',
   lastName: '',
-  username: ''
+  username: '',
+  role: 'admin'
 })
 
 const openEditModal = () => {
@@ -229,6 +242,7 @@ const openEditModal = () => {
   editForm.firstName = admin.value.firstName || ''
   editForm.lastName = admin.value.lastName || ''
   editForm.username = admin.value.username || ''
+  editForm.role = admin.value.role || 'admin'
   isEditModalOpen.value = true
 }
 
@@ -244,7 +258,8 @@ const saveEdit = async () => {
       action: 'update',
       firstName: editForm.firstName,
       lastName: editForm.lastName,
-      username: editForm.username
+      username: editForm.username,
+      role: editForm.role
     })
     notify('Compte mis à jour avec succès')
     closeEditModal()
@@ -265,7 +280,7 @@ const fetchLogs = async (loadMore = false) => {
     adminLogsStore.filters.startDate = ''
     adminLogsStore.filters.endDate = ''
 
-    adminLogsStore.limit = 10 // Paginatin sur 10 éléments
+    adminLogsStore.limit = 10
     adminLogsStore.currentPage = 1
     await adminLogsStore.fetchLogs()
   }
@@ -276,7 +291,6 @@ const loadMoreLogs = () => {
 }
 
 onMounted(() => {
-  // If the admin data is not loaded or different ID, fetch it
   if (!admin.value || admin.value.id !== adminId) {
     adminStore.fetchAdmin(adminId)
   }

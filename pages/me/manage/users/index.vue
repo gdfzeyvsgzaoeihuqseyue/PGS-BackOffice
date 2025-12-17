@@ -4,29 +4,30 @@
    <div v-else>
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 fade-in-up">
          <div>
-            <h2 class="text-2xl font-bold text-slate-800">Gestion Utilisateurs</h2>
-            <p class="text-slate-500 mt-1">Liste complète des utilisateurs enregistrés</p>
+            <h2 class="text-2xl font-bold text-secondary-800">Gestion Utilisateurs</h2>
+            <p class="text-secondary-500 mt-1">Liste complète des utilisateurs enregistrés</p>
          </div>
          <div class="flex items-center gap-4">
-            <div class="px-4 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm font-medium text-slate-600">
-               Total: <span class="font-bold text-slate-800">{{ userStore.total || users.length }}</span>
+            <div
+               class="px-4 py-2 bg-secondary-50 rounded-lg border border-secondary-200 text-sm font-medium text-secondary-600">
+               Total: <span class="font-bold text-secondary-800">{{ userStore.total || users.length }}</span>
             </div>
             <div class="relative group">
-               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-secondary-400">
                   <IconSearch size="18" />
                </div>
                <input v-model="search" type="text" placeholder="Rechercher un utilisateur..."
-                  class="pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none w-64 transition-all shadow-sm group-hover:shadow-md" />
+                  class="pl-10 pr-4 py-2.5 bg-white border border-secondary-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none w-64 transition-all shadow-sm group-hover:shadow-md" />
             </div>
          </div>
       </div>
 
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden fade-in-up delay-100">
+      <div class="bg-white rounded-2xl shadow-sm border border-secondary-200 overflow-hidden fade-in-up delay-100">
          <div class="overflow-x-auto relative">
             <table class="w-full text-left border-collapse">
                <thead>
                   <tr
-                     class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-bold tracking-wider">
+                     class="bg-secondary-50 border-b border-secondary-200 text-xs uppercase text-secondary-500 font-bold tracking-wider">
                      <th class="px-6 py-4">Utilisateur</th>
                      <th class="px-6 py-4">Email</th>
                      <th class="px-6 py-4">Statut</th>
@@ -34,41 +35,41 @@
                      <th class="px-6 py-4 text-right">Actions</th>
                   </tr>
                </thead>
-               <tbody class="divide-y divide-slate-100">
-                  <tr v-for="user in users" :key="user.id" class="hover:bg-slate-50/50 transition-colors group">
+               <tbody class="divide-y divide-secondary-100">
+                  <tr v-for="user in users" :key="user.id" class="hover:bg-secondary-50/50 transition-colors group">
                      <td class="px-6 py-4">
                         <NuxtLink :to="`/me/manage/users/${user.id}`"
                            class="flex items-center gap-3 group/link hover:opacity-80 transition-opacity">
                            <div
-                              class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-600 flex items-center justify-center font-bold text-sm">
+                              class="w-10 h-10 rounded-full bg-gradient-to-br from-accent-100 to-secondary-100 text-accent-600 flex items-center justify-center font-bold text-sm">
                               {{ user.fullName ? user.fullName.charAt(0).toUpperCase() : 'U' }}
                            </div>
                            <div>
                               <div
-                                 class="font-medium text-slate-900 group-hover/link:text-emerald-600 transition-colors">
+                                 class="font-medium text-secondary-900 group-hover/link:text-primary-600 transition-colors">
                                  {{ user.fullName || 'Sans nom' }}</div>
-                              <div class="text-xs text-slate-400">@{{ user.username }}</div>
+                              <div class="text-xs text-secondary-400">@{{ user.username }}</div>
                            </div>
                         </NuxtLink>
                      </td>
-                     <td class="px-6 py-4 text-slate-600 text-sm font-medium">{{ user.email }}</td>
+                     <td class="px-6 py-4 text-secondary-600 text-sm font-medium">{{ user.email }}</td>
                      <td class="px-6 py-4">
                         <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border"
                            :class="{
-                              'bg-emerald-50 text-emerald-700 border-emerald-100': user.isActive,
-                              'bg-amber-50 text-amber-700 border-amber-100': !user.isActive
+                              'bg-primary-50 text-primary-700 border-primary-100': user.isActive,
+                              'bg-warn-50 text-warn-700 border-warn-100': !user.isActive
                            }">
                            <span class="w-1.5 h-1.5 rounded-full mr-1.5"
-                              :class="user.isActive ? 'bg-emerald-500' : 'bg-amber-500'"></span>
+                              :class="user.isActive ? 'bg-primary-500' : 'bg-warn-500'"></span>
                            {{ user.isActive ? 'Actif' : 'Suspendu' }}
                         </span>
                      </td>
-                     <td class="px-6 py-4 text-slate-500 text-xs font-mono">{{ user.createdAt ? new
+                     <td class="px-6 py-4 text-secondary-500 text-xs font-mono">{{ user.createdAt ? new
                         Date(user.createdAt).toLocaleDateString() : '-' }}</td>
                      <td class="px-6 py-4 text-right">
                         <Menu as="div" class="relative inline-block text-left">
                            <MenuButton
-                              class="p-1.5 hover:bg-slate-100 rounded-lg text-slate-400 hover:text-slate-600 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
+                              class="p-1.5 hover:bg-secondary-100 rounded-lg text-secondary-400 hover:text-secondary-600 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
                               <IconDotsVertical size="20" />
                            </MenuButton>
                            <transition enter-active-class="transition duration-100 ease-out"
@@ -82,16 +83,16 @@
                                  <div class="px-1 py-1">
                                     <MenuItem v-slot="{ active }">
                                     <button @click="handleStatusToggle(user)"
-                                       :class="[active ? 'bg-emerald-50 text-emerald-900' : 'text-slate-700', 'group flex w-full items-center rounded-lg px-2 py-2 text-sm transition-colors']">
-                                       <IconBan v-if="user.isActive" class="mr-2 h-4 w-4 text-amber-500" />
-                                       <IconCheck v-else class="mr-2 h-4 w-4 text-emerald-500" />
+                                       :class="[active ? 'bg-primary-50 text-primary-900' : 'text-secondary-700', 'group flex w-full items-center rounded-lg px-2 py-2 text-sm transition-colors']">
+                                       <IconBan v-if="user.isActive" class="mr-2 h-4 w-4 text-warn-500" />
+                                       <IconCheck v-else class="mr-2 h-4 w-4 text-primary-500" />
                                        {{ user.isActive ? 'Suspendre' : 'Activer' }}
                                     </button>
                                     </MenuItem>
                                     <MenuItem v-slot="{ active }">
                                     <button @click="handleVerifyEmail(user)"
-                                       :class="[active ? 'bg-blue-50 text-blue-900' : 'text-slate-700', 'group flex w-full items-center rounded-lg px-2 py-2 text-sm transition-colors']">
-                                       <IconMailCheck class="mr-2 h-4 w-4 text-blue-500" />
+                                       :class="[active ? 'bg-accent-50 text-accent-900' : 'text-secondary-700', 'group flex w-full items-center rounded-lg px-2 py-2 text-sm transition-colors']">
+                                       <IconMailCheck class="mr-2 h-4 w-4 text-accent-500" />
                                        Vérifier Email
                                     </button>
                                     </MenuItem>
@@ -99,8 +100,8 @@
                                  <div class="px-1 py-1">
                                     <MenuItem v-slot="{ active }">
                                     <button @click="handleDelete(user)"
-                                       :class="[active ? 'bg-red-50 text-red-900' : 'text-slate-700', 'group flex w-full items-center rounded-lg px-2 py-2 text-sm transition-colors']">
-                                       <IconTrash class="mr-2 h-4 w-4 text-red-500" />
+                                       :class="[active ? 'bg-danger-50 text-danger-900' : 'text-secondary-700', 'group flex w-full items-center rounded-lg px-2 py-2 text-sm transition-colors']">
+                                       <IconTrash class="mr-2 h-4 w-4 text-danger-500" />
                                        Supprimer
                                     </button>
                                     </MenuItem>
@@ -111,7 +112,7 @@
                      </td>
                   </tr>
                   <tr v-if="users.length === 0 && !loading">
-                     <td colspan="5" class="px-6 py-12 text-center text-slate-500">
+                     <td colspan="5" class="px-6 py-12 text-center text-secondary-500">
                         <p class="text-sm">Aucun utilisateur trouvé pour cette recherche.</p>
                      </td>
                   </tr>
@@ -120,16 +121,17 @@
          </div>
 
          <!-- Pagination -->
-         <div class="px-6 py-4 border-t border-slate-200 flex items-center justify-between bg-slate-50/50"
+         <div class="px-6 py-4 border-t border-secondary-200 flex items-center justify-between bg-secondary-50/50"
             v-if="totalPages > 1">
             <button @click="userStore.setPage(page - 1)" :disabled="page <= 1"
-               class="flex items-center px-4 py-2 border border-slate-200 bg-white rounded-lg hover:bg-slate-50 hover:border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-medium text-slate-600 shadow-sm">
+               class="flex items-center px-4 py-2 border border-secondary-200 bg-white rounded-lg hover:bg-secondary-50 hover:border-secondary-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-medium text-secondary-600 shadow-sm">
                Précédent
             </button>
-            <span class="text-sm font-medium text-slate-600">Page {{ page }} <span class="text-slate-400">/</span> {{
-               totalPages }}</span>
+            <span class="text-sm font-medium text-secondary-600">Page {{ page }} <span
+                  class="text-secondary-400">/</span> {{
+                     totalPages }}</span>
             <button @click="userStore.setPage(page + 1)" :disabled="page >= totalPages"
-               class="flex items-center px-4 py-2 border border-slate-200 bg-white rounded-lg hover:bg-slate-50 hover:border-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-medium text-slate-600 shadow-sm">
+               class="flex items-center px-4 py-2 border border-secondary-200 bg-white rounded-lg hover:bg-secondary-50 hover:border-secondary-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-medium text-secondary-600 shadow-sm">
                Suivant
             </button>
          </div>

@@ -3,9 +3,12 @@
     <!-- Header -->
     <div class="h-16 flex items-center justify-center border-b border-secondary-800 flex-shrink-0">
       <transition name="fade" mode="out-in">
-        <span v-if="!collapsed"
-          class="text-xl font-bold bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent tracking-wide absolute whitespace-nowrap">BackOffice</span>
-        <span v-else class="text-xl font-bold text-primary-400">BO</span>
+        <div v-if="!collapsed" class="px-4">
+          <img :src="sharedFiles.paths.logo.dw" alt="Logo" class="h-8 w-auto" />
+        </div>
+        <div v-else>
+          <img :src="sharedFiles.paths.logo.mw" alt="Logo" class="h-8 w-auto" />
+        </div>
       </transition>
     </div>
 
@@ -41,6 +44,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useSharedFiles } from '~/stores/sharedFiles'
 import {
   IconUserEdit, IconUserShield, IconUserStar, IconNews, IconUserShare, IconDeviceAnalytics, IconFileDescription, IconUserBolt, IconDashboard, IconUsers, IconArticle, IconCategory, IconChevronsLeft, IconChevronsRight
 } from '@tabler/icons-vue'
@@ -50,6 +54,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['toggle'])
 const route = useRoute()
+const sharedFiles = useSharedFiles()
 
 // Navigation Configuration
 const navigationGroups = [

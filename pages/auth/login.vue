@@ -54,9 +54,14 @@
             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-secondary-400">
               <IconKey size="20" />
             </div>
-            <input v-model="form.password" type="password" required
-              class="w-full pl-11 pr-4 py-3.5 bg-secondary-50 border-secondary-200 border rounded-xl focus:bg-white focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500 outline-none transition-all font-medium text-secondary-800 placeholder-secondary-400"
+            <input v-model="form.password" :type="showPassword ? 'text' : 'password'" required
+              class="w-full pl-11 pr-10 py-3.5 bg-secondary-50 border-secondary-200 border rounded-xl focus:bg-white focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500 outline-none transition-all font-medium text-secondary-800 placeholder-secondary-400"
               placeholder="••••••••••••" />
+            <button type="button" @click="showPassword = !showPassword"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-secondary-400 hover:text-secondary-600 transition-colors">
+              <IconEye v-if="showPassword" size="20" />
+              <IconEyeOff v-else size="20" />
+            </button>
           </div>
         </div>
 
@@ -78,7 +83,7 @@
 </template>
 
 <script setup>
-import { IconMail, IconKey, IconAlertCircle, IconArrowRight, IconLoader } from '@tabler/icons-vue'
+import { IconMail, IconKey, IconAlertCircle, IconArrowRight, IconLoader, IconEye, IconEyeOff } from '@tabler/icons-vue'
 import { useSharedFiles } from '~/stores/sharedFiles';
 
 const sharedFiles = useSharedFiles();
@@ -106,7 +111,7 @@ const handleLogin = async () => {
 }
 
 useHead({
-  title: "Connexion"
+  title: 'Connexion'
 })
 </script>
 
