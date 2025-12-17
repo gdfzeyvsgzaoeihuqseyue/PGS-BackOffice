@@ -172,29 +172,14 @@ definePageMeta({
 })
 
 const { add: notify } = useToast()
-const loading = ref(false)
-const admins = ref<any[]>([]) // Using any[] because we extended admin object with status
+const adminStore = useAdminStore()
+const loading = computed(() => adminStore.loading)
+const admins = computed(() => adminStore.admins)
+
 const searchQuery = ref('')
 
-const fetchAdmins = async () => {
-  loading.value = true
-  try {
-    const { data, error } = await useAPI<{ admins: any[] }>('/admin/get-admins')
-    if (error.value) throw error.value
-
-    if (data.value?.admins) {
-      admins.value = data.value.admins
-    }
-  } catch (e) {
-    console.error(e)
-    notify('Impossible de charger la liste des administrateurs', 'error')
-  } finally {
-    loading.value = false
-  }
-}
-
 onMounted(() => {
-  fetchAdmins()
+  adminStore.fetchAdmins()
 })
 
 const filteredAdmins = computed(() => {
@@ -220,18 +205,8 @@ const getRoleBadgeClass = (role: string) => {
 
 const toggleStatus = async (admin: any) => {
   try {
-    // Assuming backend endpoint /toggle-status is valid or we rely on it.
-    // We expect it to toggle between active and suspended.
-    const { error } = await useAPI(`/admin/get-admins/${admin.id}/toggle-status`, { method: 'POST' })
-    if (error.value) throw error.value
-
-    // Optimistic update
-    const oldStatus = admin.status
-    const newStatus = oldStatus === 'active' ? 'suspended' : 'active'
-
-    admin.status = newStatus
-
-    notify(`Compte ${newStatus === 'active' ? 'activé' : 'suspendu'}`)
+    await adminStore.toggleStatus(admin.id)
+    notify(`Statut mis à jour`)
   } catch (e) {
     notify('Erreur lors du changement de statut', 'error')
   }
@@ -241,12 +216,7 @@ const resendInvite = async (admin: any) => {
   if (!confirm(`Renvoyer l'e-mail d'invitation à ${admin.firstName} ${admin.lastName} ?`)) return
 
   try {
-    const { error } = await useAPI('/admin/invite/resend', {
-      method: 'POST',
-      body: { adminId: admin.id }
-    })
-
-    if (error.value) throw error.value
+    await adminStore.resendInvite(admin.id)
     notify('Invitation renvoyée avec succès')
   } catch (e) {
     notify('Erreur lors du renvoi', 'error')
@@ -257,10 +227,7 @@ const handleDelete = async (admin: any) => {
   if (!confirm('Êtes-vous sûr de vouloir supprimer cet administrateur ? Cette action est irréversible.')) return
 
   try {
-    const { error } = await useAPI(`/admin/get-admins/${admin.id}`, { method: 'DELETE' })
-    if (error.value) throw error.value
-
-    admins.value = admins.value.filter(a => a.id !== admin.id)
+    await adminStore.deleteAdmin(admin.id)
     notify('Administrateur supprimé')
   } catch (e) {
     notify('Erreur lors de la suppression', 'error')

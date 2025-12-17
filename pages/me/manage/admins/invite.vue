@@ -88,6 +88,7 @@ definePageMeta({
 
 const { add: notify } = useToast()
 const router = useRouter()
+const adminStore = useAdminStore()
 
 const loading = ref(false)
 const form = reactive({
@@ -101,12 +102,7 @@ const form = reactive({
 const handleInvite = async () => {
   loading.value = true
   try {
-    const { error } = await useAPI('/admin/auth/invite', {
-      method: 'POST',
-      body: { ...form, status: 'pending' }
-    })
-
-    if (error.value) throw error.value
+    await adminStore.inviteAdmin(form)
 
     notify('Invitation envoyée avec succès')
     router.push('/me/manage/admins')

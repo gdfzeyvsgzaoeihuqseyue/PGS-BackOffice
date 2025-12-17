@@ -4,9 +4,19 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: [
     '@nuxtjs/tailwindcss',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    '@nuxtjs/google-fonts',
   ],
   css: ['~/assets/css/main.css'],
+
+  googleFonts: {
+    display: 'swap',
+    families: {
+      'Kedebideri': [400, 500, 600, 700, 800, 900],
+      'Science+Gothic': [100, 200, 300, 400, 500, 600, 700, 800, 900],
+      'Stack+Sans+Notch': [100, 200, 300, 400, 500, 600, 700, 800, 900],
+    }
+  },
 
   runtimeConfig: {
     mistralApiKey: process.env.NOAH_MISTRAL_KEY,

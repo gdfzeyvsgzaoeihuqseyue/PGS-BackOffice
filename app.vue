@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="min-h-screen font-body">
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
@@ -8,11 +8,9 @@
 </template>
 
 <script setup lang="ts">
-
 import { useSharedFiles } from '~/stores/sharedFiles';
 
 const { toasts } = useToast()
-
 const runtimeConfig = useRuntimeConfig();
 const sharedFilesUrl = runtimeConfig.public.pgsSharedFiles;
 const sharedFiles = useSharedFiles();

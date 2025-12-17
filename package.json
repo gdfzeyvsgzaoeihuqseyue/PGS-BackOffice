@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.23",
+    "@nuxtjs/google-fonts": "^3.2.0",
     "@pinia/nuxt": "^0.11.3",
     "@tabler/icons-vue": "^3.36.0",
     "@tiptap/extension-color": "^3.13.0",

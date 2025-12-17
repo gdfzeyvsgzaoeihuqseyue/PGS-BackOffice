@@ -51,6 +51,24 @@ export const useAuthStore = defineStore('auth', {
         this.loading = false
       }
     },
+    async acceptInvitation(payload: { token: string, password: string, firstName?: string, lastName?: string }) {
+      this.loading = true
+      try {
+        const { error } = await useAPI('/admin/invite/accept-invitation', {
+          method: 'POST',
+          body: payload
+        })
+
+        if (error.value) throw error.value
+
+        return true
+      } catch (e: any) {
+        throw e
+      } finally {
+        this.loading = false
+      }
+    },
+
     async logout() {
       try {
         await useAPI('/admin/auth/logout', { method: 'POST' })

@@ -113,6 +113,7 @@ import { IconLock, IconCheck, IconAlertCircle, IconArrowRight } from '@tabler/ic
 import { useSharedFiles } from '~/stores/sharedFiles';
 
 const sharedFiles = useSharedFiles();
+const authStore = useAuthStore()
 
 definePageMeta({
   layout: false,
@@ -152,21 +153,17 @@ const handleSubmit = async () => {
     return
   }
 
+  authStore.loading = true
   loading.value = true
   error.value = ''
 
   try {
-    const { error: apiError } = await useAPI('/admin/auth/accept-invitation', {
-      method: 'POST',
-      body: {
-        token: token,
-        password: form.password,
-        firstName: form.firstName || undefined,
-        lastName: form.lastName || undefined
-      }
+    await authStore.acceptInvitation({
+      token,
+      password: form.password,
+      firstName: form.firstName || undefined,
+      lastName: form.lastName || undefined
     })
-
-    if (apiError.value) throw apiError.value
 
     success.value = true
 

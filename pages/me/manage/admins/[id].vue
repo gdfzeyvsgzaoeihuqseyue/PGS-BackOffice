@@ -160,59 +160,31 @@ const route = useRoute()
 const { add: notify } = useToast()
 const adminId = route.params.id
 
-const admin = ref(null)
-const loading = ref(false)
+const adminStore = useAdminStore()
+const adminLogsStore = useAdminLogsStore()
 
-const logs = ref([])
-const logsTotal = ref(0)
-const logsPage = ref(1)
-const logsLoading = ref(false)
+const admin = computed(() => adminStore.currentAdmin)
+const loading = computed(() => adminStore.loading)
 
-const fetchAdmin = async () => {
-  loading.value = true
-  try {
-    const { data, error } = await useAPI('/admin/get-admins', { query: { limit: 1000 } })
-    if (error.value) throw error.value
-
-    if (data.value?.admins) {
-      admin.value = data.value.admins.find(a => a.id === adminId)
-    }
-
-  } catch (e) {
-    notify('Administrateur introuvable', 'error')
-  } finally {
-    loading.value = false
-  }
-}
+const logs = computed(() => adminLogsStore.logs)
+const logsTotal = computed(() => adminLogsStore.total)
+const logsLoading = computed(() => adminLogsStore.loading)
 
 const fetchLogs = async (loadMore = false) => {
-  logsLoading.value = true
-  try {
-    const page = loadMore ? logsPage.value + 1 : 1
-    const { data, error } = await useAPI('/admin/all-activity-logs', {
-      query: {
-        adminId: adminId,
-        page: page,
-        limit: 10
-      }
-    })
+  if (loadMore) {
+    adminLogsStore.setPage(adminLogsStore.currentPage + 1)
+  } else {
+    // Reset and filter for this admin
+    // We need to access filters safely. Assuming adminLogsStore has methods to set filters.
+    // The previously seen adminLogsStore has 'filters' in state.
+    adminLogsStore.filters.adminId = adminId
+    adminLogsStore.filters.action = ''
+    adminLogsStore.filters.targetType = ''
+    adminLogsStore.filters.startDate = ''
+    adminLogsStore.filters.endDate = ''
 
-    if (error.value) throw error.value
-
-    if (data.value?.logs) {
-      if (loadMore) {
-        logs.value.push(...data.value.logs)
-        logsPage.value = page
-      } else {
-        logs.value = data.value.logs
-        logsPage.value = 1
-      }
-      logsTotal.value = data.value.pagination?.total || 0
-    }
-  } catch (e) {
-    console.error(e)
-  } finally {
-    logsLoading.value = false
+    adminLogsStore.currentPage = 1
+    await adminLogsStore.fetchLogs()
   }
 }
 
@@ -221,30 +193,14 @@ const loadMoreLogs = () => {
 }
 
 onMounted(() => {
-  fetchAdmin()
+  adminStore.fetchAdmin(adminId)
   fetchLogs()
 })
 
 const toggleStatus = async () => {
   if (!admin.value) return
-  // Logic to toggle between active and suspended
-  const newStatus = admin.value.status === 'active' ? 'suspended' : 'active'
   try {
-    // Assuming backend also supports updating status via update endpoint or we still use toggle-status but it might act differently. 
-    // Since I cannot change backend controller easily, I assume I should use an update endpoint or if the user implied the backend is ready, 
-    // maybe toggle-status is still the one but implementation changed implicitly? 
-    // But honestly, explicit update is safer if I can.
-    // However, the previous code used /toggle-status. Let's stick to it but assume it handles status now, OR 
-    // if I should strictly follow "isActive is replaced by status", I should treat status as the source of truth.
-    // If I use toggle-status, I am hoping it does the right thing.
-    // Let's try to see if I can update status directly.
-    // But I don't know if there is an update endpoint.
-    // I'll stick to toggle-status but update the local state correctly.
-
-    await useAPI(`/admin/get-admins/${admin.value.id}/toggle-status`, { method: 'POST' })
-
-    // Optimistic update
-    admin.value.status = newStatus
+    await adminStore.toggleStatus(admin.value.id)
     notify('Statut mis à jour')
   } catch (e) {
     notify('Erreur lors de la mise à jour du statut', 'error')
@@ -254,10 +210,7 @@ const toggleStatus = async () => {
 const resendInvite = async () => {
   if (!admin.value) return
   try {
-    await useAPI('/admin/invite/resend', {
-      method: 'POST',
-      body: { adminId: admin.value.id }
-    })
+    await adminStore.resendInvite(admin.value.id)
     notify('Invitation renvoyée')
   } catch (e) {
     notify('Erreur', 'error')
