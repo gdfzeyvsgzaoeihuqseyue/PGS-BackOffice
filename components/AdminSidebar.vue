@@ -23,8 +23,8 @@
 
       <!-- Journal Group -->
       <SidebarGroup label="Journal" :collapsed="collapsed" :icon="IconHistory">
-        <NavItem to="/me/activity" icon="IconHistory" label="Personnel" :collapsed="collapsed" />
-        <NavItem to="/me/activity/all-logs" icon="IconClipboardList" label="Système" :collapsed="collapsed" />
+        <NavItem to="/me/activity/me" icon="IconHistory" label="Personnel" :collapsed="collapsed" />
+        <NavItem to="/me/activity/syst" icon="IconClipboardList" label="Système" :collapsed="collapsed" />
       </SidebarGroup>
 
       <!-- Blog Group -->

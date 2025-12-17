@@ -124,15 +124,8 @@
                   class="text-emerald-600 hover:underline text-xs font-bold uppercase whitespace-nowrap">
                   Voir Admin
                 </NuxtLink>
-                <!-- Optional: If we had a detailed single log view, we would link there. For now user said "Bouton Voir Détail" like in activity index.
-                       In activity index it links to /me/activity/:id.
-                       If we want detailed log view for ALL LOGS, we need a page for it.
-                       However, the user said "Comme pour @[pages/me/activity/index.vue], ajoute un bouton Voir Détail dans @[pages/me/activity/all-logs.vue]". 
-                       So I should add a link to detailed log view. 
-                       I'll assume the same detailed view /me/activity/:id might work IF it handles fetching any log (if permitted). 
-                       Or I might need to create it. For now, I will link to /me/activity/:id assuming it might work or is desired placeholder.
-                   -->
-                <button @click="$router.push(`/me/activity/${log.id}`)"
+
+                <button @click="$router.push(`/me/activity/syst/${log.id}`)"
                   class="text-emerald-600 hover:underline text-xs font-bold uppercase ml-2">
                   Voir Détail
                 </button>

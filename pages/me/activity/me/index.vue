@@ -65,7 +65,7 @@
               {{ new Date(log.createdAt).toLocaleString() }}
             </td>
             <td class="px-6 py-4 text-sm text-slate-500">
-              <NuxtLink :to="`/me/activity/${log.id || log._id}`"
+              <NuxtLink :to="`/me/activity/me/${log.id || log._id}`"
                 class="text-emerald-600 hover:underline text-xs font-bold uppercase">
                 Voir Détail
               </NuxtLink>
