@@ -106,8 +106,6 @@ const userStore = useUserStore()
 const learnerStore = useLearnerStore()
 const blogStore = useBlogStore()
 
-// Trigger fetches to populate stats if not already done
-// We use Promise.allSettled to avoid one failure stopping others
 onMounted(async () => {
   await Promise.allSettled([
     userStore.fetchUsers(),
