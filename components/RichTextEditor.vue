@@ -5,7 +5,7 @@
     <RichTextEditorToolbar :editor="editor" />
 
     <!-- Zone de contenu de l'éditeur -->
-    <editor-content :editor="editor" class="p-4 prose prose-emerald max-w-none min-h-[150px] outline-none" />
+    <editor-content :editor="editor" class="p-4 prose prose-primary max-w-none min-h-[150px] outline-none" />
   </div>
 </template>
 
@@ -34,11 +34,7 @@ const props = defineProps({
   }
 })
 
-// --- Emits ---
 const emit = defineEmits(['update:modelValue'])
-
-
-// --- Extensions Personnalisées ---
 
 /**
  * FontSize Extension
@@ -245,27 +241,27 @@ onBeforeUnmount(() => {
 
 /* Styles pour les liens */
 .ProseMirror a {
-  color: #059669;
-  /* emerald-600 */
+  color: theme('colors.primary.600');
+  /* primary-600 */
   text-decoration: underline;
   cursor: pointer;
 }
 
 .ProseMirror a:hover {
-  color: #047857;
-  /* emerald-700 */
+  color: theme('colors.primary.700');
+  /* primary-700 */
 }
 
 /* Styles pour les citations (blockquotes) */
 .ProseMirror blockquote {
-  border-left: 4px solid #cbd5e1;
-  /* slate-300 */
+  border-left: 4px solid theme('colors.secondary.300');
+  /* secondary-300 */
   padding-left: 1em;
   margin: 1em 0;
   font-style: italic;
-  color: #475569;
-  /* slate-600 */
-  background: #f8fafc;
+  color: theme('colors.secondary.600');
+  /* secondary-600 */
+  background: theme('colors.secondary.50');
   padding-top: 0.5em;
   padding-bottom: 0.5em;
   padding-right: 0.5em;
@@ -273,8 +269,8 @@ onBeforeUnmount(() => {
 
 /* Styles pour les blocs de code */
 .ProseMirror pre {
-  background: #1e293b;
-  color: #f8fafc;
+  background: theme('colors.secondary.800');
+  color: theme('colors.secondary.50');
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
   font-family: 'JetBrains Mono', monospace;
@@ -300,7 +296,7 @@ onBeforeUnmount(() => {
 .ProseMirror td,
 .ProseMirror th {
   min-width: 1em;
-  border: 1px solid #ced4da;
+  border: 1px solid theme('colors.secondary.300');
   padding: 3px 5px;
   vertical-align: top;
   box-sizing: border-box;
@@ -310,7 +306,7 @@ onBeforeUnmount(() => {
 .ProseMirror th {
   font-weight: bold;
   text-align: left;
-  background-color: #f1f3f5;
+  background-color: theme('colors.secondary.100');
 }
 
 .ProseMirror .selectedCell:after {

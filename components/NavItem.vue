@@ -1,14 +1,14 @@
 <template>
   <NuxtLink :to="to"
-    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition-all group relative"
-    active-class="bg-emerald-600/10 text-emerald-400 shadow-sm border border-emerald-500/10">
+    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary-400 hover:bg-secondary-800 hover:text-white transition-all group relative"
+    active-class="bg-primary-600/10 text-primary-400 shadow-sm border border-primary-500/10">
     <component :is="iconComponent" class="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform" />
 
     <span v-if="!collapsed" class="font-medium truncate transition-all duration-300">{{ label }}</span>
 
     <!-- Tooltip for collapsed mode -->
     <div v-if="collapsed"
-      class="absolute left-full ml-4 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50 shadow-xl">
+      class="absolute left-full ml-4 px-2 py-1 bg-secondary-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50 shadow-xl">
       {{ label }}
     </div>
   </NuxtLink>
