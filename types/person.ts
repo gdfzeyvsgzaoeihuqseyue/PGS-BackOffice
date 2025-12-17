@@ -23,22 +23,20 @@ export interface Admin {
 
 export interface User {
   id: string
+  firstName?: string
+  lastName?: string
   fullName: string
   username: string
   email: string
+  emailVerified?: boolean
   isActive: boolean
+  lastLogin?: string | number | null
   createdAt: string | number
-  updatedAt: string | number
+  updatedAt?: string | number
 }
 
 export interface Learner extends User {
-  id: string
-  fullName: string
-  username: string
-  email: string
-  isActive: boolean
-  createdAt: string | number
-  updatedAt: string | number
+  phoneNumber?: string
 }
 
 export interface PaginationMeta {

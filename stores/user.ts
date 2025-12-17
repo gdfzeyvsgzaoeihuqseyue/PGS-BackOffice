@@ -4,6 +4,7 @@ import type { User, PaginatedResponse } from '~/types'
 export const useUserStore = defineStore('user', {
   state: () => ({
     users: [] as User[],
+    currentUser: null as User | null,
     total: 0,
     page: 1,
     limit: 20,
@@ -13,6 +14,27 @@ export const useUserStore = defineStore('user', {
     search: ''
   }),
   actions: {
+    async fetchUser(id: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const { data, error } = await useAPI<{ user: User }>(`/admin/manage/user/${id}`)
+        if (error.value) throw error.value
+
+        if (data.value?.user) {
+          this.currentUser = {
+            ...data.value.user,
+            fullName: `${data.value.user.firstName || ''} ${data.value.user.lastName || ''}`.trim()
+          }
+        }
+      } catch (e: any) {
+        console.error('Failed to fetch user', e)
+        this.error = e.message || 'Utilisateur introuvable'
+        throw e
+      } finally {
+        this.loading = false
+      }
+    },
     async fetchUsers(search = '') {
       this.loading = true
       this.error = null

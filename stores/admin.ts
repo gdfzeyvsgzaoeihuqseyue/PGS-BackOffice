@@ -33,20 +33,13 @@ export const useAdminStore = defineStore('admin', {
       this.loading = true
       this.error = null
       try {
-        // Try to find in existing list first if available (and if we trust it's fresh enough)
-        // But for detail view, better fetch fresh or fetch all if endpoint doesn't support single get
-        // As per current implementation, we fetch all (limit 1000) and find one. 
-
-        const { data, error } = await useAPI<{ admins: Admin[] }>('/admin/get-admins', { query: { limit: 1000 } })
+        const { data, error } = await useAPI<{ admin: Admin }>(`/admin/manage/admin/${id}`)
         if (error.value) throw error.value
 
-        if (data.value?.admins) {
-          const found = data.value.admins.find(a => a.id === id)
-          if (found) {
-            this.currentAdmin = found
-          } else {
-            throw new Error('Administrateur introuvable')
-          }
+        if (data.value?.admin) {
+          this.currentAdmin = data.value.admin
+        } else {
+          throw new Error('Administrateur introuvable')
         }
       } catch (e: any) {
         console.error('Failed to fetch admin', e)
@@ -90,22 +83,37 @@ export const useAdminStore = defineStore('admin', {
       }
     },
 
-    async toggleStatus(adminId: string) {
+    async manageAdmin(payload: { adminId: string, action: string, [key: string]: any }) {
       try {
-        const { error } = await useAPI(`/admin/get-admins/${adminId}/toggle-status`, { method: 'POST' })
+        const { error } = await useAPI('/admin/manage/admin/manage', {
+          method: 'POST',
+          body: payload
+        })
         if (error.value) throw error.value
 
-        // Optimistic update in list
-        const adminInList = this.admins.find(a => a.id === adminId)
-        if (adminInList) {
-          adminInList.status = adminInList.status === 'active' ? 'suspended' : 'active'
+        // Refresh current admin if it matches
+        if (this.currentAdmin && this.currentAdmin.id === payload.adminId) {
+          await this.fetchAdmin(payload.adminId)
         }
 
-        // Optimistic update in current admin
-        if (this.currentAdmin && this.currentAdmin.id === adminId) {
-          this.currentAdmin.status = this.currentAdmin.status === 'active' ? 'suspended' : 'active'
-        }
+        // Refresh list
+        await this.fetchAdmins()
+      } catch (e: any) {
+        throw e
+      }
+    },
 
+    async toggleStatus(adminId: string) {
+      const admin = this.admins.find(a => a.id === adminId) || (this.currentAdmin?.id === adminId ? this.currentAdmin : null)
+      if (!admin) return
+
+      const action = admin.status === 'active' ? 'suspend' : 'activate'
+
+      try {
+        await this.manageAdmin({
+          adminId,
+          action
+        })
       } catch (e: any) {
         throw e
       }
@@ -113,13 +121,10 @@ export const useAdminStore = defineStore('admin', {
 
     async deleteAdmin(adminId: string) {
       try {
-        const { error } = await useAPI(`/admin/get-admins/${adminId}`, { method: 'DELETE' })
-        if (error.value) throw error.value
-
-        this.admins = this.admins.filter(a => a.id !== adminId)
-        if (this.currentAdmin && this.currentAdmin.id === adminId) {
-          this.currentAdmin = null
-        }
+        await this.manageAdmin({
+          adminId,
+          action: 'delete'
+        })
       } catch (e: any) {
         throw e
       }

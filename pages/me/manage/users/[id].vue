@@ -114,16 +114,12 @@ definePageMeta({
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
-const { users, loading, error } = storeToRefs(userStore)
+const { currentUser: user, loading, error } = storeToRefs(userStore)
 const { add: notify } = useToast()
 
-const user = computed(() => {
-  return users.value.find(u => u.id === route.params.id)
+onMounted(() => {
+  userStore.fetchUser(route.params.id)
 })
-
-if (!user.value && !users.value.length) {
-  userStore.fetchUsers()
-}
 
 const handleStatusToggle = async () => {
   if (!user.value) return
@@ -131,6 +127,8 @@ const handleStatusToggle = async () => {
     const action = user.value.isActive ? 'suspend' : 'activate'
     await userStore.manageUser(user.value.id, action)
     notify(`Utilisateur ${user.value.isActive ? 'suspendu' : 'activé'} avec succès`)
+    // Refresh user data
+    await userStore.fetchUser(user.value.id)
   } catch (e) {
     notify('Erreur lors de la mise à jour', 'error')
   }
@@ -141,6 +139,8 @@ const handleVerifyEmail = async () => {
   try {
     await userStore.manageUser(user.value.id, 'verify_email')
     notify('Email vérifié avec succès')
+    // Refresh user data
+    await userStore.fetchUser(user.value.id)
   } catch (e) {
     notify('Erreur lors de la vérification', 'error')
   }

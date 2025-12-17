@@ -4,6 +4,7 @@ import type { Learner } from '~/types'
 export const useLearnerStore = defineStore('learner', {
   state: () => ({
     learners: [] as Learner[],
+    currentLearner: null as Learner | null,
     total: 0,
     page: 1,
     limit: 20,
@@ -13,6 +14,27 @@ export const useLearnerStore = defineStore('learner', {
     search: ''
   }),
   actions: {
+    async fetchLearner(id: string) {
+      this.loading = true
+      this.error = null
+      try {
+        const { data, error } = await useAPI<{ learner: Learner }>(`/admin/manage/learner/${id}`)
+        if (error.value) throw error.value
+
+        if (data.value?.learner) {
+          this.currentLearner = {
+            ...data.value.learner,
+            fullName: `${data.value.learner.firstName || ''} ${data.value.learner.lastName || ''}`.trim()
+          }
+        }
+      } catch (e: any) {
+        console.error('Failed to fetch learner', e)
+        this.error = e.message || 'Apprenant introuvable'
+        throw e
+      } finally {
+        this.loading = false
+      }
+    },
     async fetchLearners(search = '') {
       this.loading = true
       this.error = null

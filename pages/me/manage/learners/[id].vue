@@ -95,16 +95,12 @@ definePageMeta({
 const route = useRoute()
 const router = useRouter()
 const learnerStore = useLearnerStore()
-const { learners, loading, error } = storeToRefs(learnerStore)
+const { currentLearner: user, loading, error } = storeToRefs(learnerStore)
 const { add: notify } = useToast()
 
-const user = computed(() => {
-  return learners.value.find(u => u.id === route.params.id)
+onMounted(() => {
+  learnerStore.fetchLearner(route.params.id)
 })
-
-if (!user.value && !learners.value.length) {
-  learnerStore.fetchLearners()
-}
 
 const handleStatusToggle = async () => {
   if (!user.value) return
@@ -112,6 +108,7 @@ const handleStatusToggle = async () => {
     const action = user.value.isActive ? 'suspend' : 'activate'
     await learnerStore.manageLearner(user.value.id, action)
     notify(`Apprenant ${user.value.isActive ? 'suspendu' : 'activé'} avec succès`)
+    await learnerStore.fetchLearner(user.value.id)
   } catch (e) {
     notify('Erreur lors de la mise à jour', 'error')
   }
