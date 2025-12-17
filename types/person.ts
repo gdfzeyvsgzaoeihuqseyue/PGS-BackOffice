@@ -1,3 +1,26 @@
+export interface Admin {
+  id: string;
+  firstName: string;
+  lastName: string;
+  username?: string | null;
+  email: string;
+  role: 'main' | 'admin' | 'moderator' | 'support' | 'analyst';
+  // permissions: Record<string, any>;
+  permissions: {
+    canManageAll: boolean
+    [key: string]: any
+  }
+  status: 'active' | 'pending' | 'suspended' | 'deleted';
+  emailVerified: boolean;
+  lastLogin?: string | null;
+  createdBy?: string | null;
+  twoFactorEnabled: boolean;
+  emailProofToken?: string | null;
+  emailProofTokenExpiresAt?: number | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface User {
   id: string
   fullName: string

@@ -37,7 +37,6 @@ export const useAuthStore = defineStore('auth', {
 
         if (error.value) throw error.value
 
-        // Update user state immediately from login response if provided
         if (data.value?.admin) {
           this.user = data.value.admin
         } else {

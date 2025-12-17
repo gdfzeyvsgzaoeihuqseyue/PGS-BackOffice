@@ -3,8 +3,8 @@ import type { Admin } from '~/types'
 
 export const useAdminStore = defineStore('admin', {
   state: () => ({
-    admins: [] as any[], // Using any for now to support status extension until type is updated globally
-    currentAdmin: null as any | null,
+    admins: [] as Admin[],
+    currentAdmin: null as Admin | null,
     loading: false,
     error: null as string | null
   }),
@@ -14,7 +14,7 @@ export const useAdminStore = defineStore('admin', {
       this.loading = true
       this.error = null
       try {
-        const { data, error } = await useAPI<{ admins: any[] }>('/admin/get-admins')
+        const { data, error } = await useAPI<{ admins: Admin[] }>('/admin/get-admins')
         if (error.value) throw error.value
 
         if (data.value?.admins) {
@@ -37,7 +37,7 @@ export const useAdminStore = defineStore('admin', {
         // But for detail view, better fetch fresh or fetch all if endpoint doesn't support single get
         // As per current implementation, we fetch all (limit 1000) and find one. 
 
-        const { data, error } = await useAPI<{ admins: any[] }>('/admin/get-admins', { query: { limit: 1000 } })
+        const { data, error } = await useAPI<{ admins: Admin[] }>('/admin/get-admins', { query: { limit: 1000 } })
         if (error.value) throw error.value
 
         if (data.value?.admins) {

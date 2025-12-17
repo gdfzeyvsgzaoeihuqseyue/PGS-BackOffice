@@ -1,20 +1,4 @@
-export interface Admin {
-  id: string
-  firstName: string
-  lastName: string
-  username: string
-  email: string
-  role: string
-  permissions: {
-    canManageAll: boolean
-    [key: string]: any
-  }
-  emailVerified: boolean
-  isActive: boolean
-  lastLogin: string
-  createdAt: number
-  twoFactorEnabled: boolean
-}
+import type { Admin } from './person'
 
 export interface AuthResponse {
   message?: string

@@ -162,9 +162,8 @@
 </template>
 
 <script setup lang="ts">
-import { IconSearch, IconUserPlus, IconUsers, IconArrowRight, IconDotsVertical, IconPower, IconTrash, IconMailForward, IconEye } from '@tabler/icons-vue'
+import { IconSearch, IconUserPlus, IconUsers, IconArrowRight, IconDotsVertical, IconPower, IconTrash, IconMailForward } from '@tabler/icons-vue'
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
-import type { Admin } from '~/types/auth'
 
 definePageMeta({
   layout: 'admin',
