@@ -17,9 +17,6 @@ export default defineNuxtConfig({
       pgsSharedFiles: process.env.PGS_SHARED_FILES,
       betaMode: process.env.BETA_MODE === 'true',
       siteIdentifier: process.env.SITE_IDENTIFIER,
-      serviceId: process.env.SERVICE_ID,
-      ssoUrl: process.env.SSO_URL,
-      serviceDomain: process.env.SERVICE_DOMAIN,
     }
   },
 
@@ -27,9 +24,17 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' },
     layoutTransition: { name: 'layout', mode: 'out-in' },
     head: {
-      title: 'Backoffice Administrateur',
+      title: 'Backoffice PRO GESTION SOFT',
       meta: [
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'author', content: 'Pro Gestion Soft' },
+        { name: 'keywords', content: 'Pro Gestion Soft, numérique, PME, Afrique, Bénin, SaaS, digitalisation, technologie, PGS, SuitOps' },
+        { name: 'google-site-verification', content: 'OdKxHpVkBSxk0mj4vD4OTmZPdVi5pWzyCu4QPIMHy9A' },
+      ],
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/favicon.ico' },
+        { rel: 'canonical', href: 'https://progestionsoft.netlify.app' }
       ]
     }
   },

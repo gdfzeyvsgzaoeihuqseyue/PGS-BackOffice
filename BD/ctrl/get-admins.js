@@ -15,9 +15,9 @@ module.exports = {
     },
     status: {
       type: 'string',
-      isIn: ['active', 'pending', 'all'],
+      isIn: ['active', 'pending', 'suspended', 'deleted', 'all'],
       defaultsTo: 'all',
-      description: 'Filtrer par statut: active (accepté), pending (invité mais pas accepté), all'
+      description: 'Filtrer par statut: active, pending, suspended, deleted, all'
     },
     search: {
       type: 'string',
@@ -50,12 +50,8 @@ module.exports = {
       let criteria = {};
 
       // Filtrage par statut
-      if (inputs.status === 'active') {
-        criteria.isActive = true;
-      } else if (inputs.status === 'pending') {
-        criteria.isActive = false;
-        // On suppose que pending signifie inactive + token présent
-        criteria.emailProofToken = { '!=': '' };
+      if (inputs.status !== 'all') {
+        criteria.status = inputs.status;
       }
 
       // Filtrage par rôle
@@ -82,15 +78,6 @@ module.exports = {
 
       // Mapper les résultats
       const mappedAdmins = admins.map(admin => {
-        let status = 'active';
-        if (!admin.isActive) {
-          if (admin.emailProofToken) {
-            status = 'pending_invite';
-          } else {
-            status = 'inactive';
-          }
-        }
-
         return {
           id: admin.id,
           firstName: admin.firstName,
@@ -98,8 +85,8 @@ module.exports = {
           username: admin.username,
           email: admin.email,
           role: admin.role,
-          isActive: admin.isActive,
-          status: status, // active, pending_invite, inactive
+          isActive: admin.status === 'active',
+          status: admin.status,
           lastLogin: admin.lastLogin,
           createdAt: admin.createdAt,
           invitedBy: admin.createdBy // ID de l'inviteur

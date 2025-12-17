@@ -135,7 +135,7 @@ import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import { IconDotsVertical, IconBan, IconCheck, IconTrash, IconSearch } from '@tabler/icons-vue'
 import { useLearnerStore } from '~/stores/learner'
 import { useToast } from '~/composables/useToast'
-import type { Learner } from '~/types/user'
+import type { Learner } from '~/types/person'
 
 definePageMeta({
    layout: 'admin',

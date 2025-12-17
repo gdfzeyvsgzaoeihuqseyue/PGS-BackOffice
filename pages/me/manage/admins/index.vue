@@ -90,16 +90,21 @@
                 <div class="flex items-center gap-2">
                   <div class="w-2 h-2 rounded-full" :class="{
                     'bg-emerald-500': admin.status === 'active',
-                    'bg-amber-500': admin.status === 'pending_invite',
-                    'bg-red-500': admin.status === 'inactive'
+                    'bg-amber-500': admin.status === 'pending',
+                    'bg-red-500': admin.status === 'suspended',
+                    'bg-slate-300': admin.status === 'deleted'
                   }"></div>
                   <span class="text-sm font-medium" :class="{
                     'text-emerald-700': admin.status === 'active',
-                    'text-amber-700': admin.status === 'pending_invite',
-                    'text-red-700': admin.status === 'inactive'
+                    'text-amber-700': admin.status === 'pending',
+                    'text-red-700': admin.status === 'suspended',
+                    'text-slate-500': admin.status === 'deleted'
                   }">
-                    {{ admin.status === 'active' ? 'Actif' : (admin.status === 'pending_invite' ? 'Invitation envoyée' :
-                      'Inactif') }}
+                    {{
+                      admin.status === 'active' ? 'Actif' :
+                        admin.status === 'pending' ? 'En attente' :
+                          admin.status === 'suspended' ? 'Suspendu' : 'Supprimé'
+                    }}
                   </span>
                 </div>
               </td>
@@ -119,7 +124,7 @@
                     <MenuItems
                       class="absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-xl bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none py-1 z-10">
                       <div class="px-1 py-1">
-                        <MenuItem v-if="admin.status === 'pending_invite'" v-slot="{ active }">
+                        <MenuItem v-if="admin.status === 'pending'" v-slot="{ active }">
                         <button @click="resendInvite(admin)"
                           :class="[active ? 'bg-amber-50 text-amber-700' : 'text-slate-700', 'group flex w-full items-center rounded-lg px-2 py-2 text-sm']">
                           <IconMailForward class="mr-2 h-4 w-4 text-amber-500" aria-hidden="true" />
@@ -129,9 +134,10 @@
                         <MenuItem v-else v-slot="{ active }">
                         <button @click="toggleStatus(admin)" :disabled="admin.role === 'main'"
                           :class="[active ? 'bg-slate-50' : '', admin.role === 'main' ? 'opacity-50 cursor-not-allowed' : '', 'group flex w-full items-center rounded-lg px-2 py-2 text-sm text-slate-700']">
-                          <IconPower class="mr-2 h-4 w-4" :class="admin.isActive ? 'text-red-500' : 'text-emerald-500'"
+                          <IconPower class="mr-2 h-4 w-4"
+                            :class="admin.status === 'active' ? 'text-red-500' : 'text-emerald-500'"
                             aria-hidden="true" />
-                          {{ admin.status === 'active' ? 'Désactiver' : 'Activer' }}
+                          {{ admin.status === 'active' ? 'Suspendre' : 'Activer' }}
                         </button>
                         </MenuItem>
 
@@ -214,15 +220,18 @@ const getRoleBadgeClass = (role: string) => {
 
 const toggleStatus = async (admin: any) => {
   try {
+    // Assuming backend endpoint /toggle-status is valid or we rely on it.
+    // We expect it to toggle between active and suspended.
     const { error } = await useAPI(`/admin/get-admins/${admin.id}/toggle-status`, { method: 'POST' })
     if (error.value) throw error.value
 
-    admin.isActive = !admin.isActive
-    // Update status locally
-    if (admin.isActive) admin.status = 'active'
-    else admin.status = 'inactive'
+    // Optimistic update
+    const oldStatus = admin.status
+    const newStatus = oldStatus === 'active' ? 'suspended' : 'active'
 
-    notify(`Compte ${admin.isActive ? 'activé' : 'désactivé'}`)
+    admin.status = newStatus
+
+    notify(`Compte ${newStatus === 'active' ? 'activé' : 'suspendu'}`)
   } catch (e) {
     notify('Erreur lors du changement de statut', 'error')
   }

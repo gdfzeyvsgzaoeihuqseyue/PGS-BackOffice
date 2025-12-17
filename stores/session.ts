@@ -1,20 +1,5 @@
 import { defineStore } from 'pinia'
-import type { Admin } from '~/types/auth'
-
-export interface Session {
-  id: string
-  adminId: string
-  token: string
-  refreshToken: string
-  expiresAt: string
-  refreshExpiresAt: string
-  ipAddress: string
-  userAgent: string
-  isRevoked: boolean
-  deviceInfo: any
-  createdAt: string
-  updatedAt: string
-}
+import type { Admin, Session } from '~/types'
 
 export const useSessionStore = defineStore('session', {
   state: () => ({
@@ -25,9 +10,7 @@ export const useSessionStore = defineStore('session', {
     currentToken: '' as string
   }),
   actions: {
-    // --- Current Session / Validations (Auth) ---
     async getSession() {
-      // Calls the /auth/session endpoint -> returns { admin: ... }
       this.loading = true
       try {
         const { data, error } = await useAPI<{ admin: Admin }>('/admin/auth/session')
@@ -48,7 +31,6 @@ export const useSessionStore = defineStore('session', {
     },
 
     async verifyToken() {
-      // Calls /auth/verify-token
       try {
         const { data, error } = await useAPI<{ valid: boolean, admin: Admin }>('/admin/auth/verify-token', {
           method: 'POST'

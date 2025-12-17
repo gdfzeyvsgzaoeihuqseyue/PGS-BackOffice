@@ -16,7 +16,6 @@ export const useProfileStore = defineStore('profile', {
 
         if (error.value) throw error.value
 
-        // Update the auth user state to reflect changes immediately
         const authStore = useAuthStore()
         await authStore.fetchUser()
 

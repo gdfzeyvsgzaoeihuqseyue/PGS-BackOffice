@@ -103,7 +103,7 @@ const handleInvite = async () => {
   try {
     const { error } = await useAPI('/admin/auth/invite', {
       method: 'POST',
-      body: { ...form }
+      body: { ...form, status: 'pending' }
     })
 
     if (error.value) throw error.value

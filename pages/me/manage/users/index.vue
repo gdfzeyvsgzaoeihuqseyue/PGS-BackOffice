@@ -142,7 +142,7 @@ import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import { IconDotsVertical, IconBan, IconCheck, IconTrash, IconMailCheck, IconSearch } from '@tabler/icons-vue'
 import { useUserStore } from '~/stores/user'
 import { useToast } from '~/composables/useToast'
-import type { User } from '~/types/user'
+import type { User } from '~/types/person'
 
 definePageMeta({
    layout: 'admin',

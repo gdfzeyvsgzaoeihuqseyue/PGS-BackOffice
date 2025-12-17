@@ -5,11 +5,17 @@ export interface User {
   email: string
   isActive: boolean
   createdAt: string | number
-  // Add other specific fields
+  updatedAt: string | number
 }
 
 export interface Learner extends User {
-  // specific learner fields if any
+  id: string
+  fullName: string
+  username: string
+  email: string
+  isActive: boolean
+  createdAt: string | number
+  updatedAt: string | number
 }
 
 export interface PaginationMeta {

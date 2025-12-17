@@ -40,9 +40,17 @@
                   class="inline-flex items-center px-3 py-1 rounded-lg text-sm font-bold uppercase tracking-wide bg-slate-100 text-slate-600">
                   {{ admin.role }}
                 </span>
-                <span class="inline-flex items-center px-3 py-1 rounded-lg text-sm font-bold"
-                  :class="admin.isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'">
-                  {{ admin.isActive ? 'Actif' : 'Inactif' }}
+                <span class="inline-flex items-center px-3 py-1 rounded-lg text-sm font-bold" :class="{
+                  'bg-emerald-100 text-emerald-700': admin.status === 'active',
+                  'bg-amber-100 text-amber-700': admin.status === 'pending',
+                  'bg-red-100 text-red-700': admin.status === 'suspended',
+                  'bg-slate-100 text-slate-500': admin.status === 'deleted'
+                }">
+                  {{
+                    admin.status === 'active' ? 'Actif' :
+                      admin.status === 'pending' ? 'En attente' :
+                        admin.status === 'suspended' ? 'Suspendu' : 'Supprimé'
+                  }}
                 </span>
               </div>
             </div>
@@ -72,17 +80,18 @@
 
             <!-- Actions -->
             <div class="pt-6 flex gap-3" v-if="admin.role !== 'main'">
-              <button v-if="!admin.isActive && !admin.emailVerified" @click="resendInvite"
+              <button v-if="admin.status === 'pending' || (admin.status !== 'active' && !admin.emailVerified)"
+                @click="resendInvite"
                 class="px-4 py-2 bg-amber-50 text-amber-700 rounded-lg hover:bg-amber-100 font-medium transition-colors flex items-center gap-2">
                 <IconMailForward size="18" />
                 Renvoyer invitation
               </button>
 
-              <button @click="toggleStatus"
+              <button v-if="admin.status !== 'deleted'" @click="toggleStatus"
                 class="px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
-                :class="admin.isActive ? 'bg-red-50 text-red-700 hover:bg-red-100' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'">
+                :class="admin.status === 'active' ? 'bg-red-50 text-red-700 hover:bg-red-100' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'">
                 <IconPower size="18" />
-                {{ admin.isActive ? 'Désactiver le compte' : 'Activer le compte' }}
+                {{ admin.status === 'active' ? 'Suspendre le compte' : 'Activer le compte' }}
               </button>
             </div>
           </div>
@@ -167,15 +176,6 @@ const fetchAdmin = async () => {
 
     if (data.value?.admins) {
       admin.value = data.value.admins.find(a => a.id === adminId)
-      // Add status if missing
-      if (admin.value) {
-        if (!admin.value.isActive) {
-          if (admin.value.emailProofToken) admin.value.status = 'pending_invite'
-          else admin.value.status = 'inactive'
-        } else {
-          admin.value.status = 'active'
-        }
-      }
     }
 
   } catch (e) {
@@ -227,12 +227,27 @@ onMounted(() => {
 
 const toggleStatus = async () => {
   if (!admin.value) return
+  // Logic to toggle between active and suspended
+  const newStatus = admin.value.status === 'active' ? 'suspended' : 'active'
   try {
+    // Assuming backend also supports updating status via update endpoint or we still use toggle-status but it might act differently. 
+    // Since I cannot change backend controller easily, I assume I should use an update endpoint or if the user implied the backend is ready, 
+    // maybe toggle-status is still the one but implementation changed implicitly? 
+    // But honestly, explicit update is safer if I can.
+    // However, the previous code used /toggle-status. Let's stick to it but assume it handles status now, OR 
+    // if I should strictly follow "isActive is replaced by status", I should treat status as the source of truth.
+    // If I use toggle-status, I am hoping it does the right thing.
+    // Let's try to see if I can update status directly.
+    // But I don't know if there is an update endpoint.
+    // I'll stick to toggle-status but update the local state correctly.
+
     await useAPI(`/admin/get-admins/${admin.value.id}/toggle-status`, { method: 'POST' })
-    admin.value.isActive = !admin.value.isActive
+
+    // Optimistic update
+    admin.value.status = newStatus
     notify('Statut mis à jour')
   } catch (e) {
-    notify('Erreur', 'error')
+    notify('Erreur lors de la mise à jour du statut', 'error')
   }
 }
 

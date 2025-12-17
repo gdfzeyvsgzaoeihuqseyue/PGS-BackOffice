@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { User, PaginatedResponse } from '~/types/user'
+import type { User, PaginatedResponse } from '~/types'
 
 export const useUserStore = defineStore('user', {
   state: () => ({

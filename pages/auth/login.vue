@@ -1,30 +1,3 @@
-<script setup>
-import { IconLock, IconMail, IconKey, IconAlertCircle, IconArrowRight } from '@tabler/icons-vue'
-
-definePageMeta({
-  layout: false,
-  title: 'Connexion'
-})
-
-const authStore = useAuthStore()
-const form = reactive({ email: '', password: '' })
-const loading = ref(false)
-const error = ref('')
-
-const handleLogin = async () => {
-  loading.value = true
-  error.value = ''
-  try {
-    await authStore.login({ ...form })
-    await navigateTo('/me')
-  } catch (e) {
-    error.value = e.data?.message || 'Identifiants incorrects. Veuillez réessayer.'
-  } finally {
-    loading.value = false
-  }
-}
-</script>
-
 <template>
   <div class="min-h-screen flex items-center justify-center bg-slate-50 relative overflow-hidden">
     <!-- Abstract Background Elements -->
@@ -43,12 +16,23 @@ const handleLogin = async () => {
     <div
       class="relative w-full max-w-md bg-white/70 backdrop-blur-xl border border-white/50 shadow-2xl shadow-emerald-500/10 rounded-3xl p-8 md:p-10 transform hover:scale-[1.01] transition-transform duration-500">
       <div class="text-center mb-10">
-        <div
-          class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 to-cyan-500 shadow-lg shadow-emerald-500/30 mb-6 text-white">
-          <IconLock size="32" stroke-width="2" />
+        <!-- Logo -->
+        <div class="mb-10">
+          <div class="flex justify-center mb-8">
+            <div class="hidden lg:block">
+              <img :src="sharedFiles.paths.logo.dc" alt="Logo" class="h-10 w-auto sm:h-12 request-logo dark:hidden" />
+              <img :src="sharedFiles.paths.logo.dw" alt="Logo"
+                class="h-10 w-auto sm:h-12 request-logo hidden dark:block" />
+            </div>
+            <div class="lg:hidden">
+              <img :src="sharedFiles.paths.logo.mc" alt="Logo" class="h-10 w-auto sm:h-12 request-logo dark:hidden" />
+              <img :src="sharedFiles.paths.logo.mw" alt="Logo"
+                class="h-10 w-auto sm:h-12 request-logo hidden dark:block" />
+            </div>
+          </div>
         </div>
         <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Bienvenue</h1>
-        <p class="text-slate-500 mt-3 font-medium">Panneau d'administration Administrateur</p>
+        <p class="text-slate-500 mt-3 font-medium">Panneau d'administration</p>
       </div>
 
       <form @submit.prevent="handleLogin" class="space-y-6">
@@ -84,13 +68,7 @@ const handleLogin = async () => {
 
         <button type="submit" :disabled="loading"
           class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-bold py-4 rounded-xl shadow-xl shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:-translate-y-1 active:translate-y-0 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-          <svg v-if="loading" class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-            viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-            </path>
-          </svg>
+          <IconLoader v-if="loading" class="animate-spin h-5 w-5 text-white" />
           <span v-else>Se connecter</span>
           <IconArrowRight v-if="!loading" size="20" />
         </button>
@@ -98,6 +76,39 @@ const handleLogin = async () => {
     </div>
   </div>
 </template>
+
+<script setup>
+import { IconMail, IconKey, IconAlertCircle, IconArrowRight, IconLoader } from '@tabler/icons-vue'
+import { useSharedFiles } from '~/stores/sharedFiles';
+
+const sharedFiles = useSharedFiles();
+
+definePageMeta({
+  layout: false,
+})
+
+const authStore = useAuthStore()
+const form = reactive({ email: '', password: '' })
+const loading = ref(false)
+const error = ref('')
+
+const handleLogin = async () => {
+  loading.value = true
+  error.value = ''
+  try {
+    await authStore.login({ ...form })
+    await navigateTo('/me')
+  } catch (e) {
+    error.value = e.data?.message || 'Identifiants incorrects. Veuillez réessayer.'
+  } finally {
+    loading.value = false
+  }
+}
+
+useHead({
+  title: "Connexion"
+})
+</script>
 
 <style scoped>
 .animate-fade-in-up {

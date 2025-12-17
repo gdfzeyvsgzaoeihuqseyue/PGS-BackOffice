@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { Admin, LoginCredentials, AuthResponse } from '~/types/auth'
+import type { Admin, LoginCredentials, AuthResponse } from '~/types'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -9,7 +9,6 @@ export const useAuthStore = defineStore('auth', {
   }),
   actions: {
     async fetchUser() {
-      // Avoid fetching if already loading
       if (this.loading) return
 
       this.loading = true
@@ -42,7 +41,6 @@ export const useAuthStore = defineStore('auth', {
         if (data.value?.admin) {
           this.user = data.value.admin
         } else {
-          // Otherwise fetch it
           await this.fetchUser()
         }
 

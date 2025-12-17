@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { BlogArticle, BlogAuthor, BlogCategory } from '~/types/blog'
+import type { BlogArticle, BlogAuthor, BlogCategory } from '~/types'
 
 export const useBlogStore = defineStore('blog', {
   state: () => ({
