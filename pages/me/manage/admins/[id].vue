@@ -408,15 +408,22 @@ const confirmAction = async () => {
 }
 
 const fetchLogs = async (loadMore = false) => {
+  // Reset filters to avoid interference from other pages
+  activityStore.filters = {
+    adminId: '',
+    action: '',
+    targetType: ''
+  }
+
   if (loadMore) {
     activityStore.currentPage++
-    await activityStore.fetchLogs({
+    await activityStore.fetchSystemLogs({
       adminId: adminId
     }, true)
   } else {
     activityStore.currentPage = 1
     activityStore.limit = 10
-    await activityStore.fetchLogs({
+    await activityStore.fetchSystemLogs({
       adminId: adminId
     })
   }
