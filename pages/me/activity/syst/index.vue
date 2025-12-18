@@ -1,6 +1,6 @@
 <template>
   <AppLoader v-if="loading" />
-  <AppError v-else-if="error" :message="error" @retry="activityStore.fetchLogs()" />
+  <AppError v-else-if="error" :message="error" @retry="activityStore.fetchSystemLogs()" />
 
   <div v-else class="max-w-7xl mx-auto space-y-6">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -8,29 +8,31 @@
         <h2 class="text-2xl font-bold text-slate-800">Logs Système</h2>
         <p class="text-slate-500 mt-1">Surveillance de l'activité de tous les administrateurs.</p>
       </div>
-      <button @click="logsStore.fetchLogs()" class="p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors"
+      <button @click="refresh" class="p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors"
         title="Actualiser">
-        <IconRefresh :class="{ 'animate-spin': logsStore.loading }" />
+        <IconRefresh :class="{ 'animate-spin': loading }" />
       </button>
     </div>
 
     <!-- Filters -->
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Admin ID Filter -->
         <div>
-          <label class="block text-xs font-bold text-slate-500 mb-1">ID Admin</label>
-          <input v-model="logsStore.filters.adminId" @change="logsStore.setPage(1)" type="text"
-            placeholder="Filtrer par ID..."
-            class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20" />
+          <label class="block text-xs font-bold text-slate-500 mb-1">ID Admin / Email</label>
+          <div class="relative">
+            <IconUser class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+            <input v-model="filters.adminId" type="text" placeholder="Chercher un admin..."
+              class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20" />
+          </div>
         </div>
 
         <!-- Action Filter -->
         <div>
           <label class="block text-xs font-bold text-slate-500 mb-1">Action</label>
-          <select v-model="logsStore.filters.action" @change="logsStore.setPage(1)"
+          <select v-model="filters.action"
             class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 appearance-none">
-            <option value="">Toutes</option>
+            <option value="">Toutes les actions</option>
             <option value="login">Connexion</option>
             <option value="logout">Déconnexion</option>
             <option value="create">Création</option>
@@ -40,20 +42,12 @@
             <option value="resend_invite">Renvoi invitation</option>
           </select>
         </div>
-      </div>
-
-      <div class="flex flex-wrap items-center gap-4">
-        <!-- Admin Filter -->
-        <div class="relative">
-          <IconUser class="absolute left-3 top-1/2 -translate-y-1/2 text-secondary-400 w-4 h-4" />
-          <input v-model="adminFilter" type="text" placeholder="ID Admin..."
-            class="pl-9 pr-4 py-2 bg-white border border-secondary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-sm w-40" />
-        </div>
 
         <!-- Target Filter -->
-        <div class="relative">
-          <select v-model="filterType"
-            class="pl-4 pr-10 py-2 bg-white border border-secondary-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-sm appearance-none cursor-pointer">
+        <div>
+          <label class="block text-xs font-bold text-slate-500 mb-1">Type de Cible</label>
+          <select v-model="filters.targetType"
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 appearance-none">
             <option value="">Tous les types</option>
             <option value="user">Utilisateur</option>
             <option value="learner">Apprenant</option>
@@ -61,11 +55,6 @@
             <option value="system">Système</option>
           </select>
         </div>
-
-        <button @click="refresh"
-          class="p-2 text-primary-600 bg-primary-50 hover:bg-primary-100 rounded-lg transition-colors">
-          <IconRefresh size="20" :class="{ 'animate-spin': activityStore.loading }" />
-        </button>
       </div>
     </div>
 
@@ -167,16 +156,16 @@ useHead({
 })
 
 const activityStore = useActivityStore()
-const { logs, loading, error } = storeToRefs(activityStore)
+const { logs, loading, error, filters } = storeToRefs(activityStore)
 
-const filterType = ref('')
-const adminFilter = ref('')
 let searchTimeout
 
 // Initial fetch
-activityStore.fetchSystemLogs()
+onMounted(() => {
+  activityStore.fetchSystemLogs(filters.value)
+})
 
-const refresh = () => activityStore.fetchSystemLogs({ targetType: filterType.value, adminId: adminFilter.value })
+const refresh = () => activityStore.fetchSystemLogs(filters.value)
 
 // Handle Page Change
 const setPage = (page) => {
@@ -184,15 +173,12 @@ const setPage = (page) => {
   refresh()
 }
 
-watch([filterType, adminFilter], ([newType, newAdmin]) => {
+// Watch filters for auto-refresh with debounce
+watch(filters, () => {
   clearTimeout(searchTimeout)
   searchTimeout = setTimeout(() => {
     activityStore.currentPage = 1
     refresh()
   }, 500)
-})
-
-onMounted(() => {
-  // Poll for updates every 30s?
-})
+}, { deep: true })
 </script>

@@ -1,6 +1,6 @@
 <template>
   <AppLoader v-if="loading" />
-  <AppError v-else-if="error" :message="error" @retry="fetchLog" />
+  <AppError v-else-if="error" :message="error" @retry="activityStore.fetchSystemLog(route.params.id)" />
   <div v-else-if="log">
     <div class="mb-6 flex items-center justify-between gap-4">
       <div class="flex items-center gap-4">
@@ -157,25 +157,12 @@ useHead({
 
 const route = useRoute()
 const activityStore = useActivityStore()
-const loading = ref(false)
-const error = ref(null)
-const log = ref(null)
-
-const fetchLog = async () => {
-  loading.value = true
-  error.value = null
-  try {
-    const data = await activityStore.fetchSystemLog(route.params.id)
-    log.value = data
-  } catch (e) {
-    error.value = e.message || "Impossible de charger le log"
-  } finally {
-    loading.value = false
-  }
-}
+const { currentLog: log, loading, error } = storeToRefs(activityStore)
 
 onMounted(() => {
-  fetchLog()
+  if (route.params.id) {
+    activityStore.fetchSystemLog(route.params.id)
+  }
 })
 
 const downloadJson = () => {

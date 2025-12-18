@@ -10,6 +10,11 @@ export const useActivityStore = defineStore('activity', {
     totalPages: 1,
     currentPage: 1,
     limit: 20,
+    filters: {
+      adminId: '',
+      action: '',
+      targetType: ''
+    } as ActivityFilter,
     error: null as string | null
   }),
   actions: {
@@ -70,6 +75,7 @@ export const useActivityStore = defineStore('activity', {
         const query = {
           page: this.currentPage,
           limit: this.limit,
+          ...this.filters,
           ...filters
         }
 
@@ -97,7 +103,7 @@ export const useActivityStore = defineStore('activity', {
       this.loading = true
       this.error = null
       try {
-        const { data, error } = await useAPI<any>(`/admin/all-activity-logs/${id}`)
+        const { data, error } = await useAPI<any>(`/admin/get-syst-one-logs/${id}`)
 
         if (error.value) throw error.value
 
