@@ -185,7 +185,7 @@ const downloadJson = () => {
   const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(log.value, null, 2))
   const downloadAnchorNode = document.createElement('a')
   downloadAnchorNode.setAttribute("href", dataStr)
-  downloadAnchorNode.setAttribute("download", `log_${log.value.id}.json`)
+  downloadAnchorNode.setAttribute("download", `log_admin_${log.value.id}.json`)
   document.body.appendChild(downloadAnchorNode)
   downloadAnchorNode.click()
   downloadAnchorNode.remove()

@@ -22,7 +22,8 @@
 
       <!-- Groups -->
       <template v-for="(group, index) in navigationGroups" :key="index">
-        <SidebarGroup :label="group.label" :collapsed="collapsed" :icon="group.icon" :startOpen="isGroupActive(group)">
+        <SidebarGroup :label="group.label" :collapsed="collapsed" :icon="group.icon" :startOpen="isGroupActive(group)"
+          :to="group.to">
           <NavItem v-for="item in group.items" :key="item.to" :to="item.to" :icon="item.icon" :label="item.label"
             :collapsed="collapsed" />
         </SidebarGroup>
@@ -42,12 +43,9 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useSharedFiles } from '~/stores/sharedFiles'
-import {
-  IconUserEdit, IconUserShield, IconUserStar, IconNews, IconUserShare, IconDeviceAnalytics, IconFileDescription, IconUserBolt, IconDashboard, IconUsers, IconArticle, IconCategory, IconChevronsLeft, IconChevronsRight
-} from '@tabler/icons-vue'
+import { IconChevronsLeft, IconChevronsRight } from '@tabler/icons-vue'
 
 const props = defineProps({
   collapsed: Boolean
@@ -56,35 +54,7 @@ const emit = defineEmits(['toggle'])
 const route = useRoute()
 const sharedFiles = useSharedFiles()
 
-// Navigation Configuration
-const navigationGroups = [
-  {
-    label: 'Gestion Utilisateurs',
-    icon: IconUsers,
-    items: [
-      { label: 'Administrateurs', to: '/me/manage/admins', icon: 'IconUserShield' },
-      { label: 'Utilisateurs', to: '/me/manage/users', icon: 'IconUserStar' },
-      { label: 'Apprenants', to: '/me/manage/learners', icon: 'IconUserEdit' }
-    ]
-  },
-  {
-    label: 'Journal',
-    icon: IconNews,
-    items: [
-      { label: 'Personnel', to: '/me/activity/me', icon: 'IconUserShare' },
-      { label: 'Système', to: '/me/activity/syst', icon: 'IconDeviceAnalytics' }
-    ]
-  },
-  {
-    label: 'Blog',
-    icon: IconArticle,
-    items: [
-      { label: 'Articles', to: '/me/blog/articles', icon: 'IconFileDescription' },
-      { label: 'Auteurs', to: '/me/blog/authors', icon: 'IconUserBolt' },
-      { label: 'Catégories', to: '/me/blog/categories', icon: 'IconCategory' }
-    ]
-  }
-]
+const { navigationGroups } = useNavigation()
 
 // Logic to check if a group should be open based on current route
 const isGroupActive = (group) => {
