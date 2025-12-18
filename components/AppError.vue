@@ -4,9 +4,9 @@
       <IconAlertTriangle class="w-10 h-10 text-danger-500" />
     </div>
 
-    <h3 class="text-xl font-bold text-secondary-900 mb-2">Une erreur est survenue</h3>
+    <h3 class="text-xl font-bold text-secondary-900 mb-2">{{ title || 'Une erreur est survenue' }}</h3>
     <p class="text-secondary-500 mb-8">
-      {{ "Impossible de charger les données." }}</p>
+      {{ message || "Impossible de charger les données." }}</p>
 
     <div class="flex gap-4">
       <button v-if="retry" @click="$emit('retry')"
@@ -26,6 +26,7 @@
 import { IconAlertTriangle, IconRefresh } from '@tabler/icons-vue'
 
 defineProps<{
+  title?: string
   message?: string
   retry?: boolean
 }>()

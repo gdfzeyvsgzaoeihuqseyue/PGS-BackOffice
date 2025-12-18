@@ -13,7 +13,8 @@
         </div>
       </div>
       <div>
-        <button v-if="admin && admin.role !== 'main'" @click="openEditModal"
+        <button v-if="admin && admin.role !== 'main' && hasAccess(['main', 'admin'])"
+          @click="() => tryAction(['main', 'admin'], openEditModal)"
           class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-medium transition-colors flex items-center gap-2">
           <IconEdit size="18" />
           Modifier
@@ -97,8 +98,8 @@
                 Renvoyer invitation
               </button>
 
-              <button v-if="admin.status !== 'deleted'"
-                @click="openActionModal(admin.status === 'active' ? 'suspend' : 'activate')"
+              <button v-if="admin.status !== 'deleted' && hasAccess(['main', 'admin'])"
+                @click="() => tryAction(['main', 'admin'], () => openActionModal(admin.status === 'active' ? 'suspend' : 'activate'))"
                 class="px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
                 :class="admin.status === 'active' ? 'bg-danger-50 text-danger-700 hover:bg-danger-100' : 'bg-primary-50 text-primary-700 hover:bg-primary-100'">
                 <IconPower size="18" />
@@ -106,7 +107,8 @@
               </button>
 
               <!-- Delete Button -->
-              <button v-if="admin.status !== 'deleted'" @click="openActionModal('delete')"
+              <button v-if="admin.status !== 'deleted' && hasAccess(['main', 'admin'])"
+                @click="() => tryAction(['main', 'admin'], () => openActionModal('delete'))"
                 class="px-4 py-2 bg-secondary-100 text-secondary-600 rounded-lg hover:bg-secondary-200 font-medium transition-colors flex items-center gap-2">
                 <IconTrash size="18" />
                 Supprimer
@@ -276,6 +278,7 @@ useHead({
 
 const route = useRoute()
 const { add: notify } = useToast()
+const { hasAccess, tryAction } = useAccess()
 const adminId = route.params.id
 
 const adminStore = useAdminStore()

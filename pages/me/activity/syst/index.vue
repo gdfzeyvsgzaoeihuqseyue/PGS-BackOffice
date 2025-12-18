@@ -156,6 +156,9 @@ useHead({
 })
 
 const activityStore = useActivityStore()
+const { verifyAccess } = useAccess()
+verifyAccess(['main', 'admin', 'analyst'])
+
 const { logs, loading, error, filters } = storeToRefs(activityStore)
 
 let searchTimeout
