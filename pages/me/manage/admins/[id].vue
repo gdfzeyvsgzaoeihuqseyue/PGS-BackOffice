@@ -89,7 +89,7 @@
             </div>
 
             <!-- Actions -->
-            <div class="pt-6 flex gap-3" v-if="admin.role !== 'main'">
+            <div class="pt-6 flex flex-wrap gap-3" v-if="admin.role !== 'main'">
               <button v-if="admin.status === 'pending' || (admin.status !== 'active' && !admin.emailVerified)"
                 @click="resendInvite"
                 class="px-4 py-2 bg-warn-50 text-warn-700 rounded-lg hover:bg-warn-100 font-medium transition-colors flex items-center gap-2">
@@ -97,11 +97,19 @@
                 Renvoyer invitation
               </button>
 
-              <button v-if="admin.status !== 'deleted'" @click="toggleStatus"
+              <button v-if="admin.status !== 'deleted'"
+                @click="openActionModal(admin.status === 'active' ? 'suspend' : 'activate')"
                 class="px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
                 :class="admin.status === 'active' ? 'bg-danger-50 text-danger-700 hover:bg-danger-100' : 'bg-primary-50 text-primary-700 hover:bg-primary-100'">
                 <IconPower size="18" />
                 {{ admin.status === 'active' ? 'Suspendre le compte' : 'Activer le compte' }}
+              </button>
+
+              <!-- Delete Button -->
+              <button v-if="admin.status !== 'deleted'" @click="openActionModal('delete')"
+                class="px-4 py-2 bg-secondary-100 text-secondary-600 rounded-lg hover:bg-secondary-200 font-medium transition-colors flex items-center gap-2">
+                <IconTrash size="18" />
+                Supprimer
               </button>
             </div>
           </div>
@@ -197,6 +205,15 @@
           </select>
         </div>
 
+        <!-- Reason Field (Optional for Update) -->
+        <div>
+          <label class="block text-sm font-medium text-secondary-700 mb-1">
+            Raison <span class="text-secondary-400 font-normal">(Optionnel)</span>
+          </label>
+          <textarea v-model="editForm.reason" rows="2" placeholder="Raison de la modification..."
+            class="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"></textarea>
+        </div>
+
         <div class="flex justify-end gap-3 pt-4">
           <button @click="closeEditModal"
             class="px-4 py-2 border border-secondary-300 rounded-lg text-secondary-700 hover:bg-secondary-50">
@@ -210,11 +227,44 @@
         </div>
       </div>
     </BaseModal>
+
+    <!-- Action Modal (Suspend, Activate, Delete) -->
+    <BaseModal :isOpen="actionState.isOpen" :title="actionState.title" @close="closeActionModal">
+      <div class="space-y-4">
+        <p class="text-secondary-600">{{ actionState.description }}</p>
+
+        <!-- Reason Field -->
+        <div>
+          <label class="block text-sm font-medium text-secondary-700 mb-1">
+            Raison <span v-if="['activate'].includes(actionState.type)"
+              class="text-secondary-400 font-normal">(Optionnel)</span>
+            <span v-else class="text-danger-500">*</span>
+          </label>
+          <textarea v-model="actionState.reason" rows="3" placeholder="Veuillez indiquer la raison de cette action..."
+            class="w-full px-3 py-2 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"></textarea>
+          <p v-if="actionState.errorMessage" class="text-danger-600 text-sm mt-1">{{ actionState.errorMessage }}</p>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-2">
+          <button @click="closeActionModal" :disabled="actionState.isLoading"
+            class="px-4 py-2 border border-secondary-300 rounded-lg text-secondary-700 hover:bg-secondary-50">
+            Annuler
+          </button>
+          <button @click="confirmAction" :disabled="actionState.isLoading"
+            class="px-4 py-2 text-white rounded-lg font-medium shadow-sm transition-colors flex items-center gap-2 disabled:opacity-50"
+            :class="actionState.type === 'activate' ? 'bg-primary-600 hover:bg-primary-700' : 'bg-danger-600 hover:bg-danger-700'">
+            <IconLoader2 v-if="actionState.isLoading" class="animate-spin w-4 h-4" />
+            Confirmer
+          </button>
+        </div>
+      </div>
+    </BaseModal>
+
   </div>
 </template>
 
 <script setup>
-import { IconArrowLeft, IconMailForward, IconPower, IconActivity, IconEdit, IconLoader2 } from '@tabler/icons-vue'
+import { IconArrowLeft, IconMailForward, IconPower, IconActivity, IconEdit, IconLoader2, IconTrash } from '@tabler/icons-vue'
 
 definePageMeta({
   layout: 'admin'
@@ -245,7 +295,8 @@ const editForm = reactive({
   firstName: '',
   lastName: '',
   username: '',
-  role: ''
+  role: '',
+  reason: ''
 })
 
 const openEditModal = () => {
@@ -254,6 +305,7 @@ const openEditModal = () => {
   editForm.lastName = admin.value.lastName || ''
   editForm.username = admin.value.username || ''
   editForm.role = admin.value.role
+  editForm.reason = ''
   isEditModalOpen.value = true
 }
 
@@ -270,7 +322,8 @@ const saveEdit = async () => {
       firstName: editForm.firstName,
       lastName: editForm.lastName,
       username: editForm.username,
-      role: editForm.role
+      role: editForm.role,
+      reason: editForm.reason
     })
     notify('Compte mis à jour avec succès')
     closeEditModal()
@@ -278,6 +331,76 @@ const saveEdit = async () => {
     notify(e.message || 'Erreur lors de la mise à jour', 'error')
   } finally {
     isSaving.value = false
+  }
+}
+
+// Action Modal State (Suspend, Activate, Delete)
+const actionState = reactive({
+  isOpen: false,
+  type: 'suspend', // suspend, activate, delete
+  title: '',
+  description: '',
+  reason: '',
+  isLoading: false,
+  errorMessage: ''
+})
+
+const openActionModal = (type) => {
+  if (!admin.value) return
+
+  actionState.type = type
+  actionState.reason = ''
+  actionState.errorMessage = ''
+  actionState.isOpen = true
+  actionState.isLoading = false
+
+  switch (type) {
+    case 'suspend':
+      actionState.title = 'Suspendre le compte'
+      actionState.description = 'Êtes-vous sûr de vouloir suspendre ce compte administrateur ? Cette action empêchera l\'utilisateur de se connecter.'
+      break
+    case 'activate':
+      actionState.title = 'Activer le compte'
+      actionState.description = 'Voulez-vous réactiver ce compte administrateur ?'
+      break
+    case 'delete':
+      actionState.title = 'Supprimer le compte'
+      actionState.description = 'Attention : Cette action est irréversible. Le compte administrateur sera définitivement supprimé.'
+      break
+  }
+}
+
+const closeActionModal = () => {
+  actionState.isOpen = false
+}
+
+const confirmAction = async () => {
+  // Update validation: Reason is mandatory for suspend and delete
+  if (['suspend', 'delete'].includes(actionState.type) && !actionState.reason.trim()) {
+    actionState.errorMessage = 'Une raison est requise pour effectuer cette action.'
+    return
+  }
+
+  actionState.isLoading = true
+  actionState.errorMessage = ''
+
+  try {
+    await adminStore.manageAdmin({
+      adminId: admin.value.id,
+      action: actionState.type,
+      reason: actionState.reason
+    })
+    notify(`Action "${actionState.type}" effectuée avec succès`)
+    closeActionModal()
+
+    // If deleted, redirect
+    if (actionState.type === 'delete') {
+      navigateTo('/me/manage/admins')
+    }
+  } catch (e) {
+    actionState.errorMessage = e.message || 'Une erreur est survenue'
+  } finally {
+    actionState.isLoading = false
   }
 }
 
@@ -306,16 +429,6 @@ onMounted(() => {
   }
   fetchLogs()
 })
-
-const toggleStatus = async () => {
-  if (!admin.value) return
-  try {
-    await adminStore.toggleStatus(admin.value.id)
-    notify('Statut mis à jour')
-  } catch (e) {
-    notify('Erreur lors de la mise à jour du statut', 'error')
-  }
-}
 
 const resendInvite = async () => {
   if (!admin.value) return
