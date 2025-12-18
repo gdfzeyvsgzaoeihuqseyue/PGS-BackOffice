@@ -18,7 +18,7 @@ export const useUserStore = defineStore('user', {
       this.loading = true
       this.error = null
       try {
-        const { data, error } = await useAPI<{ user: User }>(`/admin/manage/user/${id}`)
+        const { data, error } = await useAPI<{ user: User }>(`/admin/user/get-user/${id}`)
         if (error.value) throw error.value
 
         if (data.value?.user) {
