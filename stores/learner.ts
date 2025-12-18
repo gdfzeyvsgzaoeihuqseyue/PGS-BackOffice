@@ -18,7 +18,7 @@ export const useLearnerStore = defineStore('learner', {
       this.loading = true
       this.error = null
       try {
-        const { data, error } = await useAPI<{ learner: Learner }>(`/admin/user/get-learner/${id}`)
+        const { data, error } = await useAPI<{ learner: Learner }>(`/admin/learner/get-learner/${id}`)
         if (error.value) throw error.value
 
         if (data.value?.learner) {

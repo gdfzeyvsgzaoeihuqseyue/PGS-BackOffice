@@ -105,9 +105,9 @@ const form = reactive({
 const handleInvite = async () => {
   loading.value = true
   try {
-    await adminStore.inviteAdmin(form)
+    const data = await adminStore.inviteAdmin(form)
 
-    notify('Invitation envoyée avec succès')
+    notify(`Invitation envoyée avec succès à ${data?.admin?.maskedEmail || form.email}`)
     router.push('/me/manage/admins')
 
   } catch (e) {
