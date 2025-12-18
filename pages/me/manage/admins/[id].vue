@@ -433,11 +433,13 @@ const loadMoreLogs = () => {
   fetchLogs(true)
 }
 
-onMounted(() => {
-  if (!admin.value || admin.value.id !== adminId) {
-    adminStore.fetchAdmin(adminId)
+onMounted(async () => {
+  try {
+    await adminStore.fetchAdmin(adminId)
+    await fetchLogs()
+  } catch (e) {
+    notify('Impossible de charger les informations', 'error')
   }
-  fetchLogs()
 })
 
 const resendInvite = async () => {
