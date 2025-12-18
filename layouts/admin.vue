@@ -124,9 +124,18 @@ const handleLogout = async () => {
   await authStore.logout()
 }
 
-const menuItems = [
-  { label: 'Mon Profil', to: '/me/profile', icon: IconUser },
-  { label: 'Sessions', to: '/me/sessions', icon: IconDeviceDesktop },
-  { label: 'Inviter un admin', to: '/me/manage/admins/invite', icon: IconUserPlus },
-]
+const { hasAccess } = useAccess()
+
+const menuItems = computed(() => {
+  const items = [
+    { label: 'Mon Profil', to: '/me/profile', icon: IconUser },
+    { label: 'Sessions', to: '/me/sessions', icon: IconDeviceDesktop },
+  ]
+
+  if (hasAccess(['main', 'admin'])) {
+    items.push({ label: 'Inviter un admin', to: '/me/manage/admins/invite', icon: IconUserPlus })
+  }
+
+  return items
+})
 </script>

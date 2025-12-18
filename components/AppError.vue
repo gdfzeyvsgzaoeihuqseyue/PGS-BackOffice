@@ -6,7 +6,7 @@
 
     <h3 class="text-xl font-bold text-secondary-900 mb-2">{{ title || 'Une erreur est survenue' }}</h3>
     <p class="text-secondary-500 mb-8">
-      {{ message || "Impossible de charger les données." }}</p>
+      {{ "Impossible de charger les données." }}</p>
 
     <div class="flex gap-4">
       <button v-if="retry" @click="$emit('retry')"

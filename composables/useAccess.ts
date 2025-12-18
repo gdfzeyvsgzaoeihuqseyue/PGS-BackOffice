@@ -19,7 +19,7 @@ export const useAccess = () => {
 
     // Super Admin / canManageAll override
     if (auth.user.permissions?.canManageAll) return true
-    // Si rôle 'main', on considère souvent qu'il a tout accès (selon logique métier, sinon retirer)
+    // Si rôle 'main'
     if (auth.user.role === 'main') return true
 
     const roles = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles]
