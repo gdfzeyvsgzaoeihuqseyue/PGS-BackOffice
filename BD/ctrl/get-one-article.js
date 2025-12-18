@@ -1,13 +1,18 @@
 module.exports = {
   friendlyName: 'Obtenir un article',
   description: 'Renvoie un article de blog spécifique par son ID ou slug avec les détails de son auteur et sa catégorie.',
-  
+
   inputs: {
     identifier: {
       type: 'string',
       required: true,
       description: 'L\'ID ou le slug de l\'article à récupérer.',
     },
+    excludeView: {
+      type: 'boolean',
+      defaultsTo: false,
+      description: 'Si vrai, n\'incrémente pas le compteur de vues (ex: pour l\'édition admin).'
+    }
   },
 
   exits: {
@@ -41,13 +46,18 @@ module.exports = {
         return exits.notFound({ message: 'Article non trouvé.' });
       }
 
-      // Incrémenter les vues 
-      const updatedArticle = await Blog.updateOne({ id: article.id }).set({
-        views: (article.views || 0) + 1
-      });
+      // Incrémenter les vues seulement si excludeView est faux
+      if (!inputs.excludeView) {
+        await Blog.updateOne({ id: article.id }).set({
+          views: (article.views || 0) + 1
+        });
+      }
+
+      const articleId = article.id; // Use ID from initial fetch as updateOne returns array or specific object depending on adapter version, safer to stick to found ID
+
 
       // Populer les relations
-      const populatedArticle = await Blog.findOne({ id: updatedArticle.id })
+      const populatedArticle = await Blog.findOne({ id: article.id })
         .populate('author')
         .populate('category');
 

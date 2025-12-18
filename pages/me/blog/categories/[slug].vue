@@ -138,20 +138,16 @@ useHead({
 const route = useRoute()
 const router = useRouter()
 const blogStore = useBlogStore()
-const { categories, articles, loading, error } = storeToRefs(blogStore)
+const { currentCategory: category, articles, loading, error } = storeToRefs(blogStore)
 
 const retryFetch = () => {
-  blogStore.fetchCategories()
+  blogStore.fetchCategory(route.params.slug)
   blogStore.fetchArticles()
 }
 
 // Fetch both parallel
-blogStore.fetchCategories()
+blogStore.fetchCategory(route.params.slug)
 blogStore.fetchArticles()
-
-const category = computed(() => {
-  return categories.value.find(c => c.slug === route.params.slug)
-})
 
 // Articles Logic
 const currentPage = ref(1)

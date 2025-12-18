@@ -154,19 +154,17 @@ useHead({
 const route = useRoute()
 const router = useRouter()
 const blogStore = useBlogStore()
-const { articles, authors, categories, loading, error } = storeToRefs(blogStore)
+const { currentArticle: article, authors, categories, loading, error } = storeToRefs(blogStore)
 
-const refresh = () => {
-  blogStore.fetchArticles()
+const refresh = async () => {
+  // Fetch article with excludeView=true for admin view
+  await blogStore.fetchArticle(route.params.slug, true)
+  // Fetch lists for the edit form
   blogStore.fetchAuthors()
   blogStore.fetchCategories()
 }
 
 refresh()
-
-const article = computed(() => {
-  return articles.value.find(a => a.slug === route.params.slug)
-})
 
 
 // Edit Modal

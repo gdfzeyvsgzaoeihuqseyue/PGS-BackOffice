@@ -151,21 +151,16 @@ useHead({
 const route = useRoute()
 const router = useRouter()
 const blogStore = useBlogStore()
-const { authors, articles, loading, error } = storeToRefs(blogStore)
+const { currentAuthor: author, articles, loading, error } = storeToRefs(blogStore)
 
 const retryFetch = () => {
-  blogStore.fetchAuthors()
+  blogStore.fetchAuthor(route.params.slug)
   blogStore.fetchArticles()
 }
 
 // Fetch both so we can count articles
-// Fetch both so we can count articles
-blogStore.fetchAuthors()
+blogStore.fetchAuthor(route.params.slug)
 blogStore.fetchArticles()
-
-const author = computed(() => {
-  return authors.value.find(a => a.slug === route.params.slug)
-})
 
 // Articles Logic
 const currentPage = ref(1)
