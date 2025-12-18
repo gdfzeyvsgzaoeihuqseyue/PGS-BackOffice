@@ -40,7 +40,7 @@ export const useLearnerStore = defineStore('learner', {
       this.error = null
       this.search = search
       try {
-        const { data, error } = await useAPI<any>('/admin/leaner/get-all-learners', {
+        const { data, error } = await useAPI<any>('/admin/learner/get-all-learners', {
           query: {
             page: this.page,
             limit: this.limit,
@@ -75,9 +75,9 @@ export const useLearnerStore = defineStore('learner', {
     },
     async manageLearner(id: string, action: 'suspend' | 'activate' | 'delete') {
       try {
-        await useAPI('/admin/leaner/manage', {
+        await useAPI('/admin/learner/manage', {
           method: 'POST',
-          body: { id, action }
+          body: { learnerId: id, action }
         })
         await this.fetchLearners(this.search)
         return true

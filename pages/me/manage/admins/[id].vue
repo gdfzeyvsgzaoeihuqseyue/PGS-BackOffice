@@ -111,7 +111,10 @@
       <!-- Activity Logs -->
       <div class="bg-white rounded-2xl shadow-sm border border-secondary-200 overflow-hidden">
         <div class="px-6 py-4 border-b border-secondary-100 flex items-center justify-between">
-          <h3 class="font-bold text-secondary-800">Historique d'activité</h3>
+          <div class="flex items-center gap-2">
+            <h3 class="font-bold text-secondary-800">Historique d'activité</h3>
+            <IconLoader2 v-if="logsLoading" class="animate-spin w-4 h-4 text-primary-500" />
+          </div>
           <span class="text-xs text-secondary-500">{{ logsTotal }} entrées</span>
         </div>
 
@@ -143,13 +146,13 @@
           <!-- Load More -->
           <div v-if="logs.length < logsTotal" class="p-4 text-center border-t border-secondary-100">
             <button @click="loadMoreLogs" :disabled="logsLoading"
-              class="text-sm text-primary-600 font-bold hover:underline flex items-center justify-center gap-2 mx-auto">
+              class="text-sm text-primary-600 font-bold hover:underline flex items-center justify-center gap-2 mx-auto disabled:opacity-50 disabled:cursor-not-allowed">
               <IconLoader2 v-if="logsLoading" class="animate-spin w-4 h-4" />
               {{ logsLoading ? 'Chargement...' : 'Voir plus' }}
             </button>
           </div>
         </div>
-        <div v-else class="p-8 text-center text-secondary-500">
+        <div v-else-if="!logsLoading" class="p-8 text-center text-secondary-500">
           Aucune activité enregistrée.
         </div>
       </div>

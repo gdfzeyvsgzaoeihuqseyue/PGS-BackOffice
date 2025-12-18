@@ -80,7 +80,7 @@ export const useUserStore = defineStore('user', {
       try {
         await useAPI('/admin/user/manage', {
           method: 'POST',
-          body: { id, action }
+          body: { userId: id, action }
         })
         // Refresh list
         await this.fetchUsers(this.search)
