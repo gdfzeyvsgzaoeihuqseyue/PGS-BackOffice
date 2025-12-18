@@ -62,11 +62,9 @@ export const useSessionStore = defineStore('session', {
       }
     },
 
-    // --- Session Management (List / Revoke) ---
     async fetchSessions() {
       this.loading = true
       try {
-        // Calls /admin/sessions -> returns { sessions: [], currentToken: '' }
         const { data, error } = await useAPI<{ sessions: Session[], currentToken: string }>('/admin/sessions')
 
         if (error.value) throw error.value
@@ -94,7 +92,6 @@ export const useSessionStore = defineStore('session', {
         const index = this.sessions.findIndex(s => s.id === sessionId)
         if (index !== -1) {
           this.sessions[index].isRevoked = true
-          // ou remove: this.sessions.splice(index, 1) -- mais le backend met isRevoked=true, donc on garde
         }
         return true
       } catch (e) {

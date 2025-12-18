@@ -17,6 +17,11 @@ const sharedFiles = useSharedFiles();
 const { data: customData } = await useAsyncData('customData', () => sharedFiles.getCustomData());
 
 onMounted(async () => {
+  const authStore = useAuthStore()
+  if (!authStore.user && !authStore.initialized) {
+    await authStore.fetchUser()
+  }
+
   if (!customData.value) {
     await refreshNuxtData('customData');
   }
