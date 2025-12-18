@@ -1,5 +1,8 @@
 <template>
-  <div class="max-w-7xl mx-auto space-y-6">
+  <AppLoader v-if="loading" />
+  <AppError v-else-if="error" :message="error" @retry="activityStore.fetchLogs()" />
+
+  <div v-else class="max-w-7xl mx-auto space-y-6">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         <h2 class="text-2xl font-bold text-slate-800">Logs Système</h2>
@@ -37,8 +40,6 @@
             <option value="resend_invite">Renvoi invitation</option>
           </select>
         </div>
-        <h2 class="text-2xl font-bold text-secondary-800">Journal Système</h2>
-        <p class="text-secondary-500 mt-1">Activité globale de l'administration</p>
       </div>
 
       <div class="flex flex-wrap items-center gap-4">
@@ -63,7 +64,7 @@
 
         <button @click="refresh"
           class="p-2 text-primary-600 bg-primary-50 hover:bg-primary-100 rounded-lg transition-colors">
-          <IconRefresh size="20" :class="{ 'animate-spin': adminLogsStore.loading }" />
+          <IconRefresh size="20" :class="{ 'animate-spin': activityStore.loading }" />
         </button>
       </div>
     </div>
@@ -130,16 +131,15 @@
       <!-- Pagination -->
       <div class="px-6 py-4 border-t border-secondary-100 flex items-center justify-between">
         <div class="text-sm text-secondary-500">
-          Page {{ adminLogsStore.currentPage }} sur {{ adminLogsStore.totalPages }}
+          Page {{ activityStore.currentPage }} sur {{ activityStore.totalPages }}
         </div>
         <div class="flex gap-2">
-          <button @click="adminLogsStore.setPage(adminLogsStore.currentPage - 1)"
-            :disabled="adminLogsStore.currentPage <= 1"
+          <button @click="setPage(activityStore.currentPage - 1)" :disabled="activityStore.currentPage <= 1"
             class="p-1 rounded hover:bg-secondary-100 disabled:opacity-50 disabled:cursor-not-allowed text-secondary-600">
             <IconChevronLeft size="20" />
           </button>
-          <button @click="adminLogsStore.setPage(adminLogsStore.currentPage + 1)"
-            :disabled="adminLogsStore.currentPage >= adminLogsStore.totalPages"
+          <button @click="setPage(activityStore.currentPage + 1)"
+            :disabled="activityStore.currentPage >= activityStore.totalPages"
             class="p-1 rounded hover:bg-secondary-100 disabled:opacity-50 disabled:cursor-not-allowed text-secondary-600">
             <IconChevronRight size="20" />
           </button>
@@ -149,36 +149,46 @@
     </div>
     <div v-else class="text-center p-12 text-secondary-500 bg-white rounded-xl border border-secondary-200 shadow-sm">
       <IconTimeline class="w-12 h-12 mx-auto text-secondary-200 mb-2" />
-      <p>{{ adminLogsStore.loading ? 'Chargement...' : 'Aucun journal trouvé.' }}</p>
+      <p>{{ activityStore.loading ? 'Chargement...' : 'Aucun journal trouvé.' }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
 import { IconRefresh, IconChevronLeft, IconChevronRight, IconUser, IconArrowRight, IconTimeline } from '@tabler/icons-vue'
-import { useAdminLogsStore } from '~/stores/adminLogs'
+import { useActivityStore } from '~/stores/activity'
 
 definePageMeta({
-  layout: 'admin',
-  title: 'Journal Système'
+  layout: 'admin'
 })
 
-const adminLogsStore = useAdminLogsStore()
-const { logs, loading, error } = storeToRefs(adminLogsStore)
+useHead({
+  title: 'Journaux Système'
+})
+
+const activityStore = useActivityStore()
+const { logs, loading, error } = storeToRefs(activityStore)
 
 const filterType = ref('')
 const adminFilter = ref('')
 let searchTimeout
 
-adminLogsStore.fetchLogs()
+// Initial fetch
+activityStore.fetchSystemLogs()
 
-const refresh = () => adminLogsStore.fetchLogs({ targetType: filterType.value, adminId: adminFilter.value })
+const refresh = () => activityStore.fetchSystemLogs({ targetType: filterType.value, adminId: adminFilter.value })
+
+// Handle Page Change
+const setPage = (page) => {
+  activityStore.currentPage = page
+  refresh()
+}
 
 watch([filterType, adminFilter], ([newType, newAdmin]) => {
   clearTimeout(searchTimeout)
   searchTimeout = setTimeout(() => {
-    adminLogsStore.currentPage = 1
-    adminLogsStore.fetchLogs({ targetType: newType, adminId: newAdmin })
+    activityStore.currentPage = 1
+    refresh()
   }, 500)
 })
 

@@ -59,7 +59,10 @@
 
 <script setup>
 definePageMeta({
-   layout: 'admin',
+   layout: 'admin'
+})
+
+useHead({
    title: 'Mon Profil - Administration'
 })
 

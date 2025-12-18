@@ -141,7 +141,10 @@ import { IconArrowLeft, IconTrash, IconPencil, IconArticle, IconArrowRight, Icon
 import { useBlogStore } from '~/stores/blog'
 
 definePageMeta({
-  layout: 'admin',
+  layout: 'admin'
+})
+
+useHead({
   title: 'Détail Auteur'
 })
 

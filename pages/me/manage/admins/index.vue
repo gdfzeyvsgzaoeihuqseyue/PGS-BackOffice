@@ -167,8 +167,11 @@ import { IconSearch, IconUserPlus, IconUsers, IconArrowRight, IconDotsVertical, 
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 
 definePageMeta({
-  layout: 'admin',
-  title: 'Gestion Admins'
+  layout: 'admin'
+})
+
+useHead({
+  title: 'Administrateurs'
 })
 
 const { add: notify } = useToast()

@@ -17,18 +17,16 @@
       class="relative w-full max-w-md bg-white/70 backdrop-blur-xl border border-white/50 shadow-2xl shadow-primary-500/10 rounded-3xl p-8 md:p-10 transform hover:scale-[1.01] transition-transform duration-500">
       <div class="text-center mb-10">
         <!-- Logo -->
-        <div class="mb-10">
-          <div class="flex justify-center mb-8">
-            <div class="hidden lg:block">
-              <img :src="sharedFiles.paths.logo.dc" alt="Logo" class="h-10 w-auto sm:h-12 request-logo dark:hidden" />
-              <img :src="sharedFiles.paths.logo.dw" alt="Logo"
-                class="h-10 w-auto sm:h-12 request-logo hidden dark:block" />
-            </div>
-            <div class="lg:hidden">
-              <img :src="sharedFiles.paths.logo.mc" alt="Logo" class="h-10 w-auto sm:h-12 request-logo dark:hidden" />
-              <img :src="sharedFiles.paths.logo.mw" alt="Logo"
-                class="h-10 w-auto sm:h-12 request-logo hidden dark:block" />
-            </div>
+        <div class="flex justify-center mb-4">
+          <div class="hidden lg:block">
+            <img :src="sharedFiles.paths.logo.dc" alt="Logo" class="h-10 w-auto sm:h-12 request-logo dark:hidden" />
+            <img :src="sharedFiles.paths.logo.dw" alt="Logo"
+              class="h-10 w-auto sm:h-12 request-logo hidden dark:block" />
+          </div>
+          <div class="lg:hidden">
+            <img :src="sharedFiles.paths.logo.mc" alt="Logo" class="h-10 w-auto sm:h-12 request-logo dark:hidden" />
+            <img :src="sharedFiles.paths.logo.mw" alt="Logo"
+              class="h-10 w-auto sm:h-12 request-logo hidden dark:block" />
           </div>
         </div>
         <h1 class="text-3xl font-extrabold text-secondary-800 tracking-tight">Bienvenue</h1>
@@ -44,7 +42,7 @@
             </div>
             <input v-model="form.email" type="email" required
               class="w-full pl-11 pr-4 py-3.5 bg-secondary-50 border-secondary-200 border rounded-xl focus:bg-white focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500 outline-none transition-all font-medium text-secondary-800 placeholder-secondary-400"
-              placeholder="admin@stafast.com" />
+              placeholder="admin@progestionsoft.com" />
           </div>
         </div>
 
@@ -94,6 +92,7 @@ definePageMeta({
 
 const authStore = useAuthStore()
 const form = reactive({ email: '', password: '' })
+const showPassword = ref(false)
 const loading = ref(false)
 const error = ref('')
 

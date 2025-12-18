@@ -102,6 +102,10 @@ definePageMeta({
   layout: 'admin',
 })
 
+useHead({
+  title: 'Tableau de bord'
+})
+
 const userStore = useUserStore()
 const learnerStore = useLearnerStore()
 const blogStore = useBlogStore()
@@ -115,7 +119,5 @@ onMounted(async () => {
   ])
 })
 
-useHead({
-  title: "tableau de bord"
-})
+
 </script>

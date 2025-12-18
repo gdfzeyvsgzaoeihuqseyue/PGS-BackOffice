@@ -55,68 +55,84 @@
             </div>
             <div>
               <span class="text-xs font-bold uppercase text-secondary-400 block mb-1">ID Cible</span>
-              <span class="font-mono text-sm text-secondary-600 bg-secondary-50 px-2 py-1 rounded inline-block">{{
-                log.targetId }}
+              <span v-if="log.targetId"
+                class="font-mono text-sm text-secondary-600 bg-secondary-50 px-2 py-1 rounded inline-block">{{
+                  log.targetId }}
               </span>
+              <span v-else class="text-secondary-400 italic text-sm">Non applicable</span>
             </div>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-sm border border-secondary-200 p-6">
-          <h3 class="text-lg font-bold text-secondary-800 mb-4 flex items-center gap-2">
-            <IconDatabase size="20" class="text-warn-500" />
-            Détails (Metadata)
-          </h3>
-          <div class="bg-secondary-900 rounded-lg p-4 overflow-x-auto">
-            <pre class="text-sm font-mono text-secondary-50">{{ JSON.stringify(log.metadata || {}, null, 2) }}</pre>
           </div>
         </div>
       </div>
 
-      <div class="space-y-6">
-        <div class="bg-white rounded-xl shadow-sm border border-secondary-200 p-6">
-          <h3 class="text-lg font-bold text-secondary-800 mb-4 flex items-center gap-2">
-            <IconUser size="20" class="text-secondary-500" />
-            Auteur
-          </h3>
-          <div v-if="log.admin" class="space-y-4">
-            <div class="flex items-center gap-3 mb-4">
-              <div
-                class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-bold">
-                {{ log.admin.firstName?.[0] }}
-              </div>
-              <div>
-                <div class="font-bold text-secondary-800">{{ log.admin.firstName }} {{ log.admin.lastName }}</div>
-                <div class="text-xs text-secondary-500">{{ log.admin.email }}</div>
-              </div>
+      <!-- Metadata -->
+      <div class="bg-white rounded-xl shadow-sm border border-secondary-200 p-6">
+        <h3 class="text-lg font-bold text-secondary-800 mb-4 flex items-center gap-2">
+          <IconDatabase size="20" class="text-warn-500" />
+          Détails (Metadata)
+        </h3>
+        <div class="bg-secondary-900 rounded-lg p-4 overflow-x-auto">
+          <pre class="text-sm font-mono text-secondary-50">{{ JSON.stringify(log.details || {}, null, 2) }}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar Info -->
+    <div class="space-y-6">
+      <div class="bg-white rounded-xl shadow-sm border border-secondary-200 p-6">
+        <h3 class="text-lg font-bold text-secondary-800 mb-4 flex items-center gap-2">
+          <IconUser size="20" class="text-secondary-500" />
+          Auteur
+        </h3>
+        <div v-if="log.admin" class="space-y-4">
+          <div class="flex items-center gap-3 mb-4">
+            <div
+              class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-bold">
+              {{ log.admin.firstName?.[0] }}
             </div>
             <div>
-              <span class="text-xs font-bold uppercase text-secondary-400 block mb-1">Rôle</span>
-              <span
-                class="inline-block px-2 py-1 rounded text-xs font-bold uppercase bg-secondary-100 text-secondary-700">
-                {{ log.admin.role }}
-              </span>
+              <div class="font-bold text-secondary-800">{{ log.admin.firstName }} {{ log.admin.lastName }}</div>
+              <div class="text-xs text-secondary-500">{{ log.admin.email }}</div>
             </div>
           </div>
-          <div v-else class="text-secondary-500 italic">
-            Système ou Auteur inconnu
+          <div>
+            <span class="text-xs font-bold uppercase text-secondary-400 block mb-1">Rôle</span>
+            <span
+              class="inline-block px-2 py-1 rounded text-xs font-bold uppercase bg-secondary-100 text-secondary-700">
+              {{ log.admin.role }}
+            </span>
           </div>
         </div>
+        <div v-else class="text-secondary-500 italic">
+          Système ou Auteur inconnu
+        </div>
+      </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-secondary-200 p-6">
-          <h3 class="text-lg font-bold text-secondary-800 mb-4 flex items-center gap-2">
-            <IconDeviceDesktop size="20" class="text-secondary-500" />
-            Système
-          </h3>
-          <div class="space-y-3">
-            <div>
-              <span class="text-xs font-bold uppercase text-secondary-400 block mb-1">IP</span>
-              <span class="font-mono text-sm text-secondary-600">{{ log.ip || 'N/A' }}</span>
-            </div>
-            <div>
-              <span class="text-xs font-bold uppercase text-secondary-400 block mb-1">User Agent</span>
-              <div class="text-xs text-secondary-500 break-words leading-tight">{{ log.userAgent || 'N/A' }}</div>
-            </div>
+      <!-- System Info -->
+      <div class="bg-white rounded-xl shadow-sm border border-secondary-200 p-6">
+        <h3 class="text-lg font-bold text-secondary-800 mb-4 flex items-center gap-2">
+          <IconDeviceDesktop size="20" class="text-secondary-500" />
+          Système
+        </h3>
+        <div class="space-y-3">
+          <div>
+            <span class="text-xs font-bold uppercase text-secondary-400 block mb-1">IP</span>
+            <span class="font-mono text-sm text-secondary-600">{{ log.ipAddress || 'N/A' }}</span>
+          </div>
+          <div>
+            <span class="text-xs font-bold uppercase text-secondary-400 block mb-1">User Agent</span>
+            <div class="text-xs text-secondary-500 break-words leading-tight">{{ log.userAgent || 'N/A' }}</div>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-xs font-bold uppercase text-secondary-400 block mb-1">Status</span>
+            <span class="px-2 py-1 rounded text-xs font-bold uppercase tracking-wide" :class="{
+              'bg-accent-100 text-accent-600': log.status === 'success',
+              'bg-danger-100 text-danger-600': log.status === 'failed',
+              'bg-warn-100 text-warn-600': log.status === 'pending',
+              'bg-slate-100 text-slate-800': !['success', 'failed', 'pending'].includes(log.status)
+            }">
+              {{ log.status || 'N/A' }}
+            </span>
           </div>
         </div>
       </div>
@@ -129,48 +145,45 @@
 
 <script setup>
 import { IconArrowLeft, IconDownload, IconActivity, IconTarget, IconDatabase, IconUser, IconDeviceDesktop } from '@tabler/icons-vue'
-import { useAdminLogsStore } from '~/stores/adminLogs'
+import { useActivityStore } from '~/stores/activity'
 
 definePageMeta({
-  layout: 'admin',
-  title: 'Détail Log Système'
+  layout: 'admin'
+})
+
+useHead({
+  title: 'Journal système'
 })
 
 const route = useRoute()
 const activityStore = useActivityStore()
-const adminLogsStore = useAdminLogsStore()
-const { logs: myLogs, loading: myLoading } = storeToRefs(activityStore)
-const { logs: allLogs, loading: allLoading } = storeToRefs(adminLogsStore)
+const loading = ref(false)
+const error = ref(null)
+const log = ref(null)
 
-const loading = computed(() => myLoading.value || allLoading.value)
-
-// Try to find in existing logs first (both stores)
-const log = computed(() => {
-  const id = route.params.id
-  return myLogs.value.find(l => (l.id === id) || (l._id === id)) ||
-    allLogs.value.find(l => (l.id === id) || (l._id === id))
-})
-
-// If not found (e.g. direct access), we might need to fetch. 
-// We try fetching my logs first, and if we have rights, maybe all logs?
-// Since we don't have a reliable 'getOne' endpoint yet, this is best effort.
-onMounted(async () => {
-  if (!log.value) {
-    if (!myLogs.value.length) await activityStore.fetchLogs()
-    // If still not found and we are admin (implied by access to this page or app structure), try generic logs?
-    // But get-all-logs is paginated, so we might not find it unless it's recent. 
-    // Ideally we need getLogById.
-    // For now, if coming from 'all-logs' page, the store is populated so it works.
-    // On refresh, this might still 404 for old logs not in first page of 'my logs'.
+const fetchLog = async () => {
+  loading.value = true
+  error.value = null
+  try {
+    const data = await activityStore.fetchSystemLog(route.params.id)
+    log.value = data
+  } catch (e) {
+    error.value = e.message || "Impossible de charger le log"
+  } finally {
+    loading.value = false
   }
+}
+
+onMounted(() => {
+  fetchLog()
 })
 
 const downloadJson = () => {
-  if (!log.value || !log.value.details) return
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(log.value.details, null, 2))
+  if (!log.value) return
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(log.value, null, 2))
   const downloadAnchorNode = document.createElement('a')
   downloadAnchorNode.setAttribute("href", dataStr)
-  downloadAnchorNode.setAttribute("download", `log-${log.value.id}.json`)
+  downloadAnchorNode.setAttribute("download", `log_syst_${log.value.id}.json`)
   document.body.appendChild(downloadAnchorNode)
   downloadAnchorNode.click()
   downloadAnchorNode.remove()

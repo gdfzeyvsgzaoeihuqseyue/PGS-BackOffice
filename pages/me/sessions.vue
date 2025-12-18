@@ -116,7 +116,10 @@ import {
 import { storeToRefs } from 'pinia'
 
 definePageMeta({
-  layout: 'admin',
+  layout: 'admin'
+})
+
+useHead({
   title: 'Gestion des Sessions - Administration'
 })
 

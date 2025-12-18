@@ -90,7 +90,10 @@ import { useLearnerStore } from '~/stores/learner'
 import { useToast } from '~/composables/useToast'
 
 definePageMeta({
-  layout: 'admin',
+  layout: 'admin'
+})
+
+useHead({
   title: 'Détail Apprenant'
 })
 

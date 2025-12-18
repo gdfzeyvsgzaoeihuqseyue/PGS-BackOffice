@@ -147,7 +147,10 @@ import { useToast } from '~/composables/useToast'
 import type { User } from '~/types/person'
 
 definePageMeta({
-   layout: 'admin',
+   layout: 'admin'
+})
+
+useHead({
    title: 'Utilisateurs'
 })
 

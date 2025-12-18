@@ -110,7 +110,10 @@ import { useUserStore } from '~/stores/user'
 import { useToast } from '~/composables/useToast'
 
 definePageMeta({
-  layout: 'admin',
+  layout: 'admin'
+})
+
+useHead({
   title: 'Détail Utilisateur'
 })
 

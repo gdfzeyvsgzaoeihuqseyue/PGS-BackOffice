@@ -82,7 +82,10 @@
 import { IconMail, IconShieldLock, IconChevronDown, IconSend } from '@tabler/icons-vue'
 
 definePageMeta({
-  layout: 'admin',
+  layout: 'admin'
+})
+
+useHead({
   title: 'Inviter un admin'
 })
 

@@ -30,18 +30,16 @@
       <div v-else>
         <div class="text-center mb-8">
           <!-- Logo -->
-          <div class="mb-10">
-            <div class="flex justify-center mb-8">
-              <div class="hidden lg:block">
-                <img :src="sharedFiles.paths.logo.dc" alt="Logo" class="h-10 w-auto sm:h-12 request-logo dark:hidden" />
-                <img :src="sharedFiles.paths.logo.dw" alt="Logo"
-                  class="h-10 w-auto sm:h-12 request-logo hidden dark:block" />
-              </div>
-              <div class="lg:hidden">
-                <img :src="sharedFiles.paths.logo.mc" alt="Logo" class="h-10 w-auto sm:h-12 request-logo dark:hidden" />
-                <img :src="sharedFiles.paths.logo.mw" alt="Logo"
-                  class="h-10 w-auto sm:h-12 request-logo hidden dark:block" />
-              </div>
+          <div class="flex justify-center mb-4">
+            <div class="hidden lg:block">
+              <img :src="sharedFiles.paths.logo.dc" alt="Logo" class="h-10 w-auto sm:h-12 request-logo dark:hidden" />
+              <img :src="sharedFiles.paths.logo.dw" alt="Logo"
+                class="h-10 w-auto sm:h-12 request-logo hidden dark:block" />
+            </div>
+            <div class="lg:hidden">
+              <img :src="sharedFiles.paths.logo.mc" alt="Logo" class="h-10 w-auto sm:h-12 request-logo dark:hidden" />
+              <img :src="sharedFiles.paths.logo.mw" alt="Logo"
+                class="h-10 w-auto sm:h-12 request-logo hidden dark:block" />
             </div>
           </div>
 

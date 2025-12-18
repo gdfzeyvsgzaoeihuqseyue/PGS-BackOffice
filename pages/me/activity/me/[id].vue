@@ -56,28 +56,29 @@
             </div>
             <div>
               <span class="text-xs font-bold uppercase text-secondary-400 block mb-1">ID Cible</span>
-              <span class="font-mono text-sm text-secondary-600 bg-secondary-50 px-2 py-1 rounded inline-block">{{
-                log.targetId }}
+              <span v-if="log.targetId"
+                class="font-mono text-sm text-secondary-600 bg-secondary-50 px-2 py-1 rounded inline-block">{{
+                  log.targetId }}
               </span>
+              <span v-else class="text-secondary-400 italic text-sm">Non applicable</span>
             </div>
           </div>
         </div>
 
-        <!-- Metadata / Changes -->
+        <!-- Metadata -->
         <div class="bg-white rounded-xl shadow-sm border border-secondary-200 p-6">
           <h3 class="text-lg font-bold text-secondary-800 mb-4 flex items-center gap-2">
             <IconDatabase size="20" class="text-warn-500" />
             Détails (Metadata)
           </h3>
           <div class="bg-secondary-900 rounded-lg p-4 overflow-x-auto">
-            <pre class="text-sm font-mono text-secondary-50">{{ JSON.stringify(log.metadata || {}, null, 2) }}</pre>
+            <pre class="text-sm font-mono text-secondary-50">{{ JSON.stringify(log.details, null, 2) }}</pre>
           </div>
         </div>
       </div>
 
       <!-- Sidebar Info -->
       <div class="space-y-6">
-        <!-- Author -->
         <div class="bg-white rounded-xl shadow-sm border border-secondary-200 p-6">
           <h3 class="text-lg font-bold text-secondary-800 mb-4 flex items-center gap-2">
             <IconUser size="20" class="text-secondary-500" />
@@ -114,13 +115,25 @@
             Système
           </h3>
           <div class="space-y-3">
-            <div>
-              <span class="text-xs font-bold uppercase text-secondary-400 block mb-1">IP</span>
-              <span class="font-mono text-sm text-secondary-600">{{ log.ip || 'N/A' }}</span>
+            <div class="flex justify-between">
+              <span class="text-xs font-bold uppercase text-secondary-400 block mb-1">IP Source</span>
+              <span class="font-mono text-sm text-secondary-600">{{ log.ipAddress || 'N/A' }}</span>
             </div>
             <div>
               <span class="text-xs font-bold uppercase text-secondary-400 block mb-1">User Agent</span>
-              <div class="text-xs text-secondary-500 break-words leading-tight">{{ log.userAgent || 'N/A' }}</div>
+              <div class="text-xs text-secondary-500 break-words leading-tight">
+                {{ log.userAgent || 'Aucun agent' }}</div>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-xs font-bold uppercase text-secondary-400 block mb-1">Status</span>
+              <span class="px-2 py-1 rounded text-xs font-bold uppercase tracking-wide" :class="{
+                'bg-accent-100 text-accent-600': log.status === 'success',
+                'bg-danger-100 text-danger-600': log.status === 'failed',
+                'bg-warn-100 text-warn-600': log.status === 'pending',
+                'bg-slate-100 text-slate-800': !['success', 'failed', 'pending'].includes(log.status)
+              }">
+                {{ log.status || 'N/A' }}
+              </span>
             </div>
           </div>
         </div>
@@ -137,14 +150,15 @@ import { IconArrowLeft, IconDownload, IconActivity, IconTarget, IconDatabase, Ic
 import { useActivityStore } from '~/stores/activity'
 
 definePageMeta({
-  layout: 'admin',
-  title: 'Détail Log'
+  layout: 'admin'
+})
+
+useHead({
+  title: 'Mon journal'
 })
 
 const route = useRoute()
 const activityStore = useActivityStore()
-// Instead of creating a new ref, we can use a computed or just local state if we want to fetch specific log
-// activityStore usually handles lists. Let's see if we can find it in the list or fetch it.
 const loading = ref(false)
 const error = ref(null)
 const log = ref(null)
@@ -153,20 +167,10 @@ const fetchLog = async () => {
   loading.value = true
   error.value = null
   try {
-    // Try to find in store first
-    const existing = activityStore.logs.find(l => (l.id || l._id) === route.params.id)
-    if (existing) {
-      log.value = existing
-    } else {
-      // Simulate fetch or implement specific fetch in store
-      // await activityStore.fetchLog(route.params.id)
-      // For now, if not in list, we might need a store action or direct call.
-      // Assuming list is populated for now or we redirect.
-      // If authentic backend, we would do: log.value = await $fetch(`/api/admin/logs/${route.params.id}`)
-      error.value = "Log non trouvé (ou non chargé dans la liste)"
-    }
+    const data = await activityStore.fetchLog(route.params.id)
+    log.value = data
   } catch (e) {
-    error.value = e.message
+    error.value = e.message || "Impossible de charger le log"
   } finally {
     loading.value = false
   }
@@ -182,7 +186,7 @@ const downloadJson = () => {
   const downloadAnchorNode = document.createElement('a')
   downloadAnchorNode.setAttribute("href", dataStr)
   downloadAnchorNode.setAttribute("download", `log_${log.value.id}.json`)
-  document.body.appendChild(downloadAnchorNode) // required for firefox
+  document.body.appendChild(downloadAnchorNode)
   downloadAnchorNode.click()
   downloadAnchorNode.remove()
 }

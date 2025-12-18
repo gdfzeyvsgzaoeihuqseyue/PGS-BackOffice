@@ -135,7 +135,10 @@ import { IconArticle, IconPlus, IconPencil, IconTrash } from '@tabler/icons-vue'
 import { useBlogStore } from '~/stores/blog'
 
 definePageMeta({
-  layout: 'admin',
+  layout: 'admin'
+})
+
+useHead({
   title: 'Blog - Articles'
 })
 

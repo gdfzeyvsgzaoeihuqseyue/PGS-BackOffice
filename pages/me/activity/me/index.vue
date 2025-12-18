@@ -106,8 +106,11 @@ import { IconRefresh, IconChevronLeft, IconChevronRight } from '@tabler/icons-vu
 import { useActivityStore } from '~/stores/activity'
 
 definePageMeta({
-  layout: 'admin',
-  title: 'Journal d\'Activité'
+  layout: 'admin'
+})
+
+useHead({
+  title: 'Journal d\'activité'
 })
 
 const activityStore = useActivityStore()

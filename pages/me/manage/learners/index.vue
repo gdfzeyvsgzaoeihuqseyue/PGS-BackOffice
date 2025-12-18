@@ -140,7 +140,10 @@ import { useToast } from '~/composables/useToast'
 import type { Learner } from '~/types/person'
 
 definePageMeta({
-   layout: 'admin',
+   layout: 'admin'
+})
+
+useHead({
    title: 'Apprenants'
 })
 

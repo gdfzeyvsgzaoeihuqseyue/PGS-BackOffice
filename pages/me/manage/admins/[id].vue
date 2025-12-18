@@ -209,8 +209,11 @@
 import { IconArrowLeft, IconMailForward, IconPower, IconActivity, IconEdit, IconLoader2 } from '@tabler/icons-vue'
 
 definePageMeta({
-  layout: 'admin',
-  title: 'Détail Admin'
+  layout: 'admin'
+})
+
+useHead({
+  title: 'Détail admin'
 })
 
 const route = useRoute()
@@ -234,7 +237,7 @@ const editForm = reactive({
   firstName: '',
   lastName: '',
   username: '',
-  role: 'admin'
+  role: ''
 })
 
 const openEditModal = () => {
@@ -242,7 +245,7 @@ const openEditModal = () => {
   editForm.firstName = admin.value.firstName || ''
   editForm.lastName = admin.value.lastName || ''
   editForm.username = admin.value.username || ''
-  editForm.role = admin.value.role || 'admin'
+  editForm.role = admin.value.role
   isEditModalOpen.value = true
 }
 

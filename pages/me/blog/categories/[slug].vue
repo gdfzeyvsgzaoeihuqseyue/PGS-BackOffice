@@ -128,7 +128,10 @@ import { IconArrowLeft, IconCategory, IconTrash, IconPencil, IconArticle, IconAr
 import { useBlogStore } from '~/stores/blog'
 
 definePageMeta({
-  layout: 'admin',
+  layout: 'admin'
+})
+
+useHead({
   title: 'Détail Catégorie'
 })
 
