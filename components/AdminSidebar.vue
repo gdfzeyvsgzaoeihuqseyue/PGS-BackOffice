@@ -58,7 +58,7 @@ const { navigationGroups } = useNavigation()
 
 // Logic to check if a group should be open based on current route
 const isGroupActive = (group) => {
-  return group.items.some(item => route.path.startsWith(item.to))
+  return route.path === group.to || group.items.some(item => route.path.startsWith(item.to))
 }
 </script>
 

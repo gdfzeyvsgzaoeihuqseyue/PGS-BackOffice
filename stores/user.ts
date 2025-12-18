@@ -40,7 +40,7 @@ export const useUserStore = defineStore('user', {
       this.error = null
       this.search = search
       try {
-        const { data, error } = await useAPI<any>('/admin/user/list', {
+        const { data, error } = await useAPI<any>('/admin/user/get-all-users', {
           query: {
             page: this.page,
             limit: this.limit,

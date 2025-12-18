@@ -40,7 +40,7 @@ export const useLearnerStore = defineStore('learner', {
       this.error = null
       this.search = search
       try {
-        const { data, error } = await useAPI<any>('/admin/leaner/list', {
+        const { data, error } = await useAPI<any>('/admin/leaner/get-all-learners', {
           query: {
             page: this.page,
             limit: this.limit,

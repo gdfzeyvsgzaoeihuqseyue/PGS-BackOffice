@@ -18,7 +18,7 @@ export const useActivityStore = defineStore('activity', {
     error: null as string | null
   }),
   actions: {
-    async fetchLogs(filters: ActivityFilter = {}) {
+    async fetchLogs(filters: ActivityFilter = {}, append = false) {
       this.loading = true
       this.error = null
       try {
@@ -33,7 +33,13 @@ export const useActivityStore = defineStore('activity', {
         if (error.value) throw error.value
 
         if (data.value) {
-          this.logs = data.value.logs || []
+          const newLogs = data.value.logs || []
+          if (append) {
+            this.logs = [...this.logs, ...newLogs]
+          } else {
+            this.logs = newLogs
+          }
+
           if (data.value.pagination) {
             this.total = data.value.pagination.total || 0
             this.totalPages = data.value.pagination.totalPages || 1
@@ -68,7 +74,7 @@ export const useActivityStore = defineStore('activity', {
       }
     },
 
-    async fetchSystemLogs(filters: ActivityFilter = {}) {
+    async fetchSystemLogs(filters: ActivityFilter = {}, append = false) {
       this.loading = true
       this.error = null
       try {
@@ -84,7 +90,13 @@ export const useActivityStore = defineStore('activity', {
         if (error.value) throw error.value
 
         if (data.value) {
-          this.logs = data.value.logs || []
+          const newLogs = data.value.logs || []
+          if (append) {
+            this.logs = [...this.logs, ...newLogs]
+          } else {
+            this.logs = newLogs
+          }
+
           if (data.value.pagination) {
             this.total = data.value.pagination.total || 0
             this.totalPages = data.value.pagination.totalPages || 1
@@ -93,7 +105,7 @@ export const useActivityStore = defineStore('activity', {
       } catch (error: any) {
         console.error('Failed to fetch system logs', error)
         this.error = error.message || 'Erreur lors du chargement journal système'
-        this.logs = []
+        if (!append) this.logs = []
       } finally {
         this.loading = false
       }

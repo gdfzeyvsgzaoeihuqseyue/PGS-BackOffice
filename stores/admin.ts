@@ -14,7 +14,7 @@ export const useAdminStore = defineStore('admin', {
       this.loading = true
       this.error = null
       try {
-        const { data, error } = await useAPI<{ admins: Admin[] }>('/admin/get-admins')
+        const { data, error } = await useAPI<{ admins: Admin[] }>('/admin/get-all-admins')
         if (error.value) throw error.value
 
         if (data.value?.admins) {
@@ -33,7 +33,7 @@ export const useAdminStore = defineStore('admin', {
       this.loading = true
       this.error = null
       try {
-        const { data, error } = await useAPI<{ admin: Admin }>(`/admin/manage/admin/${id}`)
+        const { data, error } = await useAPI<{ admin: Admin }>(`/admin/manage/get-admin/${id}`)
         if (error.value) throw error.value
 
         if (data.value?.admin) {

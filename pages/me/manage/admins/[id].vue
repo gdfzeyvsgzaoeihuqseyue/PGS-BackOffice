@@ -115,7 +115,11 @@
           <span class="text-xs text-secondary-500">{{ logsTotal }} entrées</span>
         </div>
 
-        <div class="divide-y divide-secondary-100" v-if="logs.length > 0">
+        <div v-if="logsLoading && logs.length === 0" class="p-12 flex justify-center">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
+        </div>
+
+        <div v-else-if="logs.length > 0" class="divide-y divide-secondary-100">
           <div v-for="log in logs" :key="log.id" class="p-4 hover:bg-secondary-50/50 transition-colors flex gap-4">
             <div class="pt-1">
               <div class="p-2 rounded bg-secondary-100 text-secondary-500">
@@ -139,7 +143,8 @@
           <!-- Load More -->
           <div v-if="logs.length < logsTotal" class="p-4 text-center border-t border-secondary-100">
             <button @click="loadMoreLogs" :disabled="logsLoading"
-              class="text-sm text-primary-600 font-bold hover:underline">
+              class="text-sm text-primary-600 font-bold hover:underline flex items-center justify-center gap-2 mx-auto">
+              <IconLoader2 v-if="logsLoading" class="animate-spin w-4 h-4" />
               {{ logsLoading ? 'Chargement...' : 'Voir plus' }}
             </button>
           </div>
@@ -221,14 +226,14 @@ const { add: notify } = useToast()
 const adminId = route.params.id
 
 const adminStore = useAdminStore()
-const adminLogsStore = useAdminLogsStore()
+const activityStore = useActivityStore()
 
 const admin = computed(() => adminStore.currentAdmin)
 const loading = computed(() => adminStore.loading)
 
-const logs = computed(() => adminLogsStore.logs)
-const logsTotal = computed(() => adminLogsStore.total)
-const logsLoading = computed(() => adminLogsStore.loading)
+const logs = computed(() => activityStore.logs)
+const logsTotal = computed(() => activityStore.total)
+const logsLoading = computed(() => activityStore.loading)
 
 // Edit Modal State
 const isEditModalOpen = ref(false)
@@ -275,17 +280,16 @@ const saveEdit = async () => {
 
 const fetchLogs = async (loadMore = false) => {
   if (loadMore) {
-    adminLogsStore.setPage(adminLogsStore.currentPage + 1)
+    activityStore.currentPage++
+    await activityStore.fetchLogs({
+      adminId: adminId
+    }, true)
   } else {
-    adminLogsStore.filters.adminId = adminId
-    adminLogsStore.filters.action = ''
-    adminLogsStore.filters.targetType = ''
-    adminLogsStore.filters.startDate = ''
-    adminLogsStore.filters.endDate = ''
-
-    adminLogsStore.limit = 10
-    adminLogsStore.currentPage = 1
-    await adminLogsStore.fetchLogs()
+    activityStore.currentPage = 1
+    activityStore.limit = 10
+    await activityStore.fetchLogs({
+      adminId: adminId
+    })
   }
 }
 
