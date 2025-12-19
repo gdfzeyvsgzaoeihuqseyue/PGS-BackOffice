@@ -2,12 +2,17 @@ import type { Config } from 'tailwindcss'
 
 export default <Config>{
   content: [
-    './components/**/*.{js,vue,ts}',
-    './layouts/**/*.vue',
-    './pages/**/*.vue',
-    './plugins/**/*.{js,ts}',
-    './app.vue',
-    './error.vue'
+    "./components/**/*.{js,vue,ts}",
+    "./layouts/**/*.vue",
+    "./pages/**/*.vue",
+    "./plugins/**/*.{js,ts}",
+    "./app.vue",
+
+
+    // "./composables/**/*.{js,ts}",
+    // "./stores/**/*.{js,ts}",
+    // "./utils/**/*.{js,ts}",
+    // "./error.vue",
   ],
   theme: {
     extend: {
