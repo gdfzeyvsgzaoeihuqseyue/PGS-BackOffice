@@ -1,14 +1,11 @@
-import type { Config } from 'tailwindcss'
-
-export default <Config>{
+/** @type {import('tailwindcss').Config} */
+export default {
   content: [
     "./components/**/*.{js,vue,ts}",
     "./layouts/**/*.vue",
     "./pages/**/*.vue",
     "./plugins/**/*.{js,ts}",
     "./app.vue",
-
-
     "./composables/**/*.{js,ts}",
     "./stores/**/*.{js,ts}",
     "./utils/**/*.{js,ts}",
@@ -77,7 +74,7 @@ export default <Config>{
           400: '#fbbf24',
           500: '#f59e0b',
           600: '#d97706',
-          700: '#b45309',
+          700: '#b91c1c',
           800: '#92400e',
           900: '#78350f',
           950: '#451a03',
@@ -85,7 +82,7 @@ export default <Config>{
       },
       fontFamily: {
         body: ['Kedebideri', 'sans-serif'],
-        sans: ['"Science Gothic', 'sans-serif'],
+        sans: ['"Science Gothic"', 'sans-serif'],
         heading: ['"Stack Sans Notch"', 'sans-serif']
       },
       animation: {
