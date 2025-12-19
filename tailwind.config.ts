@@ -9,10 +9,10 @@ export default <Config>{
     "./app.vue",
 
 
-    // "./composables/**/*.{js,ts}",
-    // "./stores/**/*.{js,ts}",
-    // "./utils/**/*.{js,ts}",
-    // "./error.vue",
+    "./composables/**/*.{js,ts}",
+    "./stores/**/*.{js,ts}",
+    "./utils/**/*.{js,ts}",
+    "./error.vue",
   ],
   theme: {
     extend: {
