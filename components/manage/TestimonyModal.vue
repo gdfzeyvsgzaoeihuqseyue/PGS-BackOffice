@@ -33,8 +33,10 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-1">Note / 5</label>
-          <input v-model="form.note" type="number" min="1" max="5"
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all" />
+          <select v-model="form.note"
+            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white transition-all">
+            <option v-for="n in [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]" :key="n" :value="n">{{ n }}</option>
+          </select>
         </div>
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-1">Plateforme associée</label>

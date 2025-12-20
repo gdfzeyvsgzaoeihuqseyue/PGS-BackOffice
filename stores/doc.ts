@@ -25,12 +25,12 @@ export const useDocStore = defineStore('doc', {
         this.loading = false
       }
     },
-    async fetchDoc(identifier: string) {
+    async fetchDoc(id: string) {
       this.loading = true
       this.error = null
       this.currentDoc = null
       try {
-        const { data, error } = await useAPI<any>(`/public/solution/doc/${identifier}`)
+        const { data, error } = await useAPI<any>(`/public/solution/doc/${id}`)
         if (error.value) throw error.value
 
         if (data.value && data.value.data) {

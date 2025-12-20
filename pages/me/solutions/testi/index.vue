@@ -59,8 +59,11 @@
               </td>
               <td class="px-6 py-4">
                 <div class="flex text-yellow-400">
-                  <IconStarFilled size="14" v-for="n in 5" :key="n"
-                    :class="n <= (testi.note || 0) ? 'text-yellow-400' : 'text-slate-200'" />
+                  <template v-for="n in 5" :key="n">
+                    <IconStarFilled v-if="n <= (testi.note || 0)" size="14" class="text-yellow-400" />
+                    <IconStarHalfFilled v-else-if="n - 0.5 <= (testi.note || 0)" size="14" class="text-yellow-400" />
+                    <IconStarFilled v-else size="14" class="text-slate-200" />
+                  </template>
                 </div>
               </td>
               <td class="px-6 py-4">
@@ -94,7 +97,7 @@
 </template>
 
 <script setup>
-import { IconPlus, IconPencil, IconTrash, IconStar, IconStarFilled } from '@tabler/icons-vue'
+import { IconPlus, IconPencil, IconTrash, IconStar, IconStarFilled, IconStarHalfFilled } from '@tabler/icons-vue'
 import { useTestimonyStore } from '~/stores/testimony'
 
 definePageMeta({

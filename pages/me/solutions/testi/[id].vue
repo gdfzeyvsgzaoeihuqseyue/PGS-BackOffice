@@ -49,8 +49,11 @@
       </div>
 
       <div class="flex justify-center text-yellow-400 mb-4">
-        <IconStarFilled size="20" v-for="n in 5" :key="n"
-          :class="n <= (testimony?.note || 0) ? 'text-yellow-400' : 'text-slate-200'" />
+        <template v-for="n in 5" :key="n">
+          <IconStarFilled v-if="n <= (testimony?.note || 0)" size="20" class="text-yellow-400" />
+          <IconStarHalfFilled v-else-if="n - 0.5 <= (testimony?.note || 0)" size="20" class="text-yellow-400" />
+          <IconStarFilled v-else size="20" class="text-slate-200" />
+        </template>
       </div>
 
       <blockquote class="text-xl italic text-slate-700 leading-relaxed mb-6">
@@ -59,7 +62,7 @@
 
       <div class="text-slate-900 font-bold mb-1">{{ testimony?.author }}</div>
       <div class="text-slate-500">{{ testimony?.role }} <span v-if="testimony?.company">chez {{ testimony.company
-          }}</span></div>
+      }}</span></div>
 
       <div class="mt-6 flex justify-center">
         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold"
@@ -90,7 +93,7 @@
 </template>
 
 <script setup>
-import { IconArrowLeft, IconPencil, IconMessageQuote, IconStarFilled, IconStar } from '@tabler/icons-vue'
+import { IconArrowLeft, IconPencil, IconMessageQuote, IconStarFilled, IconStar, IconStarHalfFilled } from '@tabler/icons-vue'
 import { useTestimonyStore } from '~/stores/testimony'
 
 definePageMeta({
@@ -103,7 +106,7 @@ const testimonyStore = useTestimonyStore()
 
 const { loading, error } = storeToRefs(testimonyStore)
 
-const id = route.params.slug // ID or 'new'
+const id = route.params.id // ID or 'new'
 const isNew = id === 'new'
 const testimony = ref(null)
 const isModalOpen = ref(false)
