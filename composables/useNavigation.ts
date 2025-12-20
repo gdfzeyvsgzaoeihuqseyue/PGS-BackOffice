@@ -1,7 +1,7 @@
 import {
   IconUserEdit, IconUserShield, IconUserStar, IconNews, IconUserShare,
   IconDeviceAnalytics, IconFileDescription, IconUserBolt, IconDashboard,
-  IconUsers, IconArticle, IconCategory
+  IconUsers, IconArticle, IconCategory, IconDeviceDesktop, IconBook
 } from '@tabler/icons-vue'
 
 export const useNavigation = () => {
@@ -36,6 +36,16 @@ export const useNavigation = () => {
         { label: 'Articles', to: '/me/blog/articles', icon: 'IconFileDescription' },
         { label: 'Auteurs', to: '/me/blog/authors', icon: 'IconUserBolt' },
         { label: 'Catégories', to: '/me/blog/categories', icon: 'IconCategory' }
+      ]
+    },
+    {
+      slug: 'solutions',
+      label: 'Solutions',
+      to: '/me/solutions',
+      icon: IconDeviceAnalytics,
+      items: [
+        { label: 'Plateformes', to: '/me/solutions/platform', icon: 'IconDeviceDesktop' },
+        { label: 'Documents', to: '/me/solutions/doc', icon: 'IconBook' }
       ]
     }
   ]

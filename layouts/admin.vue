@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-secondary-50 flex font-sans overflow-hidden">
+  <div class="min-h-screen bg-secondary-50 flex overflow-hidden">
     <!-- Desktop Sidebar -->
     <AdminSidebar :collapsed="collapsed" @toggle="toggleSidebar" class="hidden md:flex flex-shrink-0 relative z-30" />
 
