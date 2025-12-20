@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
+import type { SolutionDoc } from '~/types'
 
 export const useDocStore = defineStore('doc', {
   state: () => ({
-    docs: [],
-    currentDoc: null,
+    docs: [] as SolutionDoc[],
+    currentDoc: null as SolutionDoc | null,
     loading: false,
     error: null as string | null
   }),

@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
+import type { SolutionPlatform } from '~/types'
 
 export const usePlatformStore = defineStore('platform', {
   state: () => ({
-    platforms: [],
-    currentPlatform: null,
+    platforms: [] as SolutionPlatform[],
+    currentPlatform: null as SolutionPlatform | null,
     loading: false,
     error: null as string | null
   }),
