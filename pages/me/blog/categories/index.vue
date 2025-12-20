@@ -27,37 +27,39 @@
     </div>
 
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" v-else>
-      <table class="w-full text-left">
-        <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-bold">
-          <tr>
-            <th class="px-6 py-4">Nom</th>
-            <th class="px-6 py-4">Slug</th>
-            <th class="px-6 py-4">Articles</th>
-            <th class="px-6 py-4 text-right">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-100">
-          <tr v-for="cat in categories" :key="cat.id" class="hover:bg-slate-50/50">
-            <td class="px-6 py-4 font-medium text-slate-800">
-              <NuxtLink :to="`/me/blog/categories/${cat.slug}`" class="hover:text-emerald-600 transition-colors">
-                {{ cat.name }}
-              </NuxtLink>
-            </td>
-            <td class="px-6 py-4 text-slate-500 bg-slate-50/50 font-mono text-sm">{{ cat.slug }}</td>
-            <td class="px-6 py-4 text-sm text-slate-600 font-bold">
-              {{ getArticleCount(cat.id) }}
-            </td>
-            <td class="px-6 py-4 text-right flex justify-end gap-2">
-              <button @click="edit(cat)" class="p-1 text-slate-400 hover:text-blue-500">
-                <IconPencil size="18" />
-              </button>
-              <button @click="remove(cat.id)" class="p-1 text-slate-400 hover:text-red-500">
-                <IconTrash size="18" />
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-bold">
+            <tr>
+              <th class="px-6 py-4">Nom</th>
+              <th class="px-6 py-4">Slug</th>
+              <th class="px-6 py-4">Articles</th>
+              <th class="px-6 py-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr v-for="cat in categories" :key="cat.id" class="hover:bg-slate-50/50">
+              <td class="px-6 py-4 font-medium text-slate-800">
+                <NuxtLink :to="`/me/blog/categories/${cat.slug}`" class="hover:text-emerald-600 transition-colors">
+                  {{ cat.name }}
+                </NuxtLink>
+              </td>
+              <td class="px-6 py-4 text-slate-500 bg-slate-50/50 font-mono text-sm">{{ cat.slug }}</td>
+              <td class="px-6 py-4 text-sm text-slate-600 font-bold">
+                {{ getArticleCount(cat.id) }}
+              </td>
+              <td class="px-6 py-4 text-right flex justify-end gap-2">
+                <button @click="edit(cat)" class="p-1 text-slate-400 hover:text-blue-500">
+                  <IconPencil size="18" />
+                </button>
+                <button @click="remove(cat.id)" class="p-1 text-slate-400 hover:text-red-500">
+                  <IconTrash size="18" />
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- Modal -->

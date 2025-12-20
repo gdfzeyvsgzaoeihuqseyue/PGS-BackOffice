@@ -30,50 +30,52 @@
 
     <!-- Data List -->
     <div class="bg-white rounded-xl shadow-sm border border-secondary-200 overflow-hidden" v-if="logs.length">
-      <table class="w-full text-left">
-        <thead class="bg-secondary-50 border-b border-secondary-200 text-xs uppercase text-secondary-500 font-bold">
-          <tr>
-            <th class="px-6 py-4">Auteur</th>
-            <th class="px-6 py-4">Action</th>
-            <th class="px-6 py-4">Cible</th>
-            <th class="px-6 py-4">Date</th>
-            <th class="px-6 py-4">Détails</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-secondary-100">
-          <tr v-for="log in logs" :key="log.id || log._id" class="hover:bg-secondary-50/50">
-            <td class="px-6 py-4">
-              <div v-if="log.admin" class="flex items-center gap-2">
-                <span class="font-medium text-secondary-700 text-sm">{{ log.admin.firstName }} {{
-                  log.admin.lastName }}</span>
-                <span class="text-xs text-secondary-400 bg-secondary-100 px-1.5 py-0.5 rounded">{{
-                  log.admin.role }}</span>
-              </div>
-              <span v-else class="text-secondary-400 italic text-sm">Système / Inconnu</span>
-            </td>
-            <td class="px-6 py-4">
-              <span
-                class="font-mono text-xs bg-secondary-100 px-2 py-1 rounded text-secondary-600 border border-secondary-200">{{
-                  log.action }}</span>
-            </td>
-            <td class="px-6 py-4 text-sm">
-              <div class="flex flex-col">
-                <span class="font-medium text-secondary-700 capitalize">{{ log.targetType }}</span>
-                <span class="text-xs text-secondary-400 font-mono">{{ log.targetId }}</span>
-              </div>
-            </td>
-            <td class="px-6 py-4 text-sm text-secondary-600">
-              {{ new Date(log.createdAt).toLocaleString() }}
-            </td>
-            <td class="px-6 py-4 text-sm text-secondary-500">
-              <NuxtLink :to="`/me/activity/me/${log.id || log._id}`"
-                class="text-primary-600 hover:underline text-xs font-bold uppercase">
-                Voir Détail
-              </NuxtLink>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-secondary-50 border-b border-secondary-200 text-xs uppercase text-secondary-500 font-bold">
+            <tr>
+              <th class="px-6 py-4">Auteur</th>
+              <th class="px-6 py-4">Action</th>
+              <th class="px-6 py-4">Cible</th>
+              <th class="px-6 py-4">Date</th>
+              <th class="px-6 py-4">Détails</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-secondary-100">
+            <tr v-for="log in logs" :key="log.id || log._id" class="hover:bg-secondary-50/50">
+              <td class="px-6 py-4">
+                <div v-if="log.admin" class="flex items-center gap-2">
+                  <span class="font-medium text-secondary-700 text-sm">{{ log.admin.firstName }} {{
+                    log.admin.lastName }}</span>
+                  <span class="text-xs text-secondary-400 bg-secondary-100 px-1.5 py-0.5 rounded">{{
+                    log.admin.role }}</span>
+                </div>
+                <span v-else class="text-secondary-400 italic text-sm">Système / Inconnu</span>
+              </td>
+              <td class="px-6 py-4">
+                <span
+                  class="font-mono text-xs bg-secondary-100 px-2 py-1 rounded text-secondary-600 border border-secondary-200">{{
+                    log.action }}</span>
+              </td>
+              <td class="px-6 py-4 text-sm">
+                <div class="flex flex-col">
+                  <span class="font-medium text-secondary-700 capitalize">{{ log.targetType }}</span>
+                  <span class="text-xs text-secondary-400 font-mono">{{ log.targetId }}</span>
+                </div>
+              </td>
+              <td class="px-6 py-4 text-sm text-secondary-600">
+                {{ new Date(log.createdAt).toLocaleString() }}
+              </td>
+              <td class="px-6 py-4 text-sm text-secondary-500">
+                <NuxtLink :to="`/me/activity/me/${log.id || log._id}`"
+                  class="text-primary-600 hover:underline text-xs font-bold uppercase">
+                  Voir Détail
+                </NuxtLink>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <!-- Pagination -->
       <div class="px-6 py-4 border-t border-secondary-100 flex items-center justify-between">

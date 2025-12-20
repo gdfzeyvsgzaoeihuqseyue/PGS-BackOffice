@@ -27,42 +27,44 @@
     </div>
 
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" v-else>
-      <table class="w-full text-left">
-        <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-bold">
-          <tr>
-            <th class="px-6 py-4">Nom & Avatar</th>
-            <th class="px-6 py-4">Rôle</th>
-            <th class="px-6 py-4">Articles</th>
-            <th class="px-6 py-4 text-right">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-100">
-          <tr v-for="author in authors" :key="author.id" class="hover:bg-slate-50/50">
-            <td class="px-6 py-4 font-medium text-slate-800">
-              <NuxtLink :to="`/me/blog/authors/${author.slug}`"
-                class="flex items-center gap-3 hover:text-emerald-600 transition-colors group">
-                <img :src="author.avatar" class="w-8 h-8 rounded-full border border-slate-100" />
-                <span>{{ author.name }}</span>
-              </NuxtLink>
-            </td>
-            <td class="px-6 py-4 text-slate-500">
-              <span class="px-2 py-1 bg-slate-100 rounded text-xs font-bold uppercase tracking-wide">{{ author.role
-              }}</span>
-            </td>
-            <td class="px-6 py-4 text-sm text-slate-600 font-bold">
-              {{ getArticleCount(author.id) }}
-            </td>
-            <td class="px-6 py-4 text-right flex justify-end gap-2">
-              <button @click="edit(author)" class="p-1 text-slate-400 hover:text-blue-500">
-                <IconPencil size="18" />
-              </button>
-              <button @click="remove(author.id)" class="p-1 text-slate-400 hover:text-red-500">
-                <IconTrash size="18" />
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-bold">
+            <tr>
+              <th class="px-6 py-4">Nom & Avatar</th>
+              <th class="px-6 py-4">Rôle</th>
+              <th class="px-6 py-4">Articles</th>
+              <th class="px-6 py-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr v-for="author in authors" :key="author.id" class="hover:bg-slate-50/50">
+              <td class="px-6 py-4 font-medium text-slate-800">
+                <NuxtLink :to="`/me/blog/authors/${author.slug}`"
+                  class="flex items-center gap-3 hover:text-emerald-600 transition-colors group">
+                  <img :src="author.avatar" class="w-8 h-8 rounded-full border border-slate-100" />
+                  <span>{{ author.name }}</span>
+                </NuxtLink>
+              </td>
+              <td class="px-6 py-4 text-slate-500">
+                <span class="px-2 py-1 bg-slate-100 rounded text-xs font-bold uppercase tracking-wide">{{ author.role
+                }}</span>
+              </td>
+              <td class="px-6 py-4 text-sm text-slate-600 font-bold">
+                {{ getArticleCount(author.id) }}
+              </td>
+              <td class="px-6 py-4 text-right flex justify-end gap-2">
+                <button @click="edit(author)" class="p-1 text-slate-400 hover:text-blue-500">
+                  <IconPencil size="18" />
+                </button>
+                <button @click="remove(author.id)" class="p-1 text-slate-400 hover:text-red-500">
+                  <IconTrash size="18" />
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- Modal -->

@@ -60,62 +60,65 @@
 
     <!-- Data List -->
     <div class="bg-white rounded-xl shadow-sm border border-secondary-200 overflow-hidden" v-if="logs.length">
-      <table class="w-full text-left">
-        <thead class="bg-secondary-50 border-b border-secondary-200 text-xs uppercase text-secondary-500 font-bold">
-          <tr>
-            <th class="px-6 py-4">Admin</th>
-            <th class="px-6 py-4">Action</th>
-            <th class="px-6 py-4">Cible</th>
-            <th class="px-6 py-4">Date</th>
-            <th class="px-6 py-4"></th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-secondary-100">
-          <tr v-for="log in logs" :key="log.id || log._id" class="hover:bg-secondary-50/50">
-            <td class="px-6 py-4">
-              <div class="flex items-center gap-3" v-if="log.admin">
-                <div
-                  class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 text-xs font-bold">
-                  {{ log.admin.firstName?.[0] }}
-                </div>
-                <div>
-                  <div class="font-medium text-secondary-800 text-sm">{{ log.admin.firstName }} {{ log.admin.lastName }}
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-secondary-50 border-b border-secondary-200 text-xs uppercase text-secondary-500 font-bold">
+            <tr>
+              <th class="px-6 py-4">Admin</th>
+              <th class="px-6 py-4">Action</th>
+              <th class="px-6 py-4">Cible</th>
+              <th class="px-6 py-4">Date</th>
+              <th class="px-6 py-4"></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-secondary-100">
+            <tr v-for="log in logs" :key="log.id || log._id" class="hover:bg-secondary-50/50">
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-3" v-if="log.admin">
+                  <div
+                    class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 text-xs font-bold">
+                    {{ log.admin.firstName?.[0] }}
                   </div>
-                  <div class="text-xs text-secondary-400">{{ log.admin.email }}</div>
+                  <div>
+                    <div class="font-medium text-secondary-800 text-sm">{{ log.admin.firstName }} {{ log.admin.lastName
+                      }}
+                    </div>
+                    <div class="text-xs text-secondary-400">{{ log.admin.email }}</div>
+                  </div>
                 </div>
-              </div>
-              <span v-else class="text-secondary-400 italic text-sm">Système</span>
-            </td>
-            <td class="px-6 py-4">
-              <span
-                class="font-mono text-xs bg-secondary-100 px-2 py-1 rounded text-secondary-700 border border-secondary-200 font-medium">
-                {{ log.action }}
-              </span>
-            </td>
-            <td class="px-6 py-4 text-sm">
-              <div class="flex items-center gap-2">
-                <div class="w-2 h-2 rounded-full" :class="{
-                  'bg-primary-500': log.targetType === 'user',
-                  'bg-accent-500': log.targetType === 'learner',
-                  'bg-warn-500': log.targetType === 'admin',
-                  'bg-secondary-400': !['user', 'learner', 'admin'].includes(log.targetType)
-                }"></div>
-                <span class="font-medium text-secondary-700 capitalize">{{ log.targetType }}</span>
-              </div>
-              <div class="text-xs text-secondary-400 font-mono pl-4">{{ log.targetId }}</div>
-            </td>
-            <td class="px-6 py-4 text-sm text-secondary-600">
-              {{ new Date(log.createdAt).toLocaleString() }}
-            </td>
-            <td class="px-6 py-4 text-right">
-              <NuxtLink :to="`/me/activity/syst/${log.id || log._id}`"
-                class="inline-flex items-center justify-center w-8 h-8 rounded-full hover:bg-secondary-100 text-secondary-400 hover:text-primary-600 transition-colors">
-                <IconArrowRight size="18" />
-              </NuxtLink>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                <span v-else class="text-secondary-400 italic text-sm">Système</span>
+              </td>
+              <td class="px-6 py-4">
+                <span
+                  class="font-mono text-xs bg-secondary-100 px-2 py-1 rounded text-secondary-700 border border-secondary-200 font-medium">
+                  {{ log.action }}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-sm">
+                <div class="flex items-center gap-2">
+                  <div class="w-2 h-2 rounded-full" :class="{
+                    'bg-primary-500': log.targetType === 'user',
+                    'bg-accent-500': log.targetType === 'learner',
+                    'bg-warn-500': log.targetType === 'admin',
+                    'bg-secondary-400': !['user', 'learner', 'admin'].includes(log.targetType)
+                  }"></div>
+                  <span class="font-medium text-secondary-700 capitalize">{{ log.targetType }}</span>
+                </div>
+                <div class="text-xs text-secondary-400 font-mono pl-4">{{ log.targetId }}</div>
+              </td>
+              <td class="px-6 py-4 text-sm text-secondary-600">
+                {{ new Date(log.createdAt).toLocaleString() }}
+              </td>
+              <td class="px-6 py-4 text-right">
+                <NuxtLink :to="`/me/activity/syst/${log.id || log._id}`"
+                  class="inline-flex items-center justify-center w-8 h-8 rounded-full hover:bg-secondary-100 text-secondary-400 hover:text-primary-600 transition-colors">
+                  <IconArrowRight size="18" />
+                </NuxtLink>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <!-- Pagination -->
       <div class="px-6 py-4 border-t border-secondary-100 flex items-center justify-between">

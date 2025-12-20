@@ -27,41 +27,43 @@
     </div>
 
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" v-else>
-      <table class="w-full text-left">
-        <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-bold">
-          <tr>
-            <th class="px-6 py-4">Titre</th>
-            <th class="px-6 py-4">Auteur</th>
-            <th class="px-6 py-4">Catégorie</th>
-            <th class="px-6 py-4">Vues</th>
-            <th class="px-6 py-4 text-right">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-100">
-          <tr v-for="article in articles" :key="article.id" class="hover:bg-slate-50/50">
-            <td class="px-6 py-4 font-medium text-slate-800">
-              <NuxtLink :to="`/me/blog/articles/${article.slug}`" class="hover:text-emerald-600 transition-colors">
-                {{ article.title }}
-              </NuxtLink>
-            </td>
-            <td class="px-6 py-4 text-sm text-slate-600">{{ article.author?.name || '-' }}</td>
-            <td class="px-6 py-4 text-sm text-slate-600">
-              <span v-if="article.category" class="px-2 py-1 rounded bg-slate-100 text-slate-600 text-xs font-bold">{{
-                article.category.name }}</span>
-              <span v-else>-</span>
-            </td>
-            <td class="px-6 py-4 text-sm text-slate-600 font-mono">{{ article.views || 0 }}</td>
-            <td class="px-6 py-4 text-right flex justify-end gap-2">
-              <button @click="edit(article)" class="p-1 text-slate-400 hover:text-blue-500">
-                <IconPencil size="18" />
-              </button>
-              <button @click="remove(article.id)" class="p-1 text-slate-400 hover:text-red-500">
-                <IconTrash size="18" />
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-bold">
+            <tr>
+              <th class="px-6 py-4">Titre</th>
+              <th class="px-6 py-4">Auteur</th>
+              <th class="px-6 py-4">Catégorie</th>
+              <th class="px-6 py-4">Vues</th>
+              <th class="px-6 py-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr v-for="article in articles" :key="article.id" class="hover:bg-slate-50/50">
+              <td class="px-6 py-4 font-medium text-slate-800">
+                <NuxtLink :to="`/me/blog/articles/${article.slug}`" class="hover:text-emerald-600 transition-colors">
+                  {{ article.title }}
+                </NuxtLink>
+              </td>
+              <td class="px-6 py-4 text-sm text-slate-600">{{ article.author?.name || '-' }}</td>
+              <td class="px-6 py-4 text-sm text-slate-600">
+                <span v-if="article.category" class="px-2 py-1 rounded bg-slate-100 text-slate-600 text-xs font-bold">{{
+                  article.category.name }}</span>
+                <span v-else>-</span>
+              </td>
+              <td class="px-6 py-4 text-sm text-slate-600 font-mono">{{ article.views || 0 }}</td>
+              <td class="px-6 py-4 text-right flex justify-end gap-2">
+                <button @click="edit(article)" class="p-1 text-slate-400 hover:text-blue-500">
+                  <IconPencil size="18" />
+                </button>
+                <button @click="remove(article.id)" class="p-1 text-slate-400 hover:text-red-500">
+                  <IconTrash size="18" />
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- Modal -->
