@@ -13,9 +13,7 @@
             class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all" />
         </div>
         <div>
-          <label class="block text-sm font-bold text-slate-700 mb-1">Logo (URL)</label>
-          <input v-model="form.logo" type="url"
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all" />
+          <CdnInput v-model="form.logo" label="Logo (URL)" placeholder="nom-logo" />
         </div>
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-1">Plateforme associée</label>
@@ -42,6 +40,7 @@
 <script setup>
 import { usePartnerStore } from '~/stores/partner'
 import { usePlatformStore } from '~/stores/platform'
+import CdnInput from './CdnInput.vue'
 
 const props = defineProps({
   isOpen: Boolean,

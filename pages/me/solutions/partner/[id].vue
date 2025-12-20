@@ -78,7 +78,7 @@ const partnerStore = usePartnerStore()
 
 const { loading, error } = storeToRefs(partnerStore)
 
-const id = route.params.id // As discussed, treating param as ID or 'new'
+const id = route.params.id
 const isNew = id === 'new'
 const partner = ref(null)
 const isModalOpen = ref(false)

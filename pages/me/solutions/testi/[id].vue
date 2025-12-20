@@ -1,5 +1,5 @@
 <template>
-  <AppLoader v-if="loading && !testimony" />
+  <AppLoader v-if="loading && !currentTestimony" />
   <AppError v-else-if="error" :message="error" />
   <div v-else>
     <div class="flex items-center justify-between mb-8 fade-in-up">
@@ -14,12 +14,12 @@
           </div>
           <div>
             <h2 class="text-2xl font-bold text-slate-800">
-              {{ testimony?.author || 'Témoignage' }}
+              {{ currentTestimony?.author || 'Témoignage' }}
             </h2>
             <div class="flex items-center gap-2 mt-1">
-              <span v-if="testimony?.platform"
+              <span v-if="currentTestimony?.platform"
                 class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-xs font-bold">
-                {{ testimony.platform.name || 'ID: ' + testimony.platform }}
+                {{ currentTestimony.platform.name || 'ID: ' + currentTestimony.platform }}
               </span>
             </div>
           </div>
@@ -36,13 +36,13 @@
     <!-- View Content -->
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-8 text-center fade-in-up max-w-2xl mx-auto">
       <div class="relative w-24 h-24 mx-auto mb-6">
-        <img v-if="testimony?.avatar" :src="testimony.avatar"
+        <img v-if="currentTestimony?.avatar" :src="currentTestimony.avatar"
           class="w-full h-full rounded-full object-cover border-4 border-slate-50 shadow" />
         <div v-else
           class="w-full h-full rounded-full bg-slate-100 flex items-center justify-center text-4xl text-slate-300 font-bold shadow-inner">
-          {{ testimony?.author?.charAt(0) }}
+          {{ currentTestimony?.author?.charAt(0) }}
         </div>
-        <div v-if="testimony?.isFeatured"
+        <div v-if="currentTestimony?.isFeatured"
           class="absolute -right-2 -bottom-2 bg-orange-500 text-white p-2 rounded-full shadow border-2 border-white">
           <IconStarFilled size="16" />
         </div>
@@ -50,45 +50,47 @@
 
       <div class="flex justify-center text-yellow-400 mb-4">
         <template v-for="n in 5" :key="n">
-          <IconStarFilled v-if="n <= (testimony?.note || 0)" size="20" class="text-yellow-400" />
-          <IconStarHalfFilled v-else-if="n - 0.5 <= (testimony?.note || 0)" size="20" class="text-yellow-400" />
+          <IconStarFilled v-if="n <= (currentTestimony?.note || 0)" size="20" class="text-yellow-400" />
+          <IconStarHalfFilled v-else-if="n - 0.5 <= (currentTestimony?.note || 0)" size="20" class="text-yellow-400" />
           <IconStarFilled v-else size="20" class="text-slate-200" />
         </template>
       </div>
 
       <blockquote class="text-xl italic text-slate-700 leading-relaxed mb-6">
-        "{{ testimony?.content }}"
+        "{{ currentTestimony?.content }}"
       </blockquote>
 
-      <div class="text-slate-900 font-bold mb-1">{{ testimony?.author }}</div>
-      <div class="text-slate-500">{{ testimony?.role }} <span v-if="testimony?.company">chez {{ testimony.company
-      }}</span></div>
+      <div class="text-slate-900 font-bold mb-1">{{ currentTestimony?.author }}</div>
+      <div class="text-slate-500">{{ currentTestimony?.role }} <span v-if="currentTestimony?.company">chez {{
+        currentTestimony.company
+          }}</span></div>
 
       <div class="mt-6 flex justify-center">
         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold"
-          :class="testimony?.isPublished ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'">
+          :class="currentTestimony?.isPublished ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'">
           <span class="w-1.5 h-1.5 rounded-full"
-            :class="testimony?.isPublished ? 'bg-emerald-500' : 'bg-slate-400'"></span>
-          {{ testimony?.isPublished ? 'Publié' : 'Brouillon' }}
+            :class="currentTestimony?.isPublished ? 'bg-emerald-500' : 'bg-slate-400'"></span>
+          {{ currentTestimony?.isPublished ? 'Publié' : 'Brouillon' }}
         </span>
       </div>
 
       <div class="mt-8 pt-8 border-t border-slate-100 grid grid-cols-2 gap-4 max-w-sm mx-auto text-left">
         <div>
           <span class="block text-xs uppercase text-slate-400 font-bold mb-1">Créé le</span>
-          <span class="text-sm font-mono text-slate-600">{{ testimony?.createdAt ? new
-            Date(testimony.createdAt).toLocaleDateString() : '-' }}</span>
+          <span class="text-sm font-mono text-slate-600">{{ currentTestimony?.createdAt ? new
+            Date(currentTestimony.createdAt).toLocaleDateString() : '-' }}</span>
         </div>
         <div>
           <span class="block text-xs uppercase text-slate-400 font-bold mb-1">Mis à jour le</span>
-          <span class="text-sm font-mono text-slate-600">{{ testimony?.updatedAt ? new
-            Date(testimony.updatedAt).toLocaleDateString() : '-' }}</span>
+          <span class="text-sm font-mono text-slate-600">{{ currentTestimony?.updatedAt ? new
+            Date(currentTestimony.updatedAt).toLocaleDateString() : '-' }}</span>
         </div>
       </div>
     </div>
 
     <!-- Modal Edit -->
-    <ManageTestimonyModal :is-open="isModalOpen" :testimony="testimony" @close="closeModal" @saved="handleSaved" />
+    <ManageTestimonyModal :is-open="isModalOpen" :testimony="currentTestimony" @close="closeModal"
+      @saved="handleSaved" />
   </div>
 </template>
 
@@ -104,21 +106,15 @@ const route = useRoute()
 const router = useRouter()
 const testimonyStore = useTestimonyStore()
 
-const { loading, error } = storeToRefs(testimonyStore)
+const { loading, error, currentTestimony } = storeToRefs(testimonyStore)
 
-const id = route.params.id // ID or 'new'
+const id = route.params.id
 const isNew = id === 'new'
-const testimony = ref(null)
 const isModalOpen = ref(false)
 
 onMounted(async () => {
   if (!isNew) {
-    try {
-      const data = await testimonyStore.fetchTestimony(id)
-      testimony.value = data
-    } catch (e) {
-      // Error handled by store
-    }
+    await testimonyStore.fetchTestimony(id)
   } else {
     isModalOpen.value = true
   }
@@ -129,19 +125,19 @@ const openModal = () => {
 }
 
 const closeModal = () => {
-  if (isNew && !testimony.value) router.back()
+  if (isNew && !currentTestimony.value) router.back()
   else isModalOpen.value = false
 }
 
 useHead({
-  title: computed(() => isNew ? 'Nouveau Témoignage' : `Modifier ${testimony.value?.author || 'Témoignage'}`)
+  title: computed(() => isNew ? 'Nouveau Témoignage' : `Modifier ${currentTestimony.value?.author || 'Témoignage'}`)
 })
 
 const handleSaved = async () => {
   if (isNew) {
     router.push('/me/solutions/testi')
   } else {
-    testimony.value = await testimonyStore.fetchTestimony(id)
+    await testimonyStore.fetchTestimony(id)
     closeModal()
   }
 }

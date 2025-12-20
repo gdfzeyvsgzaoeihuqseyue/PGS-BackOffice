@@ -34,28 +34,8 @@
       <!-- Visuels : Custom Input for CDN -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
         <div class="col-span-2 text-xs font-bold text-slate-500 uppercase">Visuels</div>
-        <div>
-          <label class="block text-sm font-bold text-slate-700 mb-1">Nom Logo Mobile</label>
-          <div class="flex items-center">
-            <span
-              class="bg-slate-200 px-3 py-2 border border-r-0 rounded-l-lg text-xs text-slate-500 whitespace-nowrap hidden sm:block truncate max-w-[120px]">.../Logos/</span>
-            <input v-model="logoName" type="text" placeholder="nom-logo"
-              class="flex-1 min-w-0 px-4 py-2 border rounded-lg sm:rounded-l-none sm:rounded-r-none focus:ring-2 focus:ring-emerald-500 outline-none" />
-            <span
-              class="bg-slate-200 px-3 py-2 border border-l-0 rounded-r-lg text-xs text-slate-500 font-mono">.png</span>
-          </div>
-        </div>
-        <div>
-          <label class="block text-sm font-bold text-slate-700 mb-1">Nom Logo Bureau</label>
-          <div class="flex items-center">
-            <span
-              class="bg-slate-200 px-3 py-2 border border-r-0 rounded-l-lg text-xs text-slate-500 whitespace-nowrap hidden sm:block truncate max-w-[120px]">.../Logos/</span>
-            <input v-model="logoDeskName" type="text" placeholder="nom-logo-desk"
-              class="flex-1 min-w-0 px-4 py-2 border rounded-lg sm:rounded-l-none sm:rounded-r-none focus:ring-2 focus:ring-emerald-500 outline-none" />
-            <span
-              class="bg-slate-200 px-3 py-2 border border-l-0 rounded-r-lg text-xs text-slate-500 font-mono">.png</span>
-          </div>
-        </div>
+        <CdnInput v-model="form.logo" label="Nom Logo Mobile" placeholder="nom-logo" />
+        <CdnInput v-model="form.logoDesk" label="Nom Logo Bureau" placeholder="nom-logo-desk" />
       </div>
 
       <!-- Auth & CTA -->
@@ -126,17 +106,15 @@
 <script setup>
 import { IconTrash, IconPlus } from '@tabler/icons-vue'
 import { usePlatformStore } from '~/stores/platform'
+import CdnInput from './CdnInput.vue'
 
 const props = defineProps({
   isOpen: Boolean,
-  platform: Object // If passed, edit mode.
+  platform: Object
 })
 
 const emit = defineEmits(['close', 'saved'])
 const platformStore = usePlatformStore()
-
-const LOGO_PREFIX = 'https://cdn.jsdelivr.net/gh/progestionsoft/Files/_General/Images/Logos/'
-const LOGO_SUFFIX = '.png'
 
 const form = reactive({
   name: '',
@@ -154,17 +132,7 @@ const form = reactive({
   features: []
 })
 
-const logoName = ref('')
-const logoDeskName = ref('')
 const featuresList = ref([])
-
-const extractNameFromUrl = (url) => {
-  if (!url) return ''
-  if (url.startsWith(LOGO_PREFIX) && url.endsWith(LOGO_SUFFIX)) {
-    return url.replace(LOGO_PREFIX, '').replace(LOGO_SUFFIX, '')
-  }
-  return ''
-}
 
 watch(() => props.isOpen, (newVal) => {
   if (newVal) {
@@ -182,10 +150,6 @@ watch(() => props.isOpen, (newVal) => {
       form.authType = data.authType || 'all'
       form.ctaText = data.ctaText || ''
       form.ctaLink = data.ctaLink || ''
-
-      // Visuels
-      logoName.value = extractNameFromUrl(data.logo)
-      logoDeskName.value = extractNameFromUrl(data.logoDesk)
 
       // Features
       if (Array.isArray(data.features)) {
@@ -214,8 +178,6 @@ watch(() => props.isOpen, (newVal) => {
       form.authType = 'all'
       form.ctaText = ''
       form.ctaLink = ''
-      logoName.value = ''
-      logoDeskName.value = ''
       featuresList.value = []
     }
   }
@@ -227,10 +189,6 @@ const removeFeature = (index) => featuresList.value.splice(index, 1)
 const save = async () => {
   try {
     form.features = featuresList.value.filter(f => f && f.trim() !== '')
-
-    // Construct URLs
-    form.logo = logoName.value ? `${LOGO_PREFIX}${logoName.value}${LOGO_SUFFIX}` : ''
-    form.logoDesk = logoDeskName.value ? `${LOGO_PREFIX}${logoDeskName.value}${LOGO_SUFFIX}` : ''
 
     if (!props.platform) {
       await platformStore.addPlatform(form)
