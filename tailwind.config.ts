@@ -82,9 +82,9 @@ export default {
         }
       },
       fontFamily: {
-        body: ['Kedebideri', 'sans-serif'],
-        sans: ['"Science Gothic"', 'sans-serif'],
-        heading: ['"Stack Sans Notch"', 'sans-serif']
+        bodyd: ['Kedebideri', 'sans-serif'],
+        sansd: ['"Science Gothic"', 'sans-serif'],
+        headingd: ['"Stack Sans Notch"', 'sans-serif']
       },
       animation: {
         'fade-in-up': 'fadeInUp 0.5s ease-out'

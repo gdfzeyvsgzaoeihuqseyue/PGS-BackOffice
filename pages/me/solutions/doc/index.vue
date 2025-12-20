@@ -12,11 +12,11 @@
         <div class="px-4 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm font-medium text-slate-600">
           Total: <span class="font-bold text-slate-800">{{ docs.length }}</span>
         </div>
-        <NuxtLink to="/me/solutions/doc/new"
+        <button @click="openModal(null)"
           class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 shadow-sm hover:shadow-md">
           <IconPlus size="20" />
           <span>Nouveau Document</span>
-        </NuxtLink>
+        </button>
       </div>
     </div>
 
@@ -61,9 +61,9 @@
                 </a>
               </td>
               <td class="px-6 py-4 text-right flex justify-end gap-2">
-                <NuxtLink :to="`/me/solutions/doc/${doc.id}`" class="p-1 text-slate-400 hover:text-blue-500">
+                <button @click="openModal(doc)" class="p-1 text-slate-400 hover:text-blue-500">
                   <IconPencil size="18" />
-                </NuxtLink>
+                </button>
                 <button @click="remove(doc.id)" class="p-1 text-slate-400 hover:text-red-500">
                   <IconTrash size="18" />
                 </button>
@@ -73,12 +73,48 @@
         </table>
       </div>
     </div>
+
+    <!-- Modal Edit -->
+    <BaseModal :is-open="isModalOpen" :title="editingId ? 'Modifier Document' : 'Nouveau Document'" @close="closeModal">
+      <form @submit.prevent="save" class="space-y-6">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-bold text-slate-700 mb-1">Nom du document</label>
+            <input v-model="form.name" type="text" required
+              class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all" />
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-slate-700 mb-1">Lien URL</label>
+            <input v-model="form.link" type="url" required
+              class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all" />
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-slate-700 mb-1">Plateforme associée</label>
+            <select v-model="form.platform" required
+              class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
+              <option value="" disabled>Sélectionner une plateforme...</option>
+              <option v-for="plat in platforms" :key="plat.id" :value="plat.id">{{ plat.name }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-6 border-t mt-4">
+          <button type="button" @click="closeModal"
+            class="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-medium transition-colors">Annuler</button>
+          <button type="submit"
+            class="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-bold shadow-sm hover:shadow-md transition-all">
+            Enregistrer
+          </button>
+        </div>
+      </form>
+    </BaseModal>
   </div>
 </template>
 
 <script setup>
 import { IconPlus, IconPencil, IconTrash, IconFileText, IconExternalLink } from '@tabler/icons-vue'
 import { useDocStore } from '~/stores/doc'
+import { usePlatformStore } from '~/stores/platform'
 
 definePageMeta({
   layout: 'admin'
@@ -89,10 +125,14 @@ useHead({
 })
 
 const docStore = useDocStore()
+const platformStore = usePlatformStore()
 const { docs, loading, error } = storeToRefs(docStore)
+const { platforms } = storeToRefs(platformStore)
 
+// Load init data
 const refresh = () => {
   docStore.fetchDocs()
+  platformStore.fetchPlatforms()
 }
 
 refresh()
@@ -100,6 +140,56 @@ refresh()
 const remove = async (id) => {
   if (confirm('Supprimer ce document ? Cette action est irréversible.')) {
     await docStore.deleteDoc(id)
+  }
+}
+
+// Modal Logic
+const isModalOpen = ref(false)
+const editingId = ref(null)
+const form = reactive({
+  name: '',
+  link: '',
+  platform: ''
+})
+
+const syncFormWithData = (data) => {
+  form.name = data.name || ''
+  form.link = data.link || ''
+  form.platform = data.platform?.id || data.platform || ''
+}
+
+const resetForm = () => {
+  form.name = ''
+  form.link = ''
+  form.platform = ''
+}
+
+const openModal = (doc) => {
+  if (doc) {
+    editingId.value = doc.id
+    syncFormWithData(doc)
+  } else {
+    editingId.value = null
+    resetForm()
+  }
+  isModalOpen.value = true
+}
+
+const closeModal = () => {
+  isModalOpen.value = false
+  editingId.value = null
+}
+
+const save = async () => {
+  try {
+    if (!editingId.value) {
+      await docStore.addDoc(form)
+    } else {
+      await docStore.updateDoc(editingId.value, form)
+    }
+    closeModal()
+  } catch (e) {
+    alert('Erreur: ' + (e.message || 'Une erreur est survenue'))
   }
 }
 </script>

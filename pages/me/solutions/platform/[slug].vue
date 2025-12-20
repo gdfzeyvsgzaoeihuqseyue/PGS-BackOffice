@@ -61,6 +61,22 @@
       <!-- Sidebar -->
       <div class="space-y-6">
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+          <h3 class="font-bold text-lg text-slate-800 mb-4 pb-2 border-b">Visuels</h3>
+          <div class="space-y-4">
+            <div v-if="platform?.logo">
+              <span class="block text-xs font-bold text-slate-400 uppercase mb-1">Logo Mobile</span>
+              <img :src="platform.logo"
+                class="h-12 w-auto object-contain p-2 bg-slate-50 rounded border border-slate-100" />
+            </div>
+            <div v-if="platform?.logoDesk">
+              <span class="block text-xs font-bold text-slate-400 uppercase mb-1">Logo Bureau</span>
+              <img :src="platform.logoDesk"
+                class="h-12 w-auto object-contain p-2 bg-slate-50 rounded border border-slate-100" />
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
           <h3 class="font-bold text-lg text-slate-800 mb-4 pb-2 border-b">Détails</h3>
           <div class="space-y-4">
             <div>
@@ -86,22 +102,6 @@
                 class="mt-2 block w-full text-center py-2 px-3 bg-slate-100 hover:bg-slate-200 rounded text-sm font-bold text-slate-700 transition-colors truncate">
                 {{ platform.ctaText }}
               </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-          <h3 class="font-bold text-lg text-slate-800 mb-4 pb-2 border-b">Visuels</h3>
-          <div class="space-y-4">
-            <div v-if="platform?.logo">
-              <span class="block text-xs font-bold text-slate-400 uppercase mb-1">Logo Mobile</span>
-              <img :src="platform.logo"
-                class="h-12 w-auto object-contain p-2 bg-slate-50 rounded border border-slate-100" />
-            </div>
-            <div v-if="platform?.logoDesk">
-              <span class="block text-xs font-bold text-slate-400 uppercase mb-1">Logo Bureau</span>
-              <img :src="platform.logoDesk"
-                class="h-12 w-auto object-contain p-2 bg-slate-50 rounded border border-slate-100" />
             </div>
           </div>
         </div>

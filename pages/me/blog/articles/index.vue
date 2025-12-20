@@ -112,11 +112,23 @@
           </div>
         </div>
 
+        <!-- Tags -->
         <div>
-          <label class="block text-sm font-bold text-slate-700 mb-1">Tags (séparés par virgule)</label>
-          <input v-model="inputTags" type="text"
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
-            placeholder="Tech, News, ..." />
+          <label class="block text-sm font-bold text-slate-700 mb-2">Tags</label>
+          <div class="space-y-2">
+            <div v-for="(tag, index) in tagsList" :key="index" class="flex gap-2">
+              <input v-model="tagsList[index]" type="text"
+                class="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none text-sm"
+                placeholder="Tag..." />
+              <button type="button" @click="removeTag(index)" class="p-2 text-red-500 hover:bg-red-50 rounded">
+                <IconTrash size="18" />
+              </button>
+            </div>
+            <button type="button" @click="addTag"
+              class="flex items-center gap-2 text-emerald-600 font-bold text-sm hover:underline mt-2">
+              <IconPlus size="16" /> Ajouter un tag
+            </button>
+          </div>
         </div>
 
         <div class="flex justify-end gap-3 mt-6 pt-4 border-t">
@@ -156,7 +168,9 @@ refresh()
 
 const isModalOpen = ref(false)
 const editingId = ref(null)
-const inputTags = ref('')
+// const inputTags = ref('') // Removed in favor of tagsList
+const tagsList = ref([])
+
 const form = reactive({
   title: '',
   excerpt: '',
@@ -164,7 +178,7 @@ const form = reactive({
   imageUrl: '',
   author: '',
   category: '',
-  tags: [] // Handled via inputTags
+  tags: [] // Handled via tagsList
 })
 
 
@@ -177,7 +191,7 @@ const openModal = () => {
   form.author = ''
   form.category = ''
   form.tags = []
-  inputTags.value = ''
+  tagsList.value = []
   isModalOpen.value = true
 }
 
@@ -195,7 +209,7 @@ const edit = (article) => {
   form.category = article.category?.id || article.category || ''
 
   form.tags = article.tags || []
-  inputTags.value = form.tags.join(', ')
+  tagsList.value = [...form.tags]
 
   isModalOpen.value = true
 }
@@ -208,10 +222,13 @@ const slugify = (text) => text.toString().toLowerCase()
   .replace(/^-+/, '')
   .replace(/-+$/, '');
 
+const addTag = () => tagsList.value.push('')
+const removeTag = (index) => tagsList.value.splice(index, 1)
+
 const save = async () => {
   try {
     // Parse tags
-    form.tags = inputTags.value.split(',').map(t => t.trim()).filter(t => t)
+    form.tags = tagsList.value.filter(t => t && t.trim() !== '')
 
     const payload = { ...form }
     // Generate slug if new and not present (though backend should trigger)
