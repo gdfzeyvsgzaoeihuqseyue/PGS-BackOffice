@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { ActivityLog, ActivityFilter } from '~/types/activity'
+import type { ActivityLog, ActivityFilter } from '~/types'
 
 export const useActivityStore = defineStore('activity', {
   state: () => ({

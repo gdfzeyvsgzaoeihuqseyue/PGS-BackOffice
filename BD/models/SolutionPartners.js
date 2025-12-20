@@ -3,16 +3,21 @@ module.exports = {
     name: {
       type: 'string',
       required: true,
-      description: 'Nom du document ou ressource.'
+      description: 'Nom ou organisation du partenaire',
     },
-    link: {
+    website: {
       type: 'string',
-      required: true,
       isURL: true,
-      description: 'L\'URL du document.'
+      description: 'URL du site web du partenaire',
+    },
+    logo: {
+      type: 'string',
+      isURL: true,
+      description: 'URL du logo du partenaire',
     },
     platform: {
       model: 'Solution',
+      required: true,
       description: 'La solution associée à ce document.'
     }
   }

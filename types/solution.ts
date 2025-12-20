@@ -12,7 +12,7 @@ export interface SolutionPlatform {
   authType?: 'all' | 'user' | 'learner'
   ctaText?: string
   ctaLink?: string
-  features?: string | any[] // Can be JSON string or array
+  features?: string | any[]
   createdAt?: string
   updatedAt?: string
 }
@@ -22,6 +22,31 @@ export interface SolutionDoc {
   name: string
   link: string
   platform: SolutionPlatform | string // Object on populate, ID otherwise
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface SolutionPartner {
+  id: string
+  name: string
+  website?: string
+  logo?: string
+  platform: SolutionPlatform | string
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface SolutionTestimony {
+  id: string
+  author: string
+  company?: string
+  role?: string
+  content: string
+  note?: number
+  avatar?: string
+  isPublished: boolean
+  isFeatured: boolean
+  platform: SolutionPlatform | string
   createdAt?: string
   updatedAt?: string
 }

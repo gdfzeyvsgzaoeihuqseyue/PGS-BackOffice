@@ -1,29 +1,34 @@
 module.exports = {
-  friendlyName: 'Ajouter un document de documentation',
-  description: 'Ajoute un nouveau document de documentation pour une solution spécifique.',
+  friendlyName: 'Ajouter un partenaire à une solution',
+  description: 'Ajoute un nouveau partenaire pour une solution spécifique.',
 
   inputs: {
     name: {
       type: 'string',
       required: true,
-      description: 'Nom du document ou de la ressource.',
+      description: 'Nom ou organisation du partenaire.',
     },
-    link: {
+    website: {
       type: 'string',
-      required: true,
-      description: 'L\'URL du document.',
+      isURL: true,
+      description: 'URL du site web du partenaire.',
+    },
+    logo: {
+      type: 'string',
+      isURL: true,
+      description: 'URL du logo du partenaire.',
     },
     platformId: {
       type: 'string',
       required: true,
-      description: 'L\'ID de la solution associée à ce document.',
+      description: 'ID de la solution associée.',
     },
   },
 
   exits: {
     success: {
       statusCode: 201,
-      description: 'Le document a été ajouté avec succès.',
+      description: 'Le partenaire a été ajouté avec succès.',
       responseType: 'created',
     },
     platformNotFound: {
@@ -47,20 +52,21 @@ module.exports = {
         });
       }
 
-      // Créer le nouveau document
-      const newDoc = await SolutionDocs.create({
+      // Créer le nouveau partenaire
+      const newPartner = await SolutionPartners.create({
         name: inputs.name,
-        link: inputs.link,
+        website: inputs.website,
+        logo: inputs.logo,
         platform: inputs.platformId,
       }).fetch();
 
       return exits.success({
         success: true,
-        message: 'Document de documentation créé avec succès.',
-        data: newDoc,
+        message: 'Partenaire ajouté avec succès.',
+        data: newPartner,
       });
     } catch (err) {
-      sails.log.error('Erreur lors de l\'ajout du document de documentation:', err);
+      sails.log.error('Erreur lors de l\'ajout du partenaire:', err);
       return exits.serverError({
         message: 'Une erreur serveur inattendue s\'est produite.',
         error: err.message

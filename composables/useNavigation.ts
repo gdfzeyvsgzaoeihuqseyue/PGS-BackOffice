@@ -1,10 +1,12 @@
 import {
   IconUserEdit, IconUserShield, IconUserStar, IconNews, IconUserShare,
   IconDeviceAnalytics, IconFileDescription, IconUserBolt, IconDashboard,
-  IconUsers, IconArticle, IconCategory, IconDeviceDesktop, IconBook
+  IconUsers, IconArticle, IconCategory, IconDeviceDesktop, IconBook,
+  IconBuilding, IconQuote
 } from '@tabler/icons-vue'
 
 export const useNavigation = () => {
+  // ... (previous groups)
   const navigationGroups = [
     {
       slug: 'manage',
@@ -45,10 +47,13 @@ export const useNavigation = () => {
       icon: IconDeviceAnalytics,
       items: [
         { label: 'Plateformes', to: '/me/solutions/platform', icon: 'IconDeviceDesktop' },
-        { label: 'Documents', to: '/me/solutions/doc', icon: 'IconBook' }
+        { label: 'Documents', to: '/me/solutions/doc', icon: 'IconBook' },
+        { label: 'Partenaires', to: '/me/solutions/partner', icon: 'IconBuilding' },
+        { label: 'Témoignages', to: '/me/solutions/testi', icon: 'IconQuote' }
       ]
     }
   ]
+  // ... (rest)
 
   const getGroupBySlug = (slug: string) => {
     return navigationGroups.find(g => g.slug === slug)
