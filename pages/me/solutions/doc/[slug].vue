@@ -59,39 +59,7 @@
     </div>
 
     <!-- Modal Edit -->
-    <BaseModal :is-open="isModalOpen" :title="isNew ? 'Nouveau Document' : 'Modifier Document'" @close="closeModal">
-      <form @submit.prevent="save" class="space-y-6">
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-bold text-slate-700 mb-1">Nom du document</label>
-            <input v-model="form.name" type="text" required
-              class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all" />
-          </div>
-          <div>
-            <label class="block text-sm font-bold text-slate-700 mb-1">Lien URL</label>
-            <input v-model="form.link" type="url" required
-              class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all" />
-          </div>
-          <div>
-            <label class="block text-sm font-bold text-slate-700 mb-1">Plateforme associée</label>
-            <select v-model="form.platform" required
-              class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
-              <option value="" disabled>Sélectionner une plateforme...</option>
-              <option v-for="plat in platforms" :key="plat.id" :value="plat.id">{{ plat.name }}</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="flex justify-end gap-3 pt-6 border-t mt-4">
-          <button type="button" @click="closeModal"
-            class="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-medium transition-colors">Annuler</button>
-          <button type="submit"
-            class="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-bold shadow-sm hover:shadow-md transition-all">
-            Enregistrer
-          </button>
-        </div>
-      </form>
-    </BaseModal>
+    <ManageDocModal :is-open="isModalOpen" :doc="doc" @close="closeModal" @saved="handleSaved" />
   </div>
 </template>
 
@@ -117,12 +85,6 @@ const isNew = id === 'new'
 const doc = ref(null)
 const isModalOpen = ref(false)
 
-const form = reactive({
-  name: '',
-  link: '',
-  platform: ''
-})
-
 onMounted(async () => {
   // Determine context: we need platforms list for the form
   platformStore.fetchPlatforms()
@@ -131,7 +93,6 @@ onMounted(async () => {
     try {
       const data = await docStore.fetchDoc(id)
       doc.value = data
-      syncFormWithData(data)
     } catch (e) {
       // Error handled by store
     }
@@ -140,19 +101,12 @@ onMounted(async () => {
   }
 })
 
-const syncFormWithData = (data) => {
-  form.name = data.name
-  form.link = data.link
-  form.platform = data.platform?.id || data.platform || ''
-}
-
 const openModal = () => {
-  if (doc.value) syncFormWithData(doc.value)
   isModalOpen.value = true
 }
 
 const closeModal = () => {
-  if (isNew) router.back()
+  if (isNew && !doc.value) router.back()
   else isModalOpen.value = false
 }
 
@@ -160,19 +114,12 @@ useHead({
   title: computed(() => isNew ? 'Nouveau Document' : `Modifier ${doc.value?.name || 'Document'}`)
 })
 
-const save = async () => {
-  try {
-    if (isNew) {
-      await docStore.addDoc(form)
-      router.push('/me/solutions/doc')
-    } else {
-      await docStore.updateDoc(doc.value.id, form)
-      // refresh
-      doc.value = await docStore.fetchDoc(doc.value.id)
-      isModalOpen.value = false
-    }
-  } catch (e) {
-    alert('Erreur: ' + (e.message || 'Une erreur est survenue'))
+const handleSaved = async () => {
+  if (isNew) {
+    router.push('/me/solutions/doc')
+  } else {
+    doc.value = await docStore.fetchDoc(id)
+    closeModal()
   }
 }
 </script>
