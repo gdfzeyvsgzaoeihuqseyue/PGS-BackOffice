@@ -68,8 +68,7 @@
       <!-- Contenu : Simple Textarea -->
       <div>
         <label class="block text-sm font-bold text-slate-700 mb-1">Contenu Détaillé</label>
-        <textarea v-model="form.content" rows="6"
-          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all font-mono text-sm"></textarea>
+        <textarea v-model="form.content" rows="6" class="form-textarea"></textarea>
       </div>
 
       <!-- Features -->

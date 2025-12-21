@@ -4,40 +4,31 @@
       <!-- Title -->
       <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">Titre</label>
-        <input v-model="form.title" type="text" required
-          class="w-full rounded-lg border-slate-200 focus:border-emerald-500 focus:ring-emerald-500 text-sm"
-          placeholder="Ex: Comment utiliser..." />
+        <input v-model="form.title" type="text" required class="form-input" placeholder="Ex: Comment utiliser..." />
       </div>
 
       <!-- Description -->
       <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">Description</label>
-        <textarea v-model="form.description" rows="3"
-          class="w-full rounded-lg border-slate-200 focus:border-emerald-500 focus:ring-emerald-500 text-sm"
-          placeholder="Courte description..."></textarea>
+        <textarea v-model="form.description" rows="3" class="form-input" placeholder="Courte description..."></textarea>
       </div>
 
       <!-- Time & Link -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-medium text-slate-700 mb-1">Durée</label>
-          <input v-model="form.time" type="text"
-            class="w-full rounded-lg border-slate-200 focus:border-emerald-500 focus:ring-emerald-500 text-sm"
-            placeholder="Ex: 5min" />
+          <input v-model="form.time" type="text" class="form-input" placeholder="Ex: 5min" />
         </div>
         <div>
           <label class="block text-sm font-medium text-slate-700 mb-1">Lien (Vidéo/Guide)</label>
-          <input v-model="form.link" type="text" required
-            class="w-full rounded-lg border-slate-200 focus:border-emerald-500 focus:ring-emerald-500 text-sm"
-            placeholder="https://..." />
+          <input v-model="form.link" type="text" required class="form-input" placeholder="https://..." />
         </div>
       </div>
 
       <!-- Platform -->
       <div>
         <label class="block text-sm font-medium text-slate-700 mb-1">Plateforme associée</label>
-        <select v-model="form.platform" required
-          class="w-full rounded-lg border-slate-200 focus:border-emerald-500 focus:ring-emerald-500 text-sm">
+        <select v-model="form.platform" required class="form-input">
           <option :value="null" disabled>Sélectionner une plateforme</option>
           <option v-for="plat in platforms" :key="plat.id" :value="plat.id">
             {{ plat.name }}
