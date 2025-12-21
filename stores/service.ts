@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
-import type { Service } from '~/types'
+import type { Service, ServiceStats } from '~/types'
 
 export const useServiceStore = defineStore('service', () => {
 
   // State
   const services = ref<Service[]>([])
   const service = ref<Service | null>(null)
-  const stats = ref<any>(null)
+  const stats = ref<ServiceStats | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
 
@@ -133,7 +133,7 @@ export const useServiceStore = defineStore('service', () => {
 
   const fetchStats = async () => {
     try {
-      const { data } = await useAPI('/admin/service/stats')
+      const { data } = await useAPI<ServiceStats>('/admin/service/stats')
       if (data.value) {
         stats.value = data.value
       }

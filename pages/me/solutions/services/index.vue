@@ -13,6 +13,11 @@
           <div class="px-4 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm font-medium text-slate-600">
             Total: <span class="font-bold text-slate-800">{{ services.length }}</span>
           </div>
+          <NuxtLink to="/me/solutions/services/stats"
+            class="bg-white hover:bg-slate-50 text-slate-700 px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 shadow-sm border border-slate-200">
+            <IconChartBar size="20" />
+            <span>Statistiques</span>
+          </NuxtLink>
           <button @click="openModal(null)"
             class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 shadow-sm hover:shadow-md">
             <IconPlus size="20" />
@@ -112,7 +117,7 @@
 </template>
 
 <script setup>
-import { IconPlus, IconPencil, IconTrash, IconExternalLink, IconCopy, IconEye, IconEyeOff, IconRefresh } from '@tabler/icons-vue'
+import { IconPlus, IconPencil, IconTrash, IconExternalLink, IconCopy, IconEye, IconEyeOff, IconRefresh, IconChartBar } from '@tabler/icons-vue'
 import { useServiceStore } from '~/stores/service'
 import { useToast } from '~/composables/useToast'
 

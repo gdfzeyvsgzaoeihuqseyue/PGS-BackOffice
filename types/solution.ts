@@ -112,3 +112,33 @@ export interface Service {
   createdAt?: string
   updatedAt?: string
 }
+
+export interface ServiceStats {
+  overview: {
+    services: { total: number; active: number; inactive: number }
+    access: {
+      users: { total: number; active: number; inactive: number }
+      learners: { total: number; active: number; inactive: number }
+      combined: { total: number; active: number; inactive: number }
+    }
+    averages: { accessPerService: number }
+  }
+  topServices: {
+    title: string
+    data: any[]
+  }
+  leastUsedServices: {
+    title: string
+    data: any[]
+  }
+  unusedServices: {
+    title: string
+    count: number
+    data: any[]
+  }
+  healthIndicators: {
+    servicesUtilization: number
+    accessRate: number
+    unusedServicesPercentage: number
+  }
+}
