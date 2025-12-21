@@ -45,11 +45,11 @@ export const useServiceStore = defineStore('service', () => {
 
   const addService = async (payload: any) => {
     try {
-      const { data, error } = await useAPI<Service>('/admin/service/create', { method: 'POST', body: payload })
+      const { data, error } = await useAPI<{ service: Service }>('/admin/service/create', { method: 'POST', body: payload })
       if (error.value) throw error.value
-      if (data.value) {
-        services.value.push(data.value)
-        return data.value
+      if (data.value && data.value.service) {
+        services.value.push(data.value.service)
+        return data.value.service
       }
     } catch (err: any) {
       throw new Error(err.message || 'Erreur lors de la création')
@@ -59,20 +59,20 @@ export const useServiceStore = defineStore('service', () => {
   const updateService = async (id: string, payload: any) => {
     try {
       // Mapping to backend route: PUT /api/v1/admin/service/:serviceId
-      const { data, error } = await useAPI<Service>(`/admin/service/${id}`, { method: 'PUT', body: payload })
+      const { data, error } = await useAPI<{ service: Service }>(`/admin/service/${id}`, { method: 'PUT', body: payload })
       if (error.value) throw error.value
 
-      if (data.value) {
+      if (data.value && data.value.service) {
         // Update in list
         const index = services.value.findIndex(s => s.id === id)
         if (index !== -1) {
-          services.value[index] = { ...services.value[index], ...data.value }
+          services.value[index] = { ...services.value[index], ...data.value.service }
         }
         // Update detail if loaded
         if (service.value && service.value.id === id) {
-          service.value = { ...service.value, ...data.value }
+          service.value = { ...service.value, ...data.value.service }
         }
-        return data.value
+        return data.value.service
       }
     } catch (err: any) {
       throw new Error(err.message || 'Erreur lors de la mise à jour')
@@ -104,21 +104,26 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
-  const toggleService = async (id: string) => {
+  const toggleService = async (id: string, isActive: boolean, reason: string | null = null) => {
     try {
       // Mapping to backend route: PATCH /api/v1/admin/service/:serviceId/toggle
-      const { data, error } = await useAPI<Service>(`/admin/service/${id}/toggle`, { method: 'PATCH' })
+      // Backend returns { message, service: Service, impact: ... }
+      const { data, error } = await useAPI<{ service: Service }>(`/admin/service/${id}/toggle`, {
+        method: 'PATCH',
+        body: { isActive, reason }
+      })
+
       if (error.value) throw error.value
 
-      if (data.value) {
+      if (data.value && data.value.service) {
         // Update in list
         const index = services.value.findIndex(s => s.id === id)
         if (index !== -1) {
-          services.value[index].isActive = data.value.isActive
+          services.value[index].isActive = data.value.service.isActive
         }
         // Update detail if loaded
         if (service.value && service.value.id === id) {
-          service.value.isActive = data.value.isActive
+          service.value.isActive = data.value.service.isActive
         }
       }
     } catch (err: any) {

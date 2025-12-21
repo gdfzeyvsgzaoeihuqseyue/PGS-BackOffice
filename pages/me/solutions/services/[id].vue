@@ -25,6 +25,11 @@
         </div>
 
         <div class="flex items-center gap-2">
+          <button @click="toggle" class="px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+            :class="service.isActive ? 'bg-amber-50 text-amber-600 hover:bg-amber-100' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'">
+            <component :is="service.isActive ? IconPower : IconPower" size="18" />
+            {{ service.isActive ? 'Désactiver' : 'Activer' }}
+          </button>
           <button @click="openModal"
             class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-medium hover:bg-slate-200 transition-colors flex items-center gap-2">
             <IconPencil size="18" /> Modifier
@@ -159,7 +164,7 @@
 </template>
 
 <script setup>
-import { IconArrowLeft, IconExternalLink, IconPencil, IconTrash, IconKey, IconCopy, IconInfoCircle, IconWorld, IconUsers, IconUserEdit, IconDeviceAnalytics, IconEye, IconEyeOff, IconRefresh } from '@tabler/icons-vue'
+import { IconArrowLeft, IconExternalLink, IconPencil, IconTrash, IconKey, IconCopy, IconInfoCircle, IconWorld, IconUsers, IconUserEdit, IconDeviceAnalytics, IconEye, IconEyeOff, IconRefresh, IconPower } from '@tabler/icons-vue'
 import { useServiceStore } from '~/stores/service'
 import { useToast } from '~/composables/useToast'
 
@@ -203,6 +208,24 @@ const copy = (text) => {
   if (!text) return
   navigator.clipboard.writeText(text)
   notify('Clé CLI copiée', 'success')
+}
+
+const toggle = async () => {
+  if (!service.value) return
+
+  const newStatus = !service.value.isActive
+  const action = newStatus ? 'activer' : 'désactiver'
+
+  const reason = prompt(`Voulez-vous vraiment ${action} le service "${service.value.name}" ?\nRaison (optionnelle) :`)
+
+  if (reason === null) return
+
+  try {
+    await serviceStore.toggleService(service.value.id, newStatus, reason)
+    notify(`Service ${newStatus ? 'activé' : 'désactivé'} avec succès`, 'success')
+  } catch (e) {
+    notify(e.message, 'error')
+  }
 }
 
 const isRevealed = ref(false)

@@ -149,9 +149,18 @@ const onDeleted = () => {
 }
 
 const toggle = async (service) => {
+  const newStatus = !service.isActive
+  const action = newStatus ? 'activer' : 'désactiver'
+
+  // Prompt for reason (optional but good for tracking)
+  const reason = prompt(`Voulez-vous vraiment ${action} le service "${service.name}" ?\nRaison du changement (optionnelle) :`)
+
+  // If user clicked Cancel (result is null), we abort
+  if (reason === null) return
+
   try {
-    await serviceStore.toggleService(service.id)
-    notify(`Service ${service.isActive ? 'désactivé' : 'activé'}`, 'success')
+    await serviceStore.toggleService(service.id, newStatus, reason)
+    notify(`Service ${newStatus ? 'activé' : 'désactivé'} avec succès`, 'success')
   } catch (e) {
     notify(e.message, 'error')
   }
