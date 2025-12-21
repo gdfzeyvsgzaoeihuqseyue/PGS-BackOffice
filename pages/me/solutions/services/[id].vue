@@ -154,6 +154,117 @@
     </div>
     <div v-else class="text-center p-12 text-slate-500">Service introuvable...</div>
 
+    <!-- Service Users -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mt-6 pb-2"
+      v-if="serviceUsers && serviceUsers.items && serviceUsers.items.length">
+      <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2 flex items-center gap-2">
+        <IconUsers size="20" class="text-blue-500" />
+        Utilisateurs du Service
+      </h3>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-slate-50 border-b border-slate-100 text-xs uppercase text-slate-500 font-bold">
+            <tr>
+              <th class="px-4 py-3">Utilisateur</th>
+              <th class="px-4 py-3">Email</th>
+              <th class="px-4 py-3">Rôle</th>
+              <th class="px-4 py-3">Statut</th>
+              <th class="px-4 py-3">Date d'accès</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr v-for="access in serviceUsers.items" :key="access.accessId" class="hover:bg-slate-50/50">
+              <td class="px-4 py-3 font-medium text-slate-800" v-if="access.user">
+                {{ access.user.firstName }} {{ access.user.lastName }}
+              </td>
+              <td class="px-4 py-3 text-slate-500" v-else>Utilisateur supprimé</td>
+
+              <td class="px-4 py-3 text-sm text-slate-600" v-if="access.user">{{ access.user.email }}</td>
+              <td class="px-4 py-3 text-sm text-slate-400" v-else>-</td>
+
+              <td class="px-4 py-3 text-sm text-slate-600 font-mono">{{ access.role }}</td>
+              <td class="px-4 py-3">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
+                  :class="access.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'">
+                  {{ access.isActive ? 'Actif' : 'Suspendu' }}
+                </span>
+              </td>
+              <td class="px-4 py-3 text-sm text-slate-500">
+                {{ access.enrollmentDate ? new Date(access.enrollmentDate).toLocaleDateString() : '-' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination (Simple implementation for now) -->
+      <div class="mt-4 flex justify-between items-center text-sm text-slate-500"
+        v-if="serviceUsers.pagination && serviceUsers.pagination.totalPages > 1">
+        <span>Page {{ serviceUsers.pagination.page }} sur {{ serviceUsers.pagination.totalPages }}</span>
+        <!-- Add pagination controls later if needed -->
+      </div>
+    </div>
+
+    <!-- Service Learners -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mt-6 pb-2"
+      v-if="serviceLearners && serviceLearners.items && serviceLearners.items.length">
+      <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2 flex items-center gap-2">
+        <IconUserEdit size="20" class="text-purple-500" />
+        Apprenants du Service
+      </h3>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-slate-50 border-b border-slate-100 text-xs uppercase text-slate-500 font-bold">
+            <tr>
+              <th class="px-4 py-3">Apprenant</th>
+              <th class="px-4 py-3">Email</th>
+              <th class="px-4 py-3">Progression</th>
+              <th class="px-4 py-3">Statut</th>
+              <th class="px-4 py-3">Date d'inscription</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr v-for="access in serviceLearners.items" :key="access.accessId" class="hover:bg-slate-50/50">
+              <td class="px-4 py-3 font-medium text-slate-800" v-if="access.learner">
+                {{ access.learner.firstName }} {{ access.learner.lastName }}
+              </td>
+              <td class="px-4 py-3 text-slate-500" v-else>Apprenant supprimé</td>
+
+              <td class="px-4 py-3 text-sm text-slate-600" v-if="access.learner">{{ access.learner.email }}</td>
+              <td class="px-4 py-3 text-sm text-slate-400" v-else>-</td>
+
+              <td class="px-4 py-3 text-sm">
+                <div class="flex items-center gap-2">
+                  <div class="flex-1 h-1.5 bg-slate-100 rounded-full w-20">
+                    <div class="h-full bg-emerald-500 rounded-full" :style="{ width: `${access.progress || 0}%` }">
+                    </div>
+                  </div>
+                  <span class="text-xs font-bold text-slate-700">{{ access.progress || 0 }}%</span>
+                </div>
+              </td>
+
+              <td class="px-4 py-3">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
+                  :class="access.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'">
+                  {{ access.isActive ? 'Actif' : 'Suspendu' }}
+                </span>
+              </td>
+              <td class="px-4 py-3 text-sm text-slate-500">
+                {{ access.enrollmentDate ? new Date(access.enrollmentDate).toLocaleDateString() : '-' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-4 flex justify-between items-center text-sm text-slate-500"
+        v-if="serviceLearners.pagination && serviceLearners.pagination.totalPages > 1">
+        <span>Page {{ serviceLearners.pagination.page }} sur {{ serviceLearners.pagination.totalPages }}</span>
+      </div>
+    </div>
+
     <!-- Modal Edit -->
     <ManageServiceModal :is-open="isModalOpen" :service="service" @close="closeModal" @saved="refresh" />
 
@@ -179,7 +290,7 @@ useHead({
 const route = useRoute()
 const router = useRouter()
 const serviceStore = useServiceStore()
-const { service, loading, error } = storeToRefs(serviceStore)
+const { service, serviceUsers, serviceLearners, loading, error } = storeToRefs(serviceStore)
 const { add: notify } = useToast()
 
 const refresh = () => {

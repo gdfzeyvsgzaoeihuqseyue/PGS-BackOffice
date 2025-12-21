@@ -6,6 +6,8 @@ export const useServiceStore = defineStore('service', () => {
   // State
   const services = ref<Service[]>([])
   const service = ref<Service | null>(null)
+  const serviceUsers = ref<any>(null)
+  const serviceLearners = ref<any>(null)
   const stats = ref<ServiceStats | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
@@ -32,8 +34,10 @@ export const useServiceStore = defineStore('service', () => {
     error.value = null
     try {
       const { data } = await useAPI<{ service: Service, users: any, learners: any }>(`/admin/service/${id}`)
-      if (data.value && data.value.service) {
-        service.value = data.value.service
+      if (data.value) {
+        if (data.value.service) service.value = data.value.service
+        if (data.value.users) serviceUsers.value = data.value.users
+        if (data.value.learners) serviceLearners.value = data.value.learners
       }
     } catch (err: any) {
       error.value = err.message || 'Erreur lors du chargement du service'
@@ -145,6 +149,8 @@ export const useServiceStore = defineStore('service', () => {
   return {
     services,
     service,
+    serviceUsers,
+    serviceLearners,
     stats,
     loading,
     error,

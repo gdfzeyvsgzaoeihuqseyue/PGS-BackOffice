@@ -1,164 +1,78 @@
 {
-  "overview": {
-    "services": {
-      "total": 5,
-      "active": 5,
-      "inactive": 0
-    },
-    "access": {
+  "service": {
+    "id": "69009f1cef08469044080df0",
+    "name": "EASY QUICK TRACK",
+    "domain": "https://eqt.netlify.app/",
+    "description": "EQT platform",
+    "isActive": true,
+    "allowedOrigins": [
+      "https://eqt.netlify.app/",
+      "https://www.eqt.me"
+    ],
+    "apiKey": "2d042a039a6784135ff3b0368f83f733ebcc65396890390f075e3beb67fc41fc",
+    "createdAt": 1761648412343,
+    "updatedAt": 1761648412343,
+    "stats": {
       "users": {
-        "total": 3,
         "active": 2,
-        "inactive": 1
+        "inactive": 0,
+        "total": 2
       },
       "learners": {
-        "total": 0,
         "active": 0,
-        "inactive": 0
+        "inactive": 0,
+        "total": 0
       },
-      "combined": {
-        "total": 3,
-        "active": 2,
-        "inactive": 1
-      }
-    },
-    "averages": {
-      "accessPerService": 0.6
+      "totalAccess": 2
     }
   },
-  "topServices": {
-    "title": "Services les plus utilisés",
-    "data": [
+  "users": {
+    "items": [
       {
-        "id": "69009f1cef08469044080df0",
-        "name": "EASY QUICK TRACK",
-        "domain": "https://eqt.netlify.app/",
+        "accessId": "691f3a2f38a1937eda5cbef5",
+        "user": {
+          "id": "691f3a0d38a1937eda5cbef3",
+          "firstName": "Archimède",
+          "lastName": "CODJOVI",
+          "email": "ctraderarchimde@gmail.com",
+          "isActive": true
+        },
+        "role": "user",
+        "permissions": {},
         "isActive": true,
-        "usersCount": 2,
-        "learnersCount": 0,
-        "totalAccess": 2
+        "lastAccess": "2025-11-20T16:04:33.097Z",
+        "enrollmentDate": 1763654191675
       },
       {
-        "id": "69009f1bef08469044080ded",
-        "name": "SUITOPS",
-        "domain": "https://suitops.netlify.app/",
+        "accessId": "69058808b2e1c9a4ee636c2f",
+        "user": {
+          "id": "69042d75aff698036d23bf65",
+          "firstName": "Steve Aster",
+          "lastName": "Afovo",
+          "email": "steveasterafovo@gmail.com",
+          "isActive": true
+        },
+        "role": "user",
+        "permissions": {},
         "isActive": true,
-        "usersCount": 0,
-        "learnersCount": 0,
-        "totalAccess": 0
-      },
-      {
-        "id": "69009f1bef08469044080dee",
-        "name": "SUITOPS HIRE",
-        "domain": "https://hire-suitops.netlify.app/",
-        "isActive": true,
-        "usersCount": 0,
-        "learnersCount": 0,
-        "totalAccess": 0
-      },
-      {
-        "id": "69009f1bef08469044080def",
-        "name": "TEMPLIX",
-        "domain": "https://templix.app",
-        "isActive": true,
-        "usersCount": 0,
-        "learnersCount": 0,
-        "totalAccess": 0
-      },
-      {
-        "id": "69481fc8faebb5beb6d42c51",
-        "name": "DropShopsss",
-        "domain": "https://dropshop.com",
-        "isActive": true,
-        "usersCount": 0,
-        "learnersCount": 0,
-        "totalAccess": 0
+        "lastAccess": "2025-12-08T16:50:51.398Z",
+        "enrollmentDate": 1761970184064
       }
-    ]
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 10,
+      "total": 2,
+      "totalPages": 1
+    }
   },
-  "leastUsedServices": {
-    "title": "Services les moins utilisés",
-    "data": [
-      {
-        "id": "69481fc8faebb5beb6d42c51",
-        "name": "DropShopsss",
-        "domain": "https://dropshop.com",
-        "isActive": true,
-        "usersCount": 0,
-        "learnersCount": 0,
-        "totalAccess": 0
-      },
-      {
-        "id": "69009f1bef08469044080def",
-        "name": "TEMPLIX",
-        "domain": "https://templix.app",
-        "isActive": true,
-        "usersCount": 0,
-        "learnersCount": 0,
-        "totalAccess": 0
-      },
-      {
-        "id": "69009f1bef08469044080dee",
-        "name": "SUITOPS HIRE",
-        "domain": "https://hire-suitops.netlify.app/",
-        "isActive": true,
-        "usersCount": 0,
-        "learnersCount": 0,
-        "totalAccess": 0
-      },
-      {
-        "id": "69009f1bef08469044080ded",
-        "name": "SUITOPS",
-        "domain": "https://suitops.netlify.app/",
-        "isActive": true,
-        "usersCount": 0,
-        "learnersCount": 0,
-        "totalAccess": 0
-      },
-      {
-        "id": "69009f1cef08469044080df0",
-        "name": "EASY QUICK TRACK",
-        "domain": "https://eqt.netlify.app/",
-        "isActive": true,
-        "usersCount": 2,
-        "learnersCount": 0,
-        "totalAccess": 2
-      }
-    ]
-  },
-  "unusedServices": {
-    "title": "Services sans utilisateurs",
-    "count": 4,
-    "data": [
-      {
-        "id": "69009f1bef08469044080ded",
-        "name": "SUITOPS",
-        "domain": "https://suitops.netlify.app/",
-        "isActive": true
-      },
-      {
-        "id": "69009f1bef08469044080dee",
-        "name": "SUITOPS HIRE",
-        "domain": "https://hire-suitops.netlify.app/",
-        "isActive": true
-      },
-      {
-        "id": "69009f1bef08469044080def",
-        "name": "TEMPLIX",
-        "domain": "https://templix.app",
-        "isActive": true
-      },
-      {
-        "id": "69481fc8faebb5beb6d42c51",
-        "name": "DropShopsss",
-        "domain": "https://dropshop.com",
-        "isActive": true
-      }
-    ]
-  },
-  "healthIndicators": {
-    "servicesUtilization": 100,
-    "accessRate": 67,
-    "unusedServicesPercentage": 80
+  "learners": {
+    "items": [],
+    "pagination": {
+      "page": 1,
+      "limit": 10,
+      "total": 0,
+      "totalPages": 0
+    }
   }
 }
