@@ -1,34 +1,37 @@
 module.exports = {
-  friendlyName: 'Ajouter un partenaire à une solution',
-  description: 'Ajoute un nouveau partenaire pour une solution spécifique.',
+  friendlyName: 'Ajouter un tutoriel',
+  description: 'Ajoute un nouveau tutoriel pour une solution spécifique.',
 
   inputs: {
-    name: {
+    title: {
       type: 'string',
       required: true,
-      description: 'Nom ou organisation du partenaire.',
+      description: 'Le titre du tutoriel.',
     },
-    website: {
+    description: {
       type: 'string',
-      isURL: true,
-      description: 'URL du site web du partenaire.',
+      description: 'Une courte description du tutoriel.',
     },
-    logo: {
+    time: {
       type: 'string',
-      isURL: true,
-      description: 'URL du logo du partenaire.',
+      description: 'La durée du tutoriel (ex: 5min, 12:30).',
+    },
+    link: {
+      type: 'string',
+      required: true,
+      description: 'Le lien vers la vidéo ou le guide.',
     },
     platformId: {
       type: 'string',
       required: true,
-      description: 'ID de la solution associée.',
+      description: 'L\'ID de la solution associée à ce tutoriel.',
     },
   },
 
   exits: {
     success: {
       statusCode: 201,
-      description: 'Le partenaire a été ajouté avec succès.',
+      description: 'Le tutoriel a été ajouté avec succès.',
       responseType: 'created',
     },
     platformNotFound: {
@@ -52,24 +55,25 @@ module.exports = {
         });
       }
 
-      // Créer le nouveau partenaire
-      const newPartner = await SolutionPartners.create({
-        name: inputs.name,
-        website: inputs.website,
-        logo: inputs.logo,
+      // Créer le nouveau tutoriel
+      const newTutorial = await SolutionTutos.create({
+        title: inputs.title,
+        description: inputs.description,
+        time: inputs.time,
+        link: inputs.link,
         platform: inputs.platformId,
       }).fetch();
 
       return exits.success({
         success: true,
-        message: 'Partenaire ajouté avec succès.',
-        data: newPartner,
+        message: 'Tutoriel créé avec succès.',
+        data: newTutorial,
       });
     } catch (err) {
-      sails.log.error('Erreur lors de l\'ajout du partenaire:', err);
+      sails.log.error('Erreur lors de l\'ajout du tutoriel:', err);
       return exits.serverError({
         message: 'Une erreur serveur inattendue s\'est produite.',
-        error: err.message
+        error: err.message,
       });
     }
   },
