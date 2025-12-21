@@ -2,7 +2,7 @@ import {
   IconUserEdit, IconUserShield, IconUserStar, IconNews, IconUserShare,
   IconDeviceAnalytics, IconFileDescription, IconUserBolt, IconDashboard,
   IconUsers, IconArticle, IconCategory, IconDeviceDesktop, IconBook,
-  IconHeartHandshake, IconQuote, IconVideo, IconWorld
+  IconHeartHandshake, IconQuote, IconVideo, IconWorld, IconBookmarkQuestion
 } from '@tabler/icons-vue'
 
 export const useNavigation = () => {
@@ -50,6 +50,8 @@ export const useNavigation = () => {
         { label: 'Documents', to: '/me/solutions/doc', icon: 'IconBook' },
         { label: 'Tutoriels', to: '/me/solutions/tuto', icon: 'IconVideo' },
         { label: 'Wiki', to: '/me/solutions/wiki', icon: 'IconWorld' },
+        { label: 'Sujets FAQ', to: '/me/solutions/topic', icon: 'IconBookmarkQuestion' },
+        { label: 'Questions FAQ', to: '/me/solutions/faq', icon: 'IconHelp' },
         { label: 'Partenaires', to: '/me/solutions/partner', icon: 'IconHeartHandshake' },
         { label: 'Témoignages', to: '/me/solutions/testi', icon: 'IconQuote' }
       ]
