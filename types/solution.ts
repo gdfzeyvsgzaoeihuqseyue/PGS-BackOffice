@@ -21,7 +21,7 @@ export interface SolutionDoc {
   id: string
   name: string
   link: string
-  platform: SolutionPlatform | string // Object on populate, ID otherwise
+  platform: SolutionPlatform | string
   createdAt?: string
   updatedAt?: string
 }
@@ -50,3 +50,27 @@ export interface SolutionTestimony {
   createdAt?: string
   updatedAt?: string
 }
+
+export interface SolutionWiki {
+  id: string
+  slug: string
+  name: string
+  description: string
+  url: string
+  additionalInfo?: string
+  platform: SolutionPlatform | string
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface SolutionTuto {
+  id: string
+  title: string
+  description?: string
+  time?: string
+  link: string
+  platform: SolutionPlatform | string
+  createdAt?: string
+  updatedAt?: string
+}
+

@@ -3,14 +3,12 @@
     <form @submit.prevent="save" class="space-y-4 max-h-[80vh] overflow-y-auto pr-2">
       <div>
         <label class="block text-sm font-bold text-slate-700 mb-1">Titre</label>
-        <input v-model="form.title" type="text" required
-          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all" />
+        <input v-model="form.title" type="text" required class="form-input" />
       </div>
 
       <div>
         <label class="block text-sm font-bold text-slate-700 mb-1">Extrait (Résumé)</label>
-        <textarea v-model="form.excerpt" rows="2"
-          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all"></textarea>
+        <textarea v-model="form.excerpt" rows="2" class="form-input"></textarea>
       </div>
 
       <div>
@@ -20,9 +18,7 @@
 
       <div>
         <label class="block text-sm font-bold text-slate-700 mb-1">URL Image</label>
-        <input v-model="form.imageUrl" type="url"
-          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
-          placeholder="https://..." />
+        <input v-model="form.imageUrl" type="url" class="form-input" placeholder="https://..." />
       </div>
 
       <div class="grid grid-cols-2 gap-4">

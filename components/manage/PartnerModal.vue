@@ -4,13 +4,11 @@
       <div class="space-y-4">
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-1">Nom / Organisation</label>
-          <input v-model="form.name" type="text" required
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all" />
+          <input v-model="form.name" type="text" required class="form-input" />
         </div>
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-1">Site Web (URL)</label>
-          <input v-model="form.website" type="url"
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all" />
+          <input v-model="form.website" type="url" class="form-input" />
         </div>
         <div>
           <CdnInput v-model="form.logo" label="Logo (URL)" placeholder="nom-logo" />

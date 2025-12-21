@@ -4,37 +4,31 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-1">Auteur (Nom)</label>
-          <input v-model="form.author" type="text" required
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all" />
+          <input v-model="form.author" type="text" required class="form-input" />
         </div>
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-1">Entreprise</label>
-          <input v-model="form.company" type="text"
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all" />
+          <input v-model="form.company" type="text" class="form-input" />
         </div>
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-1">Rôle / Poste</label>
-          <input v-model="form.role" type="text"
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all" />
+          <input v-model="form.role" type="text" class="form-input" />
         </div>
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-1">Avatar (URL)</label>
-          <input v-model="form.avatar" type="url"
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all" />
+          <input v-model="form.avatar" type="url" class="form-input" />
         </div>
       </div>
 
       <div>
         <label class="block text-sm font-bold text-slate-700 mb-1">Contenu du témoignage</label>
-        <textarea v-model="form.content" required rows="4"
-          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition-all"></textarea>
+        <textarea v-model="form.content" required rows="4" class="form-input"></textarea>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-1">Note / 5</label>
-          <select v-model="form.note"
-            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white transition-all">
+          <select v-model="form.note" class="form-input bg-white">
             <option v-for="n in [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]" :key="n" :value="n">{{ n }}</option>
           </select>
         </div>
