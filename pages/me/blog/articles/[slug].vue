@@ -103,7 +103,6 @@ const blogStore = useBlogStore()
 const { currentArticle: article, loading, error } = storeToRefs(blogStore)
 
 const refresh = async () => {
-  // Fetch article with excludeView=true for admin view
   await blogStore.fetchArticle(route.params.slug, true)
 }
 

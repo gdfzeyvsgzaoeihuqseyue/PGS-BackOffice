@@ -7,7 +7,7 @@ export const usePartnerStore = defineStore('partner', () => {
   const loading = ref(false)
   const error = ref<string | null>(null)
 
-  const fetchPartners = async (excludeView = false) => {
+  const fetchPartners = async () => {
     loading.value = true
     error.value = null
     try {

@@ -82,7 +82,7 @@ export default {
         }
       },
       fontFamily: {
-        bodyd: ['Kedebideri', 'sans-serif'],
+        body: ['Kedebideri', 'sans-serif'],
         sansd: ['"Science Gothic"', 'sans-serif'],
         headingd: ['"Stack Sans Notch"', 'sans-serif']
       },

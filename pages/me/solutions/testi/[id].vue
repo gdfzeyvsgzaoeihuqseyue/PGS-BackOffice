@@ -10,7 +10,7 @@
         </NuxtLink>
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded bg-blue-50 flex items-center justify-center text-blue-500">
-            <IconMessageQuote size="24" />
+            <IconQuote size="24" />
           </div>
           <div>
             <h2 class="text-2xl font-bold text-slate-800">
@@ -63,7 +63,7 @@
       <div class="text-slate-900 font-bold mb-1">{{ currentTestimony?.author }}</div>
       <div class="text-slate-500">{{ currentTestimony?.role }} <span v-if="currentTestimony?.company">chez {{
         currentTestimony.company
-          }}</span></div>
+      }}</span></div>
 
       <div class="mt-6 flex justify-center">
         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold"
@@ -95,7 +95,7 @@
 </template>
 
 <script setup>
-import { IconArrowLeft, IconPencil, IconMessageQuote, IconStarFilled, IconStar, IconStarHalfFilled } from '@tabler/icons-vue'
+import { IconArrowLeft, IconPencil, IconQuote, IconStarFilled, IconStar, IconStarHalfFilled } from '@tabler/icons-vue'
 import { useTestimonyStore } from '~/stores/testimony'
 
 definePageMeta({

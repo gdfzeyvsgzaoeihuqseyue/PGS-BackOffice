@@ -51,6 +51,9 @@
                   <NuxtLink :to="`/me/solutions/testi/${testi.id}`" class="hover:text-emerald-600 transition-colors">
                     {{ testi.author }}
                   </NuxtLink>
+                  <span v-if="testi.isFeatured" class="ml-2 text-xs text-orange-500 font-bold" title="Mis en avant">
+                    <IconStar size="14" />
+                  </span>
                 </div>
               </td>
               <td class="px-6 py-4 text-sm text-slate-600">
@@ -72,9 +75,6 @@
                   <span class="w-1.5 h-1.5 rounded-full"
                     :class="testi.isPublished ? 'bg-emerald-500' : 'bg-slate-400'"></span>
                   {{ testi.isPublished ? 'Publié' : 'Brouillon' }}
-                </span>
-                <span v-if="testi.isFeatured" class="ml-2 text-xs text-orange-500 font-bold" title="Mis en avant">
-                  <IconStar size="14" />
                 </span>
               </td>
               <td class="px-6 py-4 text-right flex justify-end gap-2">
