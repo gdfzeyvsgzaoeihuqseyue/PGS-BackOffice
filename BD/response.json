@@ -1,0 +1,86 @@
+{
+  "services": [
+    {
+      "id": "69009f1cef08469044080df0",
+      "name": "EASY QUICK TRACK",
+      "domain": "https://eqt.netlify.app/",
+      "description": "EQT platform",
+      "isActive": true,
+      "allowedOrigins": [
+        "https://eqt.netlify.app/",
+        "https://www.eqt.me"
+      ],
+      "apiKey": "2d042a039a6784135ff3b0368f83f733ebcc65396890390f075e3beb67fc41fc",
+      "createdAt": 1761648412343,
+      "updatedAt": 1761648412343,
+      "stats": {
+        "totalUsers": 2,
+        "totalLearners": 0,
+        "totalAccess": 2
+      }
+    },
+    {
+      "id": "69009f1bef08469044080def",
+      "name": "TEMPLIX",
+      "domain": "https://templix.app",
+      "description": "Templix application",
+      "isActive": true,
+      "allowedOrigins": [
+        "https://templix.app",
+        "https://www.templix.app"
+      ],
+      "apiKey": "0caff814cb7b95db5c51d47ea7673b449cd2bd4251f7d2e5b7aff54f3704faf9",
+      "createdAt": 1761648411935,
+      "updatedAt": 1761648411935,
+      "stats": {
+        "totalUsers": 0,
+        "totalLearners": 0,
+        "totalAccess": 0
+      }
+    },
+    {
+      "id": "69009f1bef08469044080dee",
+      "name": "SUITOPS HIRE",
+      "domain": "https://hire-suitops.netlify.app/",
+      "description": "Suitops recruitment platform",
+      "isActive": true,
+      "allowedOrigins": [
+        "https://hire.suitops.com",
+        "https://hire-suitops.netlify.app/"
+      ],
+      "apiKey": "5a0835ae4132d3ee06bafaef96d38183a2f8f3ab94f61efb473f99e0288b2ffa",
+      "createdAt": 1761648411533,
+      "updatedAt": 1761648411533,
+      "stats": {
+        "totalUsers": 0,
+        "totalLearners": 0,
+        "totalAccess": 0
+      }
+    },
+    {
+      "id": "69009f1bef08469044080ded",
+      "name": "SUITOPS",
+      "domain": "https://suitops.netlify.app/",
+      "description": "Main Suitops platform",
+      "isActive": true,
+      "allowedOrigins": [
+        "https://suitops.netlify.app/",
+        "https://www.suitops.com"
+      ],
+      "apiKey": "d44569664b11231bd00d8618c0c72e833f0c91adc019fbfcef3dbd6ab5e92eb6",
+      "createdAt": 1761648410815,
+      "updatedAt": 1761648410815,
+      "stats": {
+        "totalUsers": 0,
+        "totalLearners": 0,
+        "totalAccess": 0
+      }
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 4,
+    "totalPages": 1
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-  <BaseModal :is-open="isOpen" :title="author ? 'Modifier Auteur' : 'Nouvel Auteur'" @close="close">
+  <BaseModal :isOpen="isOpen" :title="author ? 'Modifier Auteur' : 'Nouvel Auteur'" @close="close">
     <form @submit.prevent="save" class="space-y-4">
       <div>
         <label class="block text-sm font-bold text-slate-700 mb-1">Nom</label>

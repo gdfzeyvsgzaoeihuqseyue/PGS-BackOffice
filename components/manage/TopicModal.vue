@@ -1,5 +1,5 @@
 <template>
-  <BaseModal :is-open="isOpen" :title="isEditing ? 'Modifier le Sujet FAQ' : 'Nouveau Sujet FAQ'" @close="closeModal">
+  <BaseModal :isOpen="isOpen" :title="isEditing ? 'Modifier le Sujet FAQ' : 'Nouveau Sujet FAQ'" @close="closeModal">
     <form @submit.prevent="save" class="space-y-4">
       <!-- Name & Slug -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

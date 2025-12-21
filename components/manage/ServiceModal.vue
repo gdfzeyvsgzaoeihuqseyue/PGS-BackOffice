@@ -1,5 +1,5 @@
 <template>
-  <BaseModal :is-open="isOpen" :title="service ? 'Modifier Service' : 'Nouveau Service'" @close="close">
+  <BaseModal :isOpen="isOpen" :title="service ? 'Modifier Service' : 'Nouveau Service'" @close="close">
     <form @submit.prevent="save" class="space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>

@@ -1,5 +1,5 @@
 <template>
-  <BaseModal :is-open="isOpen" :title="doc ? 'Modifier Document' : 'Nouveau Document'" @close="close">
+  <BaseModal :isOpen="isOpen" :title="doc ? 'Modifier Document' : 'Nouveau Document'" @close="close">
     <form @submit.prevent="save" class="space-y-6">
       <div class="space-y-4">
         <div>

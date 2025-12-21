@@ -1,5 +1,5 @@
 <template>
-  <BaseModal :is-open="isOpen" :title="isEditing ? 'Modifier la ressource Wiki' : 'Nouvelle ressource Wiki'"
+  <BaseModal :isOpen="isOpen" :title="isEditing ? 'Modifier la ressource Wiki' : 'Nouvelle ressource Wiki'"
     @close="closeModal">
     <form @submit.prevent="save" class="space-y-4">
       <!-- Name & Slug -->

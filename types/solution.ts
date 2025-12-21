@@ -104,6 +104,11 @@ export interface Service {
   isActive: boolean
   allowedOrigins: string[] | string
   apiKey?: string
+  stats?: {
+    users: { active: number, inactive: number, total: number }
+    learners: { active: number, inactive: number, total: number }
+    totalAccess: number
+  }
   createdAt?: string
   updatedAt?: string
 }

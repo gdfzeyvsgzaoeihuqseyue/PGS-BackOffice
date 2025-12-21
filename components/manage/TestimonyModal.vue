@@ -1,5 +1,5 @@
 <template>
-  <BaseModal :is-open="isOpen" :title="testimony ? 'Modifier Témoignage' : 'Nouveau Témoignage'" @close="close">
+  <BaseModal :isOpen="isOpen" :title="testimony ? 'Modifier Témoignage' : 'Nouveau Témoignage'" @close="close">
     <form @submit.prevent="save" class="space-y-6 max-h-[80vh] overflow-y-auto pr-2">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>

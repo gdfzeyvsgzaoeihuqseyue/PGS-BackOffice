@@ -1,5 +1,5 @@
 <template>
-  <BaseModal :is-open="isOpen" :title="platform ? 'Modifier Plateforme' : 'Nouvelle Plateforme'" @close="close">
+  <BaseModal :isOpen="isOpen" :title="platform ? 'Modifier Plateforme' : 'Nouvelle Plateforme'" @close="close">
     <form @submit.prevent="save" class="space-y-6">
       <!-- Info Principales -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

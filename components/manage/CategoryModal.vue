@@ -1,5 +1,5 @@
 <template>
-  <BaseModal :is-open="isOpen" :title="category ? 'Modifier Catégorie' : 'Nouvelle Catégorie'" @close="close">
+  <BaseModal :isOpen="isOpen" :title="category ? 'Modifier Catégorie' : 'Nouvelle Catégorie'" @close="close">
     <form @submit.prevent="save" class="space-y-4">
       <div>
         <label class="block text-sm font-bold text-slate-700 mb-1">Nom</label>

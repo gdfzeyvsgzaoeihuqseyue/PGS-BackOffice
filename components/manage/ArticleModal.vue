@@ -1,5 +1,5 @@
 <template>
-  <BaseModal :is-open="isOpen" :title="article ? 'Modifier Article' : 'Nouvel Article'" @close="close">
+  <BaseModal :isOpen="isOpen" :title="article ? 'Modifier Article' : 'Nouvel Article'" @close="close">
     <form @submit.prevent="save" class="space-y-4 max-h-[80vh] overflow-y-auto pr-2">
       <div>
         <label class="block text-sm font-bold text-slate-700 mb-1">Titre</label>

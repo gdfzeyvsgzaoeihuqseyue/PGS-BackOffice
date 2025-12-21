@@ -15,9 +15,9 @@ export const useServiceStore = defineStore('service', () => {
     loading.value = true
     error.value = null
     try {
-      const { data } = await useAPI<Service[]>('/admin/service/list')
-      if (data.value) {
-        services.value = data.value
+      const { data } = await useAPI<{ services: Service[], pagination: any }>('/admin/service/list')
+      if (data.value && data.value.services) {
+        services.value = data.value.services
       }
     } catch (err: any) {
       error.value = err.message || 'Erreur lors du chargement des services'
@@ -31,9 +31,9 @@ export const useServiceStore = defineStore('service', () => {
     loading.value = true
     error.value = null
     try {
-      const { data } = await useAPI<Service>(`/admin/service/${id}`)
-      if (data.value) {
-        service.value = data.value
+      const { data } = await useAPI<{ service: Service, users: any, learners: any }>(`/admin/service/${id}`)
+      if (data.value && data.value.service) {
+        service.value = data.value.service
       }
     } catch (err: any) {
       error.value = err.message || 'Erreur lors du chargement du service'
@@ -43,7 +43,7 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
-  const addService = async (payload: Partial<Service>) => {
+  const addService = async (payload: any) => {
     try {
       // Mapping to backend route: POST /api/v1/admin/service/create
       const { data, error } = await useAPI<Service>('/admin/service/create', { method: 'POST', body: payload })
@@ -57,7 +57,7 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
-  const updateService = async (id: string, payload: Partial<Service>) => {
+  const updateService = async (id: string, payload: any) => {
     try {
       // Mapping to backend route: PUT /api/v1/admin/service/:serviceId
       const { data, error } = await useAPI<Service>(`/admin/service/${id}`, { method: 'PUT', body: payload })

@@ -1,5 +1,5 @@
 <template>
-  <BaseModal :is-open="isOpen" :title="isEditing ? 'Modifier le tutoriel' : 'Nouveau tutoriel'" @close="closeModal">
+  <BaseModal :isOpen="isOpen" :title="isEditing ? 'Modifier le tutoriel' : 'Nouveau tutoriel'" @close="closeModal">
     <form @submit.prevent="save" class="space-y-4">
       <!-- Title -->
       <div>

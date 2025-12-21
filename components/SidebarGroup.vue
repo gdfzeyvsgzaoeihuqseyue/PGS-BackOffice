@@ -39,7 +39,7 @@ import { useRouter } from 'vue-router'
 const props = defineProps({
   label: String,
   collapsed: Boolean,
-  icon: Object,
+  icon: [Object, Function],
   startOpen: Boolean,
   to: String
 })
