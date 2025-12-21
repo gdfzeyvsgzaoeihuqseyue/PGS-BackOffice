@@ -151,6 +151,10 @@
 
     <!-- Modal Edit -->
     <ManageServiceModal :is-open="isModalOpen" :service="service" @close="closeModal" @saved="refresh" />
+
+    <!-- Modal Delete -->
+    <ManageServiceDeleteModal :is-open="isDeleteModalOpen" :service="deletingService" @close="closeDeleteModal"
+      @deleted="onDeleted" />
   </div>
 </template>
 
@@ -215,16 +219,21 @@ const regenerate = async () => {
   }
 }
 
-const remove = async () => {
-  if (confirm('Supprimer ce service ? Cette action est irréversible.')) {
-    try {
-      await serviceStore.deleteService(service.value.id)
-      notify('Service supprimé', 'success')
-      router.push('/me/solutions/services')
-    } catch (e) {
-      notify(e.message, 'error')
-    }
-  }
+const isDeleteModalOpen = ref(false)
+const deletingService = ref(null)
+
+const remove = () => {
+  deletingService.value = service.value
+  isDeleteModalOpen.value = true
+}
+
+const onDeleted = () => {
+  router.push('/me/solutions/services')
+}
+
+const closeDeleteModal = () => {
+  isDeleteModalOpen.value = false
+  deletingService.value = null
 }
 
 // Modal Logic

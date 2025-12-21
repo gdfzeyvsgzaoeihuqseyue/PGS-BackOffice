@@ -45,7 +45,6 @@ export const useServiceStore = defineStore('service', () => {
 
   const addService = async (payload: any) => {
     try {
-      // Mapping to backend route: POST /api/v1/admin/service/create
       const { data, error } = await useAPI<Service>('/admin/service/create', { method: 'POST', body: payload })
       if (error.value) throw error.value
       if (data.value) {
@@ -80,13 +79,27 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
-  const deleteService = async (id: string) => {
+  const deleteService = async (id: string, payload: any) => {
     try {
       // Mapping to backend route: DELETE /api/v1/admin/service/:serviceId
-      const { error } = await useAPI(`/admin/service/${id}`, { method: 'DELETE' })
-      if (error.value) throw error.value
+      // We pass the payload as 'body' in the options
+      const { error } = await useAPI(`/admin/service/${id}`, {
+        method: 'DELETE',
+        body: payload
+      })
+
+      if (error.value) {
+        // Pass the whole error value so component can inspect status/data
+        throw error.value
+      }
+
       services.value = services.value.filter(s => s.id !== id)
     } catch (err: any) {
+      // If it's a FetchError from useAPI
+      if (err.data) {
+        // Re-throw the data part which contains the specific backend error message/code
+        throw new Error(err.data.message || err.message)
+      }
       throw new Error(err.message || 'Erreur lors de la suppression')
     }
   }
@@ -115,7 +128,6 @@ export const useServiceStore = defineStore('service', () => {
 
   const fetchStats = async () => {
     try {
-      // Mapping to backend route: GET /api/v1/admin/service/stats
       const { data } = await useAPI('/admin/service/stats')
       if (data.value) {
         stats.value = data.value

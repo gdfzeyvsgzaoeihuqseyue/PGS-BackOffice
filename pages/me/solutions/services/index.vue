@@ -91,7 +91,7 @@
                   <button @click="openModal(service)" class="p-1 text-slate-400 hover:text-blue-500">
                     <IconPencil size="18" />
                   </button>
-                  <button @click="remove(service.id)" class="p-1 text-slate-400 hover:text-red-500">
+                  <button @click="remove(service)" class="p-1 text-slate-400 hover:text-red-500">
                     <IconTrash size="18" />
                   </button>
                 </td>
@@ -104,6 +104,10 @@
 
     <!-- Modal Edit -->
     <ManageServiceModal :is-open="isModalOpen" :service="editingService" @close="closeModal" @saved="refresh" />
+
+    <!-- Modal Delete -->
+    <ManageServiceDeleteModal :is-open="isDeleteModalOpen" :service="deletingService" @close="closeDeleteModal"
+      @deleted="onDeleted" />
   </div>
 </template>
 
@@ -130,15 +134,18 @@ const refresh = () => {
 
 refresh()
 
-const remove = async (id) => {
-  if (confirm('Supprimer ce service ? Cette action est irréversible.')) {
-    try {
-      await serviceStore.deleteService(id)
-      notify('Service supprimé', 'success')
-    } catch (e) {
-      notify(e.message, 'error')
-    }
-  }
+const editingService = ref(null)
+const deletingService = ref(null)
+const isModalOpen = ref(false)
+const isDeleteModalOpen = ref(false)
+
+const remove = (service) => {
+  deletingService.value = service
+  isDeleteModalOpen.value = true
+}
+
+const onDeleted = () => {
+  refresh()
 }
 
 const toggle = async (service) => {
@@ -155,7 +162,6 @@ const copy = (text) => {
   navigator.clipboard.writeText(text)
   notify('Clé API copiée', 'success')
 }
-
 
 const revealedKeys = ref(new Set())
 
@@ -194,10 +200,6 @@ const getOriginsCount = (service) => {
   return 0
 }
 
-// Modal Logic
-const isModalOpen = ref(false)
-const editingService = ref(null)
-
 const openModal = (service) => {
   editingService.value = service
   isModalOpen.value = true
@@ -206,5 +208,10 @@ const openModal = (service) => {
 const closeModal = () => {
   isModalOpen.value = false
   editingService.value = null
+}
+
+const closeDeleteModal = () => {
+  isDeleteModalOpen.value = false
+  deletingService.value = null
 }
 </script>
