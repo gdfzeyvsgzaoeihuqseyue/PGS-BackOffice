@@ -78,6 +78,62 @@
         </div>
       </div>
     </div>
+
+    <!-- Services Access -->
+    <div class="bg-white rounded-xl shadow-sm border border-secondary-200 p-8 mt-6">
+      <h3 class="text-lg font-bold text-secondary-800 mb-4 border-b pb-2 flex items-center gap-2">
+        <IconServer size="20" class="text-secondary-400" />
+        Services Accessibles
+      </h3>
+
+      <div v-if="currentServices.length > 0" class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-secondary-50 border-b border-secondary-100 text-xs uppercase text-secondary-500 font-bold">
+            <tr>
+              <th class="px-4 py-3">Service</th>
+              <th class="px-4 py-3">Rôle</th>
+              <th class="px-4 py-3">Progression</th>
+              <th class="px-4 py-3">Statut</th>
+              <th class="px-4 py-3">Inscrit le</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-secondary-100">
+            <tr v-for="service in currentServices" :key="service.accessId" class="hover:bg-secondary-50/50">
+              <td class="px-4 py-3">
+                <div class="font-bold text-secondary-800">{{ service.name }}</div>
+                <a :href="service.domain" target="_blank"
+                  class="text-xs text-blue-500 hover:underline inline-flex items-center gap-1">
+                  {{ service.domain }}
+                  <IconExternalLink size="10" />
+                </a>
+              </td>
+              <td class="px-4 py-3 text-sm text-secondary-600 font-mono">{{ service.role || 'Learner' }}</td>
+              <td class="px-4 py-3 text-sm">
+                <div class="flex items-center gap-2">
+                  <div class="flex-1 h-2 bg-secondary-100 rounded-full w-24">
+                    <div class="h-full bg-emerald-500 rounded-full" :style="{ width: `${service.progress || 0}%` }">
+                    </div>
+                  </div>
+                  <span class="text-xs font-bold text-secondary-700">{{ service.progress || 0 }}%</span>
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
+                  :class="service.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'">
+                  {{ service.isActive ? 'Actif' : 'Suspendu' }}
+                </span>
+              </td>
+              <td class="px-4 py-3 text-sm text-secondary-500">
+                {{ service.enrollmentDate ? new Date(service.enrollmentDate).toLocaleDateString() : '-' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div v-else class="text-center p-6 text-secondary-400 italic bg-secondary-50 rounded-lg">
+        Aucun service associé à cet apprenant.
+      </div>
+    </div>
   </div>
   <div v-else class="text-center p-12 text-secondary-500">
     Apprenant introuvable...
@@ -85,7 +141,7 @@
 </template>
 
 <script setup>
-import { IconArrowLeft, IconBan, IconCheck, IconTrash } from '@tabler/icons-vue'
+import { IconArrowLeft, IconBan, IconCheck, IconTrash, IconServer, IconExternalLink } from '@tabler/icons-vue'
 import { useLearnerStore } from '~/stores/learner'
 import { useToast } from '~/composables/useToast'
 
@@ -100,7 +156,7 @@ useHead({
 const route = useRoute()
 const router = useRouter()
 const learnerStore = useLearnerStore()
-const { currentLearner: user, loading, error } = storeToRefs(learnerStore)
+const { currentLearner: user, currentServices, loading, error } = storeToRefs(learnerStore)
 const { add: notify } = useToast()
 
 onMounted(() => {

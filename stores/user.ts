@@ -5,6 +5,7 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     users: [] as User[],
     currentUser: null as User | null,
+    currentServices: [] as any[],
     total: 0,
     page: 1,
     limit: 20,
@@ -17,14 +18,20 @@ export const useUserStore = defineStore('user', {
     async fetchUser(id: string) {
       this.loading = true
       this.error = null
+      this.currentServices = [] // Reset
       try {
-        const { data, error } = await useAPI<{ user: User }>(`/admin/user/get-user/${id}`)
+        const { data, error } = await useAPI<{ user: User, services: any[] }>(`/admin/user/get-user/${id}`)
         if (error.value) throw error.value
 
-        if (data.value?.user) {
-          this.currentUser = {
-            ...data.value.user,
-            fullName: `${data.value.user.firstName || ''} ${data.value.user.lastName || ''}`.trim()
+        if (data.value) {
+          if (data.value.user) {
+            this.currentUser = {
+              ...data.value.user,
+              fullName: `${data.value.user.firstName || ''} ${data.value.user.lastName || ''}`.trim()
+            }
+          }
+          if (data.value.services) {
+            this.currentServices = data.value.services
           }
         }
       } catch (e: any) {

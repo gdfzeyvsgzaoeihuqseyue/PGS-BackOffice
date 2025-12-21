@@ -5,6 +5,7 @@ export const useLearnerStore = defineStore('learner', {
   state: () => ({
     learners: [] as Learner[],
     currentLearner: null as Learner | null,
+    currentServices: [] as any[], // List of services accessed by current learner
     total: 0,
     page: 1,
     limit: 20,
@@ -17,14 +18,20 @@ export const useLearnerStore = defineStore('learner', {
     async fetchLearner(id: string) {
       this.loading = true
       this.error = null
+      this.currentServices = [] // Reset
       try {
-        const { data, error } = await useAPI<{ learner: Learner }>(`/admin/learner/get-learner/${id}`)
+        const { data, error } = await useAPI<{ learner: Learner, services: any[] }>(`/admin/learner/get-learner/${id}`)
         if (error.value) throw error.value
 
-        if (data.value?.learner) {
-          this.currentLearner = {
-            ...data.value.learner,
-            fullName: `${data.value.learner.firstName || ''} ${data.value.learner.lastName || ''}`.trim()
+        if (data.value) {
+          if (data.value.learner) {
+            this.currentLearner = {
+              ...data.value.learner,
+              fullName: `${data.value.learner.firstName || ''} ${data.value.learner.lastName || ''}`.trim()
+            }
+          }
+          if (data.value.services) {
+            this.currentServices = data.value.services
           }
         }
       } catch (e: any) {
