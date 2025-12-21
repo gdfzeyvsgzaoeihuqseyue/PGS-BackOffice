@@ -21,7 +21,8 @@ import {
   IconNews, IconUserShare, IconDeviceAnalytics,
   IconArticle, IconFileDescription, IconUserBolt, IconCategory,
   IconDeviceDesktop, IconBook, IconHeartHandshake, IconQuote, IconVideo, IconWorld,
-  IconHelp, IconBookmarkQuestion
+  IconHelp, IconBookmarkQuestion,
+  IconServer
 } from '@tabler/icons-vue'
 
 const props = defineProps({
@@ -37,7 +38,8 @@ const icons = {
   IconNews, IconUserShare, IconDeviceAnalytics,
   IconArticle, IconFileDescription, IconUserBolt, IconCategory,
   IconDeviceDesktop, IconBook, IconHeartHandshake, IconQuote, IconVideo, IconWorld,
-  IconHelp, IconBookmarkQuestion
+  IconHelp, IconBookmarkQuestion,
+  IconServer
 }
 
 const iconComponent = computed(() => icons[props.icon] || IconDashboard)
