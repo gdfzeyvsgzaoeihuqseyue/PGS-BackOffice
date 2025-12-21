@@ -132,8 +132,8 @@ const save = async () => {
       await testimonyStore.updateTestimony(props.testimony.id, form)
     }
     notify(props.testimony ? 'Témoignage mis à jour' : 'Témoignage créé')
-    emit('saved')
     close()
+    emit('saved')
   } catch (e) {
     notify(e.message || 'Une erreur est survenue', 'error')
   }

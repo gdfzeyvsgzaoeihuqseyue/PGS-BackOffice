@@ -197,8 +197,8 @@ const save = async () => {
       await platformStore.updatePlatform(props.platform.id, form)
     }
     notify(props.platform ? 'Plateforme mise à jour' : 'Plateforme créée')
-    emit('saved')
     close()
+    emit('saved')
   } catch (e) {
     notify(e.message || 'Une erreur est survenue', 'error')
   }

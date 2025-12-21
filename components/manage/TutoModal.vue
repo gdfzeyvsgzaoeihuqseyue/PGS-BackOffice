@@ -125,8 +125,8 @@ const save = async () => {
       await tutoStore.addTuto(form)
     }
     notify(isEditing.value ? 'Tutoriel mis à jour' : 'Tutoriel créé')
-    emit('saved')
     closeModal()
+    emit('saved')
   } catch (e) {
     notify(e.message || 'Une erreur est survenue', 'error')
   }

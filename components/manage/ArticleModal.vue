@@ -151,8 +151,8 @@ const save = async () => {
       await blogStore.addArticle(payload)
     }
     notify(props.article ? 'Article mis à jour' : 'Article créé')
-    emit('saved')
     close()
+    emit('saved')
   } catch (e) {
     notify(e.message || 'Une erreur est survenue', 'error')
   }

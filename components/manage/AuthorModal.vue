@@ -77,8 +77,8 @@ const save = async () => {
       await blogStore.addAuthor(payload)
     }
     notify(props.author ? 'Auteur mis à jour' : 'Auteur créé')
-    emit('saved')
     close()
+    emit('saved')
   } catch (e) {
     notify(e.message || 'Une erreur est survenue', 'error')
   }

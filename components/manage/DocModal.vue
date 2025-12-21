@@ -78,8 +78,8 @@ const save = async () => {
       await docStore.updateDoc(props.doc.id, form)
     }
     notify(props.doc ? 'Document mis à jour' : 'Document créé')
-    emit('saved')
     close()
+    emit('saved')
   } catch (e) {
     notify(e.message || 'Une erreur est survenue', 'error')
   }

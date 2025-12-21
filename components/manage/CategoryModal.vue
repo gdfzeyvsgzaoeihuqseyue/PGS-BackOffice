@@ -54,8 +54,8 @@ const save = async () => {
       await blogStore.addCategory(payload)
     }
     notify(props.category ? 'Catégorie mise à jour' : 'Catégorie créée')
-    emit('saved')
     close()
+    emit('saved')
   } catch (e) {
     notify(e.message || 'Une erreur est survenue', 'error')
   }

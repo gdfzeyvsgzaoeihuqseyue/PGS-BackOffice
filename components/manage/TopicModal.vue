@@ -127,8 +127,8 @@ const save = async () => {
       await topicStore.addTopic(form)
     }
     notify(isEditing.value ? 'Sujet mis à jour' : 'Sujet créé')
-    emit('saved')
     closeModal()
+    emit('saved')
   } catch (e) {
     notify(e.message || 'Une erreur est survenue', 'error')
   }

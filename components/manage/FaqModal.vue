@@ -118,8 +118,8 @@ const save = async () => {
       await faqStore.addFaq(form)
     }
     notify(isEditing.value ? 'FAQ mise à jour' : 'FAQ créée')
-    emit('saved')
     closeModal()
+    emit('saved')
   } catch (e) {
     notify(e.message || 'Une erreur est survenue', 'error')
   }

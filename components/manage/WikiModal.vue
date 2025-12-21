@@ -136,8 +136,8 @@ const save = async () => {
       await wikiStore.addWiki(form)
     }
     notify(isEditing.value ? 'Wiki mis à jour' : 'Wiki créé')
-    emit('saved')
     closeModal()
+    emit('saved')
   } catch (e) {
     notify(e.message || 'Une erreur est survenue', 'error')
   }
