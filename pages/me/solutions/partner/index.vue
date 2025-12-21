@@ -44,7 +44,7 @@
                   <img v-if="partner.logo" :src="partner.logo"
                     class="w-8 h-8 rounded object-cover border border-slate-100" />
                   <div v-else class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-slate-400">
-                    <IconBuilding size="16" />
+                    <IconHeartHandshake size="16" />
                   </div>
                   <NuxtLink :to="`/me/solutions/partner/${partner.id}`"
                     class="hover:text-emerald-600 transition-colors">
@@ -87,7 +87,7 @@
 </template>
 
 <script setup>
-import { IconPlus, IconPencil, IconTrash, IconBuilding, IconExternalLink } from '@tabler/icons-vue'
+import { IconPlus, IconPencil, IconTrash, IconHeartHandshake, IconExternalLink } from '@tabler/icons-vue'
 import { usePartnerStore } from '~/stores/partner'
 import { usePlatformStore } from '~/stores/platform'
 

@@ -10,7 +10,7 @@
         </NuxtLink>
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded bg-blue-50 flex items-center justify-center text-blue-500">
-            <IconBuilding size="24" />
+            <IconHeartHandshake size="24" />
           </div>
           <div>
             <h2 class="text-2xl font-bold text-slate-800">
@@ -65,7 +65,7 @@
 </template>
 
 <script setup>
-import { IconArrowLeft, IconPencil, IconBuilding, IconExternalLink } from '@tabler/icons-vue'
+import { IconArrowLeft, IconPencil, IconHeartHandshake, IconExternalLink } from '@tabler/icons-vue'
 import { usePartnerStore } from '~/stores/partner'
 
 definePageMeta({
