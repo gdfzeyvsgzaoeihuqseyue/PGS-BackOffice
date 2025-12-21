@@ -105,6 +105,7 @@
 <script setup>
 import { IconTrash, IconPlus } from '@tabler/icons-vue'
 import { usePlatformStore } from '~/stores/platform'
+import { useToast } from '~/composables/useToast'
 import CdnInput from './CdnInput.vue'
 
 const props = defineProps({
@@ -114,6 +115,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'saved'])
 const platformStore = usePlatformStore()
+const { add: notify } = useToast()
 
 const form = reactive({
   name: '',
@@ -194,10 +196,11 @@ const save = async () => {
     } else {
       await platformStore.updatePlatform(props.platform.id, form)
     }
+    notify(props.platform ? 'Plateforme mise à jour' : 'Plateforme créée')
     emit('saved')
     close()
   } catch (e) {
-    alert('Erreur: ' + (e.message || 'Une erreur est survenue'))
+    notify(e.message || 'Une erreur est survenue', 'error')
   }
 }
 

@@ -70,6 +70,7 @@
 <script setup>
 import { useTestimonyStore } from '~/stores/testimony'
 import { usePlatformStore } from '~/stores/platform'
+import { useToast } from '~/composables/useToast'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -77,6 +78,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'saved'])
+const { add: notify } = useToast()
 const testimonyStore = useTestimonyStore()
 const platformStore = usePlatformStore()
 const { platforms } = storeToRefs(platformStore)
@@ -129,10 +131,11 @@ const save = async () => {
     } else {
       await testimonyStore.updateTestimony(props.testimony.id, form)
     }
+    notify(props.testimony ? 'Témoignage mis à jour' : 'Témoignage créé')
     emit('saved')
     close()
   } catch (e) {
-    alert('Erreur: ' + (e.message || 'Une erreur est survenue'))
+    notify(e.message || 'Une erreur est survenue', 'error')
   }
 }
 

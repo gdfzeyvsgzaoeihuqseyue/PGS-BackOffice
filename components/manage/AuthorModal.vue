@@ -35,6 +35,7 @@
 
 <script setup>
 import { useBlogStore } from '~/stores/blog'
+import { useToast } from '~/composables/useToast'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -42,6 +43,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'saved'])
+const { add: notify } = useToast()
 const blogStore = useBlogStore()
 
 const form = reactive({ name: '', avatar: '', role: 'Rédacteur', bio: '' })
@@ -74,10 +76,11 @@ const save = async () => {
     } else {
       await blogStore.addAuthor(payload)
     }
+    notify(props.author ? 'Auteur mis à jour' : 'Auteur créé')
     emit('saved')
     close()
   } catch (e) {
-    alert('Erreur: ' + e.message)
+    notify(e.message || 'Une erreur est survenue', 'error')
   }
 }
 

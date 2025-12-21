@@ -72,6 +72,7 @@
 <script setup>
 import { IconTrash, IconPlus } from '@tabler/icons-vue'
 import { useBlogStore } from '~/stores/blog'
+import { useToast } from '~/composables/useToast'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -79,6 +80,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'saved'])
+const { add: notify } = useToast()
 
 const blogStore = useBlogStore()
 const { authors, categories } = storeToRefs(blogStore)
@@ -148,10 +150,11 @@ const save = async () => {
     } else {
       await blogStore.addArticle(payload)
     }
+    notify(props.article ? 'Article mis à jour' : 'Article créé')
     emit('saved')
     close()
   } catch (e) {
-    alert('Erreur: ' + e.message)
+    notify(e.message || 'Une erreur est survenue', 'error')
   }
 }
 

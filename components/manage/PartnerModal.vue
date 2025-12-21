@@ -38,6 +38,7 @@
 <script setup>
 import { usePartnerStore } from '~/stores/partner'
 import { usePlatformStore } from '~/stores/platform'
+import { useToast } from '~/composables/useToast'
 import CdnInput from './CdnInput.vue'
 
 const props = defineProps({
@@ -46,6 +47,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'saved'])
+const { add: notify } = useToast()
 const partnerStore = usePartnerStore()
 const platformStore = usePlatformStore()
 const { platforms } = storeToRefs(platformStore)
@@ -82,10 +84,11 @@ const save = async () => {
     } else {
       await partnerStore.updatePartner(props.partner.id, form)
     }
+    notify(props.partner ? 'Partenaire mis à jour' : 'Partenaire créé')
     emit('saved')
     close()
   } catch (e) {
-    alert('Erreur: ' + (e.message || 'Une erreur est survenue'))
+    notify(e.message || 'Une erreur est survenue', 'error')
   }
 }
 

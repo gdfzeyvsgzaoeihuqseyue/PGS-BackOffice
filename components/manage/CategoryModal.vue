@@ -18,6 +18,7 @@
 
 <script setup>
 import { useBlogStore } from '~/stores/blog'
+import { useToast } from '~/composables/useToast'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -25,6 +26,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'saved'])
+const { add: notify } = useToast()
 const blogStore = useBlogStore()
 
 const form = reactive({ name: '' })
@@ -51,10 +53,11 @@ const save = async () => {
     } else {
       await blogStore.addCategory(payload)
     }
+    notify(props.category ? 'Catégorie mise à jour' : 'Catégorie créée')
     emit('saved')
     close()
   } catch (e) {
-    alert('Erreur: ' + e.message)
+    notify(e.message || 'Une erreur est survenue', 'error')
   }
 }
 

@@ -51,6 +51,7 @@
 <script setup>
 import { useFaqStore } from '~/stores/faq'
 import { useFaqTopicStore } from '~/stores/faq-topic'
+import { useToast } from '~/composables/useToast'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -58,6 +59,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'saved'])
+const { add: notify } = useToast()
 
 const faqStore = useFaqStore()
 const topicStore = useFaqTopicStore()
@@ -115,10 +117,11 @@ const save = async () => {
     } else {
       await faqStore.addFaq(form)
     }
+    notify(isEditing.value ? 'FAQ mise à jour' : 'FAQ créée')
     emit('saved')
     closeModal()
   } catch (e) {
-    alert('Erreur: ' + (e.message || 'Une erreur est survenue'))
+    notify(e.message || 'Une erreur est survenue', 'error')
   }
 }
 </script>

@@ -63,6 +63,7 @@
 <script setup>
 import { useWikiStore } from '~/stores/wiki'
 import { usePlatformStore } from '~/stores/platform'
+import { useToast } from '~/composables/useToast'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -70,6 +71,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'saved'])
+const { add: notify } = useToast()
 
 const wikiStore = useWikiStore()
 const platformStore = usePlatformStore()
@@ -133,10 +135,11 @@ const save = async () => {
     } else {
       await wikiStore.addWiki(form)
     }
+    notify(isEditing.value ? 'Wiki mis à jour' : 'Wiki créé')
     emit('saved')
     closeModal()
   } catch (e) {
-    alert('Erreur: ' + (e.message || 'Une erreur est survenue'))
+    notify(e.message || 'Une erreur est survenue', 'error')
   }
 }
 </script>

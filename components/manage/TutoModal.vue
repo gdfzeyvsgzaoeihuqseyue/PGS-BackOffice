@@ -54,6 +54,7 @@
 <script setup>
 import { useTutoStore } from '~/stores/tuto'
 import { usePlatformStore } from '~/stores/platform'
+import { useToast } from '~/composables/useToast'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -61,6 +62,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'saved'])
+const { add: notify } = useToast()
 
 const tutoStore = useTutoStore()
 const platformStore = usePlatformStore()
@@ -122,10 +124,11 @@ const save = async () => {
     } else {
       await tutoStore.addTuto(form)
     }
+    notify(isEditing.value ? 'Tutoriel mis à jour' : 'Tutoriel créé')
     emit('saved')
     closeModal()
   } catch (e) {
-    alert('Erreur: ' + (e.message || 'Une erreur est survenue'))
+    notify(e.message || 'Une erreur est survenue', 'error')
   }
 }
 </script>

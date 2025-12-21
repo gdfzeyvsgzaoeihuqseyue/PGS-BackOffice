@@ -35,6 +35,7 @@
 <script setup>
 import { useDocStore } from '~/stores/doc'
 import { usePlatformStore } from '~/stores/platform'
+import { useToast } from '~/composables/useToast'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -42,6 +43,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'saved'])
+const { add: notify } = useToast()
 const docStore = useDocStore()
 const platformStore = usePlatformStore()
 const { platforms } = storeToRefs(platformStore)
@@ -75,10 +77,11 @@ const save = async () => {
     } else {
       await docStore.updateDoc(props.doc.id, form)
     }
+    notify(props.doc ? 'Document mis à jour' : 'Document créé')
     emit('saved')
     close()
   } catch (e) {
-    alert('Erreur: ' + (e.message || 'Une erreur est survenue'))
+    notify(e.message || 'Une erreur est survenue', 'error')
   }
 }
 
