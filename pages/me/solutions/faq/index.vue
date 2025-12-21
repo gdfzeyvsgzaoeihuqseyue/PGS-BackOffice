@@ -89,10 +89,10 @@
         </table>
       </div>
     </div>
-
-    <!-- Modal Edit -->
-    <ManageFaqModal :is-open="isModalOpen" :faq="editingFaq" @close="closeModal" @saved="refresh" />
   </div>
+
+  <!-- Modal Edit -->
+  <ManageFaqModal :is-open="isModalOpen" :faq="editingFaq" @close="closeModal" @saved="refresh" />
 </template>
 
 <script setup>

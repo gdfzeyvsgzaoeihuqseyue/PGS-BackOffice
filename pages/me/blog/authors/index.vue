@@ -66,11 +66,11 @@
         </table>
       </div>
     </div>
-
-    <!-- Modal -->
-    <ManageAuthorModal :is-open="isModalOpen" :author="editingAuthor" @close="closeModal"
-      @saved="blogStore.fetchAuthors()" />
   </div>
+
+  <!-- Modal -->
+  <ManageAuthorModal :is-open="isModalOpen" :author="editingAuthor" @close="closeModal"
+    @saved="blogStore.fetchAuthors()" />
 </template>
 
 <script setup>

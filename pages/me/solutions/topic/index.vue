@@ -77,10 +77,10 @@
         </table>
       </div>
     </div>
-
-    <!-- Modal Edit -->
-    <ManageTopicModal :is-open="isModalOpen" :topic="editingTopic" @close="closeModal" @saved="refresh" />
   </div>
+
+  <!-- Modal Edit -->
+  <ManageTopicModal :is-open="isModalOpen" :topic="editingTopic" @close="closeModal" @saved="refresh" />
 </template>
 
 <script setup>

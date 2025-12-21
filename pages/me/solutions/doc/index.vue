@@ -73,10 +73,11 @@
         </table>
       </div>
     </div>
-
-    <!-- Modal Edit -->
-    <ManageDocModal :is-open="isModalOpen" :doc="editingDoc" @close="closeModal" @saved="refresh" />
   </div>
+
+
+  <!-- Modal Edit -->
+  <ManageDocModal :is-open="isModalOpen" :doc="editingDoc" @close="closeModal" @saved="refresh" />
 </template>
 
 <script setup>

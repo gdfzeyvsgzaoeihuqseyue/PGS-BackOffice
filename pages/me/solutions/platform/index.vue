@@ -77,10 +77,10 @@
         </table>
       </div>
     </div>
-
-    <!-- Generic Modal for Create/Edit -->
-    <ManagePlatformModal :is-open="isModalOpen" :platform="editingPlatform" @close="closeModal" @saved="refresh" />
   </div>
+
+  <!-- Modal -->
+  <ManagePlatformModal :is-open="isModalOpen" :platform="editingPlatform" @close="closeModal" @saved="refresh" />
 </template>
 
 <script setup>

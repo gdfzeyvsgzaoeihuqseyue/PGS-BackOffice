@@ -65,10 +65,10 @@
         </table>
       </div>
     </div>
-
-    <!-- Modal -->
-    <ManageArticleModal :is-open="isModalOpen" :article="editingArticle" @close="closeModal" @saved="refresh" />
   </div>
+
+  <!-- Modal -->
+  <ManageArticleModal :is-open="isModalOpen" :article="editingArticle" @close="closeModal" @saved="refresh" />
 </template>
 
 <script setup>

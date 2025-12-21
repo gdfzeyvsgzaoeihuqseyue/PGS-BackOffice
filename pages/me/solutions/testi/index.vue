@@ -90,10 +90,10 @@
         </table>
       </div>
     </div>
-
-    <!-- Modal Edit -->
-    <ManageTestimonyModal :is-open="isModalOpen" :testimony="editingTesti" @close="closeModal" @saved="refresh" />
   </div>
+
+  <!-- Modal Edit -->
+  <ManageTestimonyModal :is-open="isModalOpen" :testimony="editingTesti" @close="closeModal" @saved="refresh" />
 </template>
 
 <script setup>

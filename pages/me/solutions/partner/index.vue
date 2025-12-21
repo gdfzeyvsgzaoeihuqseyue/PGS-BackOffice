@@ -80,10 +80,10 @@
         </table>
       </div>
     </div>
-
-    <!-- Modal Edit -->
-    <ManagePartnerModal :is-open="isModalOpen" :partner="editingPartner" @close="closeModal" @saved="refresh" />
   </div>
+
+  <!-- Modal Edit -->
+  <ManagePartnerModal :is-open="isModalOpen" :partner="editingPartner" @close="closeModal" @saved="refresh" />
 </template>
 
 <script setup>

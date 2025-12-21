@@ -79,10 +79,10 @@
         </table>
       </div>
     </div>
-
-    <!-- Modal Edit -->
-    <ManageTutoModal :is-open="isModalOpen" :tuto="editingTuto" @close="closeModal" @saved="refresh" />
   </div>
+
+  <!-- Modal Edit -->
+  <ManageTutoModal :is-open="isModalOpen" :tuto="editingTuto" @close="closeModal" @saved="refresh" />
 </template>
 
 <script setup>

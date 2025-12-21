@@ -74,3 +74,24 @@ export interface SolutionTuto {
   updatedAt?: string
 }
 
+
+export interface SolutionFaqTopic {
+  id: string
+  name: string
+  order?: number
+  platform?: SolutionPlatform | string
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface SolutionFaq {
+  id: string
+  question: string
+  answer: string
+  topic?: SolutionFaqTopic | string
+  platform?: SolutionPlatform | string
+  isPublished?: boolean
+  votes?: number
+  createdAt?: string
+  updatedAt?: string
+}

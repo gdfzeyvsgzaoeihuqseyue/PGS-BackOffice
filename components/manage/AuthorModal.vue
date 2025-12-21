@@ -6,8 +6,6 @@
         <input v-model="form.name" type="text" required class="form-input" />
       </div>
 
-      <!-- Slug removed -->
-
       <div>
         <label class="block text-sm font-bold text-slate-700 mb-1">Avatar URL</label>
         <input v-model="form.avatar" type="url" class="form-input" placeholder="https://..." />

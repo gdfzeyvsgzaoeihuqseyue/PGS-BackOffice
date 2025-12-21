@@ -61,11 +61,11 @@
         </table>
       </div>
     </div>
-
-    <!-- Modal -->
-    <ManageCategoryModal :is-open="isModalOpen" :category="editingCategory" @close="closeModal"
-      @saved="blogStore.fetchCategories()" />
   </div>
+
+  <!-- Modal -->
+  <ManageCategoryModal :is-open="isModalOpen" :category="editingCategory" @close="closeModal"
+    @saved="blogStore.fetchCategories()" />
 </template>
 
 <script setup>
