@@ -52,9 +52,11 @@
         </div>
       </div>
 
-      <div class="inline-block px-3 py-1 rounded-full text-sm font-bold mx-auto mb-6"
-        :class="faq?.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'">
-        {{ faq?.status === 'active' ? 'Actif' : 'Inactif' }}
+      <div class="flex justify-center mb-6">
+        <div class="px-3 py-1 rounded-full text-sm font-bold"
+          :class="faq?.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'">
+          {{ faq?.status === 'active' ? 'Actif' : 'Inactif' }}
+        </div>
       </div>
 
       <div class="text-center">

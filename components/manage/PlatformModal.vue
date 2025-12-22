@@ -197,17 +197,23 @@ const removeFeature = (index) => featuresList.value.splice(index, 1)
 
 const save = async () => {
   try {
-    form.features = featuresList.value.filter(f => f && f.trim() !== '')
-    if (!form.allowAuth) {
-      form.authType = 'all'
+    // Create a payload copy to avoid mutating form directly or sending invalid combinations
+    const payload = { ...form }
+    payload.features = featuresList.value.filter(f => f && f.trim() !== '')
+
+    // Business Logic: 
+    // If allowAuth is false, backend FORBIDS authType value (must be null or undefined).
+    // If allowAuth is true, authType is REQUIRED.
+    if (!payload.allowAuth) {
+      payload.authType = null
     } else {
-      if (!form.authType) form.authType = 'all'
+      if (!payload.authType) payload.authType = 'all'
     }
 
     if (!props.platform) {
-      await platformStore.addPlatform(form)
+      await platformStore.addPlatform(payload)
     } else {
-      await platformStore.updatePlatform(props.platform.id, form)
+      await platformStore.updatePlatform(props.platform.id, payload)
     }
     notify(props.platform ? 'Plateforme mise à jour' : 'Plateforme créée')
     close()
