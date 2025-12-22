@@ -44,6 +44,7 @@ module.exports = {
     authType: {
       type: 'string',
       isIn: ['all', 'user', 'learner'],
+      allowNull: true,
       description: "Type d'authentification autorisé (all, user, learner). Obligatoire si allowAuth est true.",
     },
     ctaText: {
