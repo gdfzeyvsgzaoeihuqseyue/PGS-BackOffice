@@ -128,10 +128,13 @@
               </td>
               <td class="px-4 py-3 text-sm text-secondary-600 font-mono">{{ service.role || '-' }}</td>
               <td class="px-4 py-3">
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
-                  :class="service.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'">
+                <button @click="handleServiceAccessToggle(service.serviceId, !service.isActive)"
+                  class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold transition-colors"
+                  :class="service.isActive ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200' : 'bg-red-100 text-red-800 hover:bg-red-200'"
+                  :title="service.isActive ? 'Désactiver l\'accès' : 'Activer l\'accès'">
+                  <component :is="service.isActive ? IconCheck : IconBan" size="12" />
                   {{ service.isActive ? 'Actif' : 'Suspendu' }}
-                </span>
+                </button>
               </td>
               <td class="px-4 py-3 text-sm text-secondary-500">
                 {{ service.joinedAt ? new Date(service.joinedAt).toLocaleDateString() : '-' }}
@@ -153,6 +156,7 @@
 <script setup>
 import { IconArrowLeft, IconBan, IconCheck, IconTrash, IconMailCheck, IconServer, IconExternalLink } from '@tabler/icons-vue'
 import { useUserStore } from '~/stores/user'
+import { useServiceStore } from '~/stores/service'
 import { useToast } from '~/composables/useToast'
 
 definePageMeta({
@@ -166,6 +170,7 @@ useHead({
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
+const serviceStore = useServiceStore()
 const { currentUser: user, currentServices, loading, error } = storeToRefs(userStore)
 const { add: notify } = useToast()
 
@@ -208,6 +213,19 @@ const handleDelete = async () => {
     router.push('/me/manage/users')
   } catch (e) {
     notify('Erreur lors de la suppression', 'error')
+  }
+}
+
+const handleServiceAccessToggle = async (serviceId, isActive) => {
+  if (!user.value) return
+  if (!confirm(`Voulez-vous vraiment ${isActive ? 'activer' : 'désactiver'} l'accès à ce service pour cet utilisateur ?`)) return
+
+  try {
+    await serviceStore.toggleAccess(user.value.id, serviceId, 'user', isActive)
+    notify(`Accès ${isActive ? 'activé' : 'désactivé'} avec succès`, 'success')
+    await userStore.fetchUser(user.value.id)
+  } catch (e) {
+    notify(e.message, 'error')
   }
 }
 </script>

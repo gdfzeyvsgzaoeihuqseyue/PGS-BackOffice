@@ -185,10 +185,13 @@
 
               <td class="px-4 py-3 text-sm text-slate-600 font-mono">{{ access.role }}</td>
               <td class="px-4 py-3">
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
-                  :class="access.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'">
+                <button @click="handleAccessToggle(access.user.id, 'user', !access.isActive)"
+                  class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold transition-colors"
+                  :class="access.isActive ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200' : 'bg-red-100 text-red-800 hover:bg-red-200'"
+                  :title="access.isActive ? 'Désactiver l\'accès' : 'Activer l\'accès'">
+                  <component :is="access.isActive ? IconCheck : IconBan" size="12" />
                   {{ access.isActive ? 'Actif' : 'Suspendu' }}
-                </span>
+                </button>
               </td>
               <td class="px-4 py-3 text-sm text-slate-500">
                 {{ access.enrollmentDate ? new Date(access.enrollmentDate).toLocaleDateString() : '-' }}
@@ -198,11 +201,10 @@
         </table>
       </div>
 
-      <!-- Pagination (Simple implementation for now) -->
+      <!-- Pagination -->
       <div class="mt-4 flex justify-between items-center text-sm text-slate-500"
         v-if="serviceUsers.pagination && serviceUsers.pagination.totalPages > 1">
         <span>Page {{ serviceUsers.pagination.page }} sur {{ serviceUsers.pagination.totalPages }}</span>
-        <!-- Add pagination controls later if needed -->
       </div>
     </div>
 
@@ -222,6 +224,7 @@
               <th class="px-4 py-3">Email</th>
               <th class="px-4 py-3">Progression</th>
               <th class="px-4 py-3">Statut</th>
+              <th class="px-4 py-3">Dernier accès</th>
               <th class="px-4 py-3">Date d'inscription</th>
             </tr>
           </thead>
@@ -246,10 +249,13 @@
               </td>
 
               <td class="px-4 py-3">
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
-                  :class="access.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'">
+                <button @click="handleAccessToggle(access.learner.id, 'learner', !access.isActive)"
+                  class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold transition-colors"
+                  :class="access.isActive ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200' : 'bg-red-100 text-red-800 hover:bg-red-200'"
+                  :title="access.isActive ? 'Désactiver l\'accès' : 'Activer l\'accès'">
+                  <component :is="access.isActive ? IconCheck : IconBan" size="12" />
                   {{ access.isActive ? 'Actif' : 'Suspendu' }}
-                </span>
+                </button>
               </td>
               <td class="px-4 py-3 text-sm text-slate-500">
                 {{ access.enrollmentDate ? new Date(access.enrollmentDate).toLocaleDateString() : '-' }}
@@ -275,7 +281,7 @@
 </template>
 
 <script setup>
-import { IconArrowLeft, IconExternalLink, IconPencil, IconTrash, IconKey, IconCopy, IconInfoCircle, IconWorld, IconUsers, IconUserEdit, IconDeviceAnalytics, IconEye, IconEyeOff, IconRefresh, IconPower } from '@tabler/icons-vue'
+import { IconArrowLeft, IconExternalLink, IconPencil, IconTrash, IconKey, IconCopy, IconInfoCircle, IconWorld, IconUsers, IconUserEdit, IconDeviceAnalytics, IconEye, IconEyeOff, IconRefresh, IconPower, IconCheck, IconBan } from '@tabler/icons-vue'
 import { useServiceStore } from '~/stores/service'
 import { useToast } from '~/composables/useToast'
 
@@ -300,6 +306,18 @@ const refresh = () => {
 }
 
 refresh()
+
+const handleAccessToggle = async (targetId, targetType, isActive) => {
+  if (!service.value) return
+  if (!confirm(`Voulez-vous vraiment ${isActive ? 'activer' : 'désactiver'} l'accès pour cet ${targetType === 'user' ? 'utilisateur' : 'apprenant'} ?`)) return
+
+  try {
+    await serviceStore.toggleAccess(targetId, service.value.id, targetType, isActive)
+    notify(`Accès ${isActive ? 'activé' : 'désactivé'} avec succès`, 'success')
+  } catch (e) {
+    notify(e.message, 'error')
+  }
+}
 
 const originsList = computed(() => {
   if (!service.value || !service.value.allowedOrigins) return []

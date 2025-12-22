@@ -146,6 +146,33 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
+  const toggleAccess = async (targetId: string, serviceId: string, targetType: 'user' | 'learner', isActive: boolean) => {
+    try {
+      const { data, error } = await useAPI<{ access: any }>('/admin/service/access/toggle', {
+        method: 'PATCH',
+        body: { targetId, serviceId, targetType, isActive }
+      })
+
+      if (error.value) throw error.value
+
+      const accessData = data.value?.access
+      if (!accessData) return true
+
+      // Update local state if successful to reflect changes immediately
+      if (targetType === 'user' && serviceUsers.value?.items) {
+        const item = serviceUsers.value.items.find((i: any) => i.accessId === accessData.id || i.user?.id === targetId)
+        if (item) item.isActive = isActive
+      } else if (targetType === 'learner' && serviceLearners.value?.items) {
+        const item = serviceLearners.value.items.find((i: any) => i.accessId === accessData.id || i.learner?.id === targetId)
+        if (item) item.isActive = isActive
+      }
+
+      return true
+    } catch (err: any) {
+      throw new Error(err.message || 'Erreur lors de la modification de l\'accès')
+    }
+  }
+
   return {
     services,
     service,
@@ -160,6 +187,7 @@ export const useServiceStore = defineStore('service', () => {
     updateService,
     deleteService,
     toggleService,
-    fetchStats
+    fetchStats,
+    toggleAccess
   }
 })
