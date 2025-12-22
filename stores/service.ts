@@ -17,7 +17,7 @@ export const useServiceStore = defineStore('service', () => {
     loading.value = true
     error.value = null
     try {
-      const { data } = await useAPI<{ services: Service[], pagination: any }>('/admin/service/list')
+      const { data } = await useAPI<{ services: Service[], pagination: any }>('/admin/solution/list-service')
       if (data.value && data.value.services) {
         services.value = data.value.services
       }
@@ -33,7 +33,7 @@ export const useServiceStore = defineStore('service', () => {
     loading.value = true
     error.value = null
     try {
-      const { data } = await useAPI<{ service: Service, users: any, learners: any }>(`/admin/service/${id}`)
+      const { data } = await useAPI<{ service: Service, users: any, learners: any }>(`/admin/solution/get-service/${id}`)
       if (data.value) {
         if (data.value.service) service.value = data.value.service
         if (data.value.users) serviceUsers.value = data.value.users
@@ -49,7 +49,7 @@ export const useServiceStore = defineStore('service', () => {
 
   const addService = async (payload: any) => {
     try {
-      const { data, error } = await useAPI<{ service: Service }>('/admin/service/create', { method: 'POST', body: payload })
+      const { data, error } = await useAPI<{ service: Service }>('/admin/solution/create-service', { method: 'POST', body: payload })
       if (error.value) throw error.value
       if (data.value && data.value.service) {
         services.value.push(data.value.service)
@@ -62,8 +62,7 @@ export const useServiceStore = defineStore('service', () => {
 
   const updateService = async (id: string, payload: any) => {
     try {
-      // Mapping to backend route: PUT /api/v1/admin/service/:serviceId
-      const { data, error } = await useAPI<{ service: Service }>(`/admin/service/${id}`, { method: 'PUT', body: payload })
+      const { data, error } = await useAPI<{ service: Service }>(`/admin/solution/update-service/${id}`, { method: 'PUT', body: payload })
       if (error.value) throw error.value
 
       if (data.value && data.value.service) {
@@ -85,23 +84,18 @@ export const useServiceStore = defineStore('service', () => {
 
   const deleteService = async (id: string, payload: any) => {
     try {
-      // Mapping to backend route: DELETE /api/v1/admin/service/:serviceId
-      // We pass the payload as 'body' in the options
-      const { error } = await useAPI(`/admin/service/${id}`, {
+      const { error } = await useAPI(`/admin/solution/delete-service/${id}`, {
         method: 'DELETE',
         body: payload
       })
 
       if (error.value) {
-        // Pass the whole error value so component can inspect status/data
         throw error.value
       }
 
       services.value = services.value.filter(s => s.id !== id)
     } catch (err: any) {
-      // If it's a FetchError from useAPI
       if (err.data) {
-        // Re-throw the data part which contains the specific backend error message/code
         throw new Error(err.data.message || err.message)
       }
       throw new Error(err.message || 'Erreur lors de la suppression')
@@ -110,9 +104,7 @@ export const useServiceStore = defineStore('service', () => {
 
   const toggleService = async (id: string, isActive: boolean, reason: string | null = null) => {
     try {
-      // Mapping to backend route: PATCH /api/v1/admin/service/:serviceId/toggle
-      // Backend returns { message, service: Service, impact: ... }
-      const { data, error } = await useAPI<{ service: Service }>(`/admin/service/${id}/toggle`, {
+      const { data, error } = await useAPI<{ service: Service }>(`/admin/solution/toggle-service-status/${id}`, {
         method: 'PATCH',
         body: { isActive, reason }
       })
@@ -137,7 +129,7 @@ export const useServiceStore = defineStore('service', () => {
 
   const fetchStats = async () => {
     try {
-      const { data } = await useAPI<ServiceStats>('/admin/service/stats')
+      const { data } = await useAPI<ServiceStats>('/admin/solution/get-service-stats')
       if (data.value) {
         stats.value = data.value
       }
@@ -148,7 +140,7 @@ export const useServiceStore = defineStore('service', () => {
 
   const toggleAccess = async (targetId: string, serviceId: string, targetType: 'user' | 'learner', isActive: boolean) => {
     try {
-      const { data, error } = await useAPI<{ access: any }>('/admin/service/access/toggle', {
+      const { data, error } = await useAPI<{ access: any }>('/admin/solution/toggle-service-access/', {
         method: 'PATCH',
         body: { targetId, serviceId, targetType, isActive }
       })
@@ -158,7 +150,6 @@ export const useServiceStore = defineStore('service', () => {
       const accessData = data.value?.access
       if (!accessData) return true
 
-      // Update local state if successful to reflect changes immediately
       if (targetType === 'user' && serviceUsers.value?.items) {
         const item = serviceUsers.value.items.find((i: any) => i.accessId === accessData.id || i.user?.id === targetId)
         if (item) item.isActive = isActive
