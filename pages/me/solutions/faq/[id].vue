@@ -93,22 +93,18 @@ const route = useRoute()
 const router = useRouter()
 const faqStore = useFaqStore()
 
-const { loading, error } = storeToRefs(faqStore)
+const { currentFaq: faq, loading, error } = storeToRefs(faqStore)
 
 const id = route.params.id
 const isNew = id === 'new'
-const faq = ref(null)
+// const faq = ref(null) // REMOVED
 const isModalOpen = ref(false)
 
 onMounted(async () => {
   if (!isNew) {
-    try {
-      const data = await faqStore.fetchFaq(id)
-      faq.value = data
-    } catch (e) {
-      // Error handled by store
-    }
+    await faqStore.fetchFaq(id)
   } else {
+    faqStore.$patch({ currentFaq: null })
     isModalOpen.value = true
   }
 })
@@ -125,7 +121,7 @@ const closeModal = () => {
 const resetVotes = async () => {
   if (confirm('Voulez-vous vraiment remettre les compteurs à zéro ?')) {
     await faqStore.resetVotes(id)
-    faq.value = await faqStore.fetchFaq(id)
+    await faqStore.fetchFaq(id)
   }
 }
 
@@ -137,7 +133,7 @@ const handleSaved = async () => {
   if (isNew) {
     router.push('/me/solutions/faq')
   } else {
-    faq.value = await faqStore.fetchFaq(id)
+    await faqStore.fetchFaq(id)
     closeModal()
   }
 }

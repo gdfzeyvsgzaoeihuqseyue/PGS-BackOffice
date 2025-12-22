@@ -85,22 +85,18 @@ const route = useRoute()
 const router = useRouter()
 const tutoStore = useTutoStore()
 
-const { loading, error } = storeToRefs(tutoStore)
+const { currentTuto: tuto, loading, error } = storeToRefs(tutoStore)
 
 const id = route.params.id // Using 'id' param as per user request
 const isNew = id === 'new'
-const tuto = ref(null)
+// const tuto = ref(null) // REMOVED
 const isModalOpen = ref(false)
 
 onMounted(async () => {
   if (!isNew) {
-    try {
-      const data = await tutoStore.fetchTuto(id)
-      tuto.value = data
-    } catch (e) {
-      // Error handled by store
-    }
+    await tutoStore.fetchTuto(id)
   } else {
+    tutoStore.$patch({ currentTuto: null })
     isModalOpen.value = true
   }
 })
@@ -122,7 +118,7 @@ const handleSaved = async () => {
   if (isNew) {
     router.push('/me/solutions/tuto')
   } else {
-    tuto.value = await tutoStore.fetchTuto(id)
+    await tutoStore.fetchTuto(id)
     closeModal()
   }
 }

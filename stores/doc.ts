@@ -14,10 +14,12 @@ export const useDocStore = defineStore('doc', {
       this.error = null
       try {
         const { data } = await useAPI<any>('/public/solution/doc')
-        if (data.value && data.value.data) {
-          this.docs = data.value.data
-        } else if (Array.isArray(data.value)) {
-          this.docs = data.value
+        if (data.value) {
+          if (Array.isArray(data.value)) {
+            this.docs = data.value
+          } else if (data.value.data) {
+            this.docs = data.value.data
+          }
         }
       } catch (e: any) {
         this.error = e.message || 'Erreur lors du chargement des documents'
@@ -33,9 +35,10 @@ export const useDocStore = defineStore('doc', {
         const { data, error } = await useAPI<any>(`/public/solution/doc/${id}`)
         if (error.value) throw error.value
 
-        if (data.value && data.value.data) {
-          this.currentDoc = data.value.data
-          return data.value.data
+        if (data.value) {
+          const result = data.value.data || data.value
+          this.currentDoc = result
+          return result
         }
       } catch (e: any) {
         this.error = e.message || 'Erreur lors du chargement du document'

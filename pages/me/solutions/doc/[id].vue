@@ -77,12 +77,12 @@ const router = useRouter()
 const docStore = useDocStore()
 const platformStore = usePlatformStore()
 
-const { loading, error } = storeToRefs(docStore)
+const { currentDoc: doc, loading, error } = storeToRefs(docStore)
 const { platforms } = storeToRefs(platformStore)
 
 const id = route.params.id
 const isNew = id === 'new'
-const doc = ref(null)
+// const doc = ref(null) // REMOVED
 const isModalOpen = ref(false)
 
 onMounted(async () => {
@@ -90,13 +90,10 @@ onMounted(async () => {
   platformStore.fetchPlatforms()
 
   if (!isNew) {
-    try {
-      const data = await docStore.fetchDoc(id)
-      doc.value = data
-    } catch (e) {
-      // Error handled by store
-    }
+    await docStore.fetchDoc(id)
   } else {
+    // Reset current doc for new creation
+    docStore.$patch({ currentDoc: null })
     isModalOpen.value = true
   }
 })
@@ -118,7 +115,7 @@ const handleSaved = async () => {
   if (isNew) {
     router.push('/me/solutions/doc')
   } else {
-    doc.value = await docStore.fetchDoc(id)
+    await docStore.fetchDoc(id)
     closeModal()
   }
 }

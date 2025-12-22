@@ -76,22 +76,18 @@ const route = useRoute()
 const router = useRouter()
 const partnerStore = usePartnerStore()
 
-const { loading, error } = storeToRefs(partnerStore)
+const { currentPartner: partner, loading, error } = storeToRefs(partnerStore)
 
 const id = route.params.id
 const isNew = id === 'new'
-const partner = ref(null)
+// const partner = ref(null) // REMOVED
 const isModalOpen = ref(false)
 
 onMounted(async () => {
   if (!isNew) {
-    try {
-      const data = await partnerStore.fetchPartner(id)
-      partner.value = data
-    } catch (e) {
-      // Error handled by store
-    }
+    await partnerStore.fetchPartner(id)
   } else {
+    partnerStore.$patch({ currentPartner: null })
     isModalOpen.value = true
   }
 })
@@ -113,7 +109,7 @@ const handleSaved = async () => {
   if (isNew) {
     router.push('/me/solutions/partner')
   } else {
-    partner.value = await partnerStore.fetchPartner(id)
+    await partnerStore.fetchPartner(id)
     closeModal()
   }
 }

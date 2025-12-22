@@ -74,25 +74,22 @@ const route = useRoute()
 const router = useRouter()
 const topicStore = useFaqTopicStore()
 
-const { loading, error } = storeToRefs(topicStore)
+const { currentTopic: topic, loading, error } = storeToRefs(topicStore)
 
 // The file is named [slug].vue, so the param is 'slug'.
 // However, typically we use ID to fetch one.
 // If the user navigates here with an ID or Slug, we try to fetch it.
 const identifier = route.params.slug
 const isNew = identifier === 'new'
-const topic = ref(null)
+// const topic = ref(null) // REMOVED
 const isModalOpen = ref(false)
 
 onMounted(async () => {
   if (!isNew) {
-    try {
-      const data = await topicStore.fetchTopic(identifier)
-      topic.value = data
-    } catch (e) {
-      // Error handled by store
-    }
+    await topicStore.fetchTopic(identifier)
   } else {
+    // Reset for new
+    topicStore.$patch({ currentTopic: null })
     isModalOpen.value = true
   }
 })
@@ -114,7 +111,7 @@ const handleSaved = async () => {
   if (isNew) {
     router.push('/me/solutions/topic')
   } else {
-    topic.value = await topicStore.fetchTopic(identifier)
+    await topicStore.fetchTopic(identifier)
     closeModal()
   }
 }
