@@ -1,0 +1,29 @@
+{
+  "success": true,
+  "message": "Solution récupérée avec succès.",
+  "data": {
+    "createdAt": 1756868642754,
+    "updatedAt": 1764213000330,
+    "id": "68b7b022142347313f601695",
+    "slug": "easyquicktrack",
+    "name": "Easy Quick Track",
+    "logo": "https://cdn.jsdelivr.net/gh/progestionsoft/Files/_General/Images/Logos/EQT-MC.png",
+    "logoDesk": "https://cdn.jsdelivr.net/gh/progestionsoft/Files/_General/Images/Logos/EQT-DC.png",
+    "category": "SEO & Analytics",
+    "description": "Solution complète pour le web : raccourcissement d’URLs, génération de QR codes, analyse de métadonnées et audit SEO.",
+    "content": "EasyQuickTrack permet aux entreprises, développeurs et créateurs de contenu d’optimiser leur visibilité en ligne. La solution intègre un puissant moteur de raccourcissement d’URLs avec statistiques détaillées, un générateur de QR codes personnalisés, et des outils d’analyse automatisée pour les sitemaps, fichiers robots.txt et métadonnées. Elle constitue un compagnon tout-en-un pour renforcer la stratégie digitale, améliorer le référencement et suivre la performance de chaque lien partagé.",
+    "disabled": false,
+    "allowAuth": true,
+    "authType": "user",
+    "ctaText": "Analyser vos liens",
+    "ctaLink": "http://eqt.netlify.app",
+    "features": [
+      "Raccourcissement d’URLs avec suivi en temps réel",
+      "Génération de QR codes personnalisables",
+      "Analyse automatique des métadonnées de pages",
+      "Audit des fichiers sitemap et robots.txt",
+      "Rapports SEO pour booster la visibilité"
+    ]
+  },
+  "populated": null
+}
