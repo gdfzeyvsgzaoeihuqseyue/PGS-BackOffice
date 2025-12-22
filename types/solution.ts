@@ -13,6 +13,12 @@ export interface SolutionPlatform {
   ctaText?: string
   ctaLink?: string
   features?: string | any[]
+  docs?: SolutionDoc[]
+  tutorials?: SolutionTuto[]
+  faqTopics?: SolutionFaqTopic[]
+  wiki?: SolutionWiki[]
+  partners?: SolutionPartner[]
+  testimonies?: SolutionTestimony[]
   createdAt?: string
   updatedAt?: string
 }

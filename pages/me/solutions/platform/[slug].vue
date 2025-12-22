@@ -108,6 +108,137 @@
       </div>
     </div>
 
+    <!-- Related Resources Section -->
+    <div class="mt-8 fade-in-up delay-200">
+      <h3 class="font-bold text-xl text-slate-800 mb-6 flex items-center gap-2">
+        <IconDatabase size="24" class="text-blue-600" />
+        Ressources & Relations
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Docs -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+          <div class="flex items-center justify-between mb-4 pb-2 border-b">
+            <h4 class="font-bold text-slate-700 flex items-center gap-2">
+              <IconFileText size="18" class="text-slate-500" />
+              Documents
+            </h4>
+            <span class="text-xs font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+              {{ platform?.docs?.length || 0 }}
+            </span>
+          </div>
+          <ul v-if="platform?.docs?.length" class="space-y-2">
+            <li v-for="doc in platform.docs" :key="doc.id"
+              class="text-sm text-slate-600 hover:text-emerald-600 truncate">
+              <NuxtLink :to="`/me/solutions/doc/${doc.id}`">• {{ doc.name || 'Document sans titre' }}</NuxtLink>
+            </li>
+          </ul>
+          <div v-else class="text-sm text-slate-400 italic">Aucun document associé.</div>
+        </div>
+
+        <!-- Tutorials -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+          <div class="flex items-center justify-between mb-4 pb-2 border-b">
+            <h4 class="font-bold text-slate-700 flex items-center gap-2">
+              <IconVideo size="18" class="text-slate-500" />
+              Tutoriels
+            </h4>
+            <span class="text-xs font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+              {{ platform?.tutorials?.length || 0 }}
+            </span>
+          </div>
+          <ul v-if="platform?.tutorials?.length" class="space-y-2">
+            <li v-for="tuto in platform.tutorials" :key="tuto.id"
+              class="text-sm text-slate-600 hover:text-emerald-600 truncate">
+              <NuxtLink :to="`/me/solutions/tuto/${tuto.id}`">• {{ tuto.title || 'Tutoriel sans titre' }}</NuxtLink>
+            </li>
+          </ul>
+          <div v-else class="text-sm text-slate-400 italic">Aucun tutoriel associé.</div>
+        </div>
+
+        <!-- Topics FAQ -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+          <div class="flex items-center justify-between mb-4 pb-2 border-b">
+            <h4 class="font-bold text-slate-700 flex items-center gap-2">
+              <IconHelp size="18" class="text-slate-500" />
+              Sujets FAQ
+            </h4>
+            <span class="text-xs font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+              {{ platform?.faqTopics?.length || 0 }}
+            </span>
+          </div>
+          <ul v-if="platform?.faqTopics?.length" class="space-y-2">
+            <li v-for="topic in platform.faqTopics" :key="topic.id"
+              class="text-sm text-slate-600 hover:text-emerald-600 truncate">
+              <NuxtLink :to="`/me/solutions/topic/${topic.slug}`">• {{ topic.name || 'Sujet sans titre' }}</NuxtLink>
+            </li>
+          </ul>
+          <div v-else class="text-sm text-slate-400 italic">Aucun sujet FAQ associé.</div>
+        </div>
+
+        <!-- Partners -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+          <div class="flex items-center justify-between mb-4 pb-2 border-b">
+            <h4 class="font-bold text-slate-700 flex items-center gap-2">
+              <IconUsers size="18" class="text-slate-500" />
+              Partenaires
+            </h4>
+            <span class="text-xs font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+              {{ platform?.partners?.length || 0 }}
+            </span>
+          </div>
+          <ul v-if="platform?.partners?.length" class="space-y-2">
+            <li v-for="partner in platform.partners" :key="partner.id"
+              class="text-sm text-slate-600 hover:text-emerald-600 truncate">
+              <NuxtLink :to="`/me/solutions/partner/${partner.id}`">• {{ partner.name || 'Partenaire sans nom' }}
+              </NuxtLink>
+            </li>
+          </ul>
+          <div v-else class="text-sm text-slate-400 italic">Aucun partenaire associé.</div>
+        </div>
+
+        <!-- Wiki -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+          <div class="flex items-center justify-between mb-4 pb-2 border-b">
+            <h4 class="font-bold text-slate-700 flex items-center gap-2">
+              <IconBook size="18" class="text-slate-500" />
+              Wiki
+            </h4>
+            <span class="text-xs font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+              {{ platform?.wiki?.length || 0 }}
+            </span>
+          </div>
+          <ul v-if="platform?.wiki?.length" class="space-y-2">
+            <li v-for="w in platform.wiki" :key="w.id" class="text-sm text-slate-600 hover:text-emerald-600 truncate">
+              <a :href="w.url" target="_blank">• {{ w.name || 'Wiki sans nom' }}</a>
+            </li>
+          </ul>
+          <div v-else class="text-sm text-slate-400 italic">Aucun wiki associé.</div>
+        </div>
+
+        <!-- Testimonies -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+          <div class="flex items-center justify-between mb-4 pb-2 border-b">
+            <h4 class="font-bold text-slate-700 flex items-center gap-2">
+              <IconMessageCircle size="18" class="text-slate-500" />
+              Témoignages
+            </h4>
+            <span class="text-xs font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+              {{ platform?.testimonies?.length || 0 }}
+            </span>
+          </div>
+          <ul v-if="platform?.testimonies?.length" class="space-y-2">
+            <li v-for="testi in platform.testimonies" :key="testi.id"
+              class="text-sm text-slate-600 hover:text-emerald-600 truncate">
+              <NuxtLink :to="`/me/solutions/testi/${testi.id}`">• {{ testi.author || 'Auteur inconnu' }}</NuxtLink>
+            </li>
+          </ul>
+          <div v-else class="text-sm text-slate-400 italic">Aucun témoignage associé.</div>
+        </div>
+
+      </div>
+    </div>
+
 
     <!-- Generic Modal for Edit -->
     <ManagePlatformModal :is-open="isModalOpen" :platform="platform" @close="closeModal" @saved="handleSaved" />
@@ -115,7 +246,7 @@
 </template>
 
 <script setup>
-import { IconArrowLeft, IconTrash, IconPlus, IconPencil, IconCheck, IconLock } from '@tabler/icons-vue'
+import { IconArrowLeft, IconTrash, IconPlus, IconPencil, IconCheck, IconLock, IconDatabase, IconFileText, IconVideo, IconHelp, IconUsers, IconBook, IconMessageCircle } from '@tabler/icons-vue'
 import { usePlatformStore } from '~/stores/platform'
 
 definePageMeta({
