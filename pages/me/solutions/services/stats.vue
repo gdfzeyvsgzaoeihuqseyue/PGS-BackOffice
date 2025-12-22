@@ -237,6 +237,14 @@
       </div>
 
     </div>
+
+    <div v-else
+      class="flex flex-col items-center justify-center py-20 bg-white rounded-xl shadow-sm border border-slate-200 mt-8">
+      <IconActivity size="48" class="text-slate-300 mb-4" />
+      <h3 class="text-lg font-bold text-slate-700">Aucune statistique disponible</h3>
+      <p class="text-slate-500 mt-2">Impossible de charger les données.</p>
+      <button @click="refresh" class="mt-4 text-emerald-600 font-bold hover:underline">Réessayer</button>
+    </div>
   </div>
 </template>
 

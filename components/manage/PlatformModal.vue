@@ -184,12 +184,25 @@ watch(() => props.isOpen, (newVal) => {
   }
 })
 
+watch(() => form.allowAuth, (newVal) => {
+  if (!newVal) {
+    form.authType = 'all'
+  } else {
+    if (!form.authType) form.authType = 'all'
+  }
+})
+
 const addFeature = () => featuresList.value.push('')
 const removeFeature = (index) => featuresList.value.splice(index, 1)
 
 const save = async () => {
   try {
     form.features = featuresList.value.filter(f => f && f.trim() !== '')
+    if (!form.allowAuth) {
+      form.authType = 'all'
+    } else {
+      if (!form.authType) form.authType = 'all'
+    }
 
     if (!props.platform) {
       await platformStore.addPlatform(form)

@@ -1,7 +1,7 @@
 <template>
-  <NuxtLink :to="to"
-    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary-400 hover:bg-secondary-800 hover:text-white transition-all group relative"
-    active-class="bg-primary-600/10 text-primary-400 shadow-sm border border-primary-500/10">
+  <NuxtLink :to="to" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group relative" :class="[
+    isActive ? 'bg-primary-600/10 text-primary-400 shadow-sm border border-primary-500/10' : 'text-secondary-400 hover:bg-secondary-800 hover:text-white'
+  ]">
     <component :is="iconComponent" class="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform" />
 
     <span v-if="!collapsed" class="font-medium truncate transition-all duration-300">{{ label }}</span>
@@ -41,6 +41,16 @@ const icons = {
   IconHelp, IconBookmarkQuestion,
   IconServer
 }
+
+
+const route = useRoute()
+
+// Manual active check to ensure it stays active for children
+const isActive = computed(() => {
+  if (!props.to) return false
+  if (props.to === '/' && route.path !== '/') return false
+  return route.path.startsWith(props.to)
+})
 
 const iconComponent = computed(() => icons[props.icon] || IconDashboard)
 </script>
