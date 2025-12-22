@@ -40,9 +40,10 @@ export const useBlogStore = defineStore('blog', {
         })
         if (error.value) throw error.value
 
-        if (data.value && data.value.data) {
-          this.currentArticle = data.value.data
-          return data.value.data
+        if (data.value) {
+          const result = data.value.data || data.value
+          this.currentArticle = result
+          return result
         }
       } catch (e: any) {
         this.error = e.message || 'Erreur lors du chargement de l\'article'
@@ -96,9 +97,10 @@ export const useBlogStore = defineStore('blog', {
         const { data, error } = await useAPI<any>(`/public/blog/author/${identifier}`)
         if (error.value) throw error.value
 
-        if (data.value && data.value.data) {
-          this.currentAuthor = data.value.data
-          return data.value.data
+        if (data.value) {
+          const result = data.value.data || data.value
+          this.currentAuthor = result
+          return result
         }
       } catch (e: any) {
         this.error = e.message || 'Erreur lors du chargement de l\'auteur'
@@ -149,9 +151,10 @@ export const useBlogStore = defineStore('blog', {
         const { data, error } = await useAPI<any>(`/public/blog/get-category/${identifier}`)
         if (error.value) throw error.value
 
-        if (data.value && data.value.data) {
-          this.currentCategory = data.value.data
-          return data.value.data
+        if (data.value) {
+          const result = data.value.data || data.value
+          this.currentCategory = result
+          return result
         }
       } catch (e: any) {
         this.error = e.message || 'Erreur lors du chargement de la catégorie'

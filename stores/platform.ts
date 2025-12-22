@@ -33,9 +33,10 @@ export const usePlatformStore = defineStore('platform', {
         const { data, error } = await useAPI<any>(`/public/solution/platform/${identifier}`)
         if (error.value) throw error.value
 
-        if (data.value && data.value.data) {
-          this.currentPlatform = data.value.data
-          return data.value.data
+        if (data.value) {
+          const result = data.value.data || data.value
+          this.currentPlatform = result
+          return result
         }
       } catch (e: any) {
         this.error = e.message || 'Erreur lors du chargement de la plateforme'

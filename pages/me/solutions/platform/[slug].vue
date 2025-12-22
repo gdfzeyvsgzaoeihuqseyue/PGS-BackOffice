@@ -125,23 +125,23 @@ definePageMeta({
 const route = useRoute()
 const router = useRouter()
 const platformStore = usePlatformStore()
-const { loading, error } = storeToRefs(platformStore)
+// Use storeToRefs for reactivity on the platform object
+const { currentPlatform: platform, loading, error } = storeToRefs(platformStore)
 
 const slug = route.params.slug
 const isNew = slug === 'new'
-const platform = ref(null)
 const isModalOpen = ref(false)
 
 onMounted(async () => {
   if (!isNew) {
-    try {
-      const data = await platformStore.fetchPlatform(slug)
-      platform.value = data
-    } catch (e) {
-      // Error handled by store
-    }
+    await platformStore.fetchPlatform(slug)
   } else {
-    isModalOpen.value = true // Auto open if new
+    // If new, ensure currentPlatform is null in store or just don't fetch
+    // ideally the store action clears it, but strictly we can rely on it being null if we didn't fetch
+    // However, if we visited another platform before, currentPlatform might be set!
+    // We should probably reset it.
+    platformStore.$patch({ currentPlatform: null })
+    isModalOpen.value = true
   }
 })
 
@@ -164,21 +164,15 @@ const openModal = () => {
 }
 
 const closeModal = () => {
-  if (isNew && !platform.value) router.back() // If cancelled creation, go back
+  if (isNew && !platform.value) router.back()
   else isModalOpen.value = false
 }
 
 const handleSaved = async () => {
   if (isNew) {
-    // If it was new, we might need to know the new slug to redirect, 
-    // OR the modal could handle redirect if it knew about router. 
-    // But simpler: just go to list or try to deduce.
-    // For now, let's assume the user goes back to list or we reload.
     router.push('/me/solutions/platform')
   } else {
-    // Refresh
-    const updated = await platformStore.fetchPlatform(platform.value.slug || slug)
-    platform.value = updated
+    await platformStore.fetchPlatform(platform.value?.slug || slug)
     closeModal()
   }
 }
