@@ -94,6 +94,7 @@
               <th class="px-4 py-3">Rôle</th>
               <th class="px-4 py-3">Progression</th>
               <th class="px-4 py-3">Statut</th>
+              <th class="px-4 py-3">Dernière Connexion</th>
               <th class="px-4 py-3">Inscrit le</th>
             </tr>
           </thead>
@@ -118,10 +119,16 @@
                 </div>
               </td>
               <td class="px-4 py-3">
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
-                  :class="service.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'">
+                <button @click="handleServiceAccessToggle(service.serviceId, !service.isActive)"
+                  class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold transition-colors"
+                  :class="service.isActive ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200' : 'bg-red-100 text-red-800 hover:bg-red-200'"
+                  :title="service.isActive ? 'Désactiver l\'accès' : 'Activer l\'accès'">
+                  <component :is="service.isActive ? IconCheck : IconBan" size="12" />
                   {{ service.isActive ? 'Actif' : 'Suspendu' }}
-                </span>
+                </button>
+              </td>
+              <td class="px-4 py-3 text-sm text-secondary-500">
+                {{ service.lastAccess ? new Date(service.lastAccess).toLocaleString() : '-' }}
               </td>
               <td class="px-4 py-3 text-sm text-secondary-500">
                 {{ service.enrollmentDate ? new Date(service.enrollmentDate).toLocaleDateString() : '-' }}
@@ -143,6 +150,7 @@
 <script setup>
 import { IconArrowLeft, IconBan, IconCheck, IconTrash, IconServer, IconExternalLink } from '@tabler/icons-vue'
 import { useLearnerStore } from '~/stores/learner'
+import { useServiceStore } from '~/stores/service'
 import { useToast } from '~/composables/useToast'
 
 definePageMeta({
@@ -156,6 +164,7 @@ useHead({
 const route = useRoute()
 const router = useRouter()
 const learnerStore = useLearnerStore()
+const serviceStore = useServiceStore()
 const { currentLearner: user, currentServices, loading, error } = storeToRefs(learnerStore)
 const { add: notify } = useToast()
 
@@ -185,6 +194,19 @@ const handleDelete = async () => {
     router.push('/me/manage/learners')
   } catch (e) {
     notify('Erreur lors de la suppression', 'error')
+  }
+}
+
+const handleServiceAccessToggle = async (serviceId, isActive) => {
+  if (!user.value) return
+  if (!confirm(`Voulez-vous vraiment ${isActive ? 'activer' : 'désactiver'} l'accès à ce service pour cet apprenant ?`)) return
+
+  try {
+    await serviceStore.toggleAccess(user.value.id, serviceId, 'learner', isActive)
+    notify(`Accès ${isActive ? 'activé' : 'désactivé'} avec succès`, 'success')
+    await learnerStore.fetchLearner(user.value.id)
+  } catch (e) {
+    notify(e.message, 'error')
   }
 }
 </script>

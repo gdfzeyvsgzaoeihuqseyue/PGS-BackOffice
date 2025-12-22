@@ -113,6 +113,7 @@
               <th class="px-4 py-3">Service</th>
               <th class="px-4 py-3">Rôle</th>
               <th class="px-4 py-3">Statut</th>
+              <th class="px-4 py-3">Dernière Connexion</th>
               <th class="px-4 py-3">Accès depuis</th>
             </tr>
           </thead>
@@ -135,6 +136,9 @@
                   <component :is="service.isActive ? IconCheck : IconBan" size="12" />
                   {{ service.isActive ? 'Actif' : 'Suspendu' }}
                 </button>
+              </td>
+              <td class="px-4 py-3 text-sm text-secondary-500">
+                {{ service.lastAccess ? new Date(service.lastAccess).toLocaleString() : '-' }}
               </td>
               <td class="px-4 py-3 text-sm text-secondary-500">
                 {{ service.joinedAt ? new Date(service.joinedAt).toLocaleDateString() : '-' }}

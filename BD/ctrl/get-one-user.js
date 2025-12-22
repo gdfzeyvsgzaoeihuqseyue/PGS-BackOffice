@@ -39,6 +39,7 @@ module.exports = {
       domain: access.service.domain,
       role: access.role,
       isActive: access.isActive,
+      lastAccess: access.lastAccess,
       joinedAt: access.createdAt
     }));
 

@@ -170,6 +170,7 @@
               <th class="px-4 py-3">Email</th>
               <th class="px-4 py-3">Rôle</th>
               <th class="px-4 py-3">Statut</th>
+              <th class="px-4 py-3">Dernier accès</th>
               <th class="px-4 py-3">Date d'accès</th>
             </tr>
           </thead>
@@ -192,6 +193,9 @@
                   <component :is="access.isActive ? IconCheck : IconBan" size="12" />
                   {{ access.isActive ? 'Actif' : 'Suspendu' }}
                 </button>
+              </td>
+              <td class="px-4 py-3 text-sm text-slate-500">
+                {{ access.lastAccess ? new Date(access.lastAccess).toLocaleString() : '-' }}
               </td>
               <td class="px-4 py-3 text-sm text-slate-500">
                 {{ access.enrollmentDate ? new Date(access.enrollmentDate).toLocaleDateString() : '-' }}
@@ -256,6 +260,9 @@
                   <component :is="access.isActive ? IconCheck : IconBan" size="12" />
                   {{ access.isActive ? 'Actif' : 'Suspendu' }}
                 </button>
+              </td>
+              <td class="px-4 py-3 text-sm text-slate-500">
+                {{ access.lastAccess ? new Date(access.lastAccess).toLocaleString() : '-' }}
               </td>
               <td class="px-4 py-3 text-sm text-slate-500">
                 {{ access.enrollmentDate ? new Date(access.enrollmentDate).toLocaleDateString() : '-' }}
