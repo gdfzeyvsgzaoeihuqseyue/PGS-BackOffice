@@ -1,0 +1,28 @@
+{
+  "success": true,
+  "message": "Solution mise à jour avec succès.",
+  "data": {
+    "createdAt": 1763162957901,
+    "updatedAt": 1766418981528,
+    "id": "6917bb4e60463c11e8ba1ec6",
+    "slug": "axiom",
+    "name": "AXIOM",
+    "logo": "https://cdn.jsdelivr.net/gh/progestionsoft/Files/_General/Images/Logos/AXIOM-MC.png",
+    "logoDesk": "https://cdn.jsdelivr.net/gh/progestionsoft/Files/_General/Images/Logos/AXIOM-DC.png",
+    "category": "Developer Tools",
+    "description": "Bibliothèque d'utilitaires JS/TS moderne et fiable pour les tâches de programmation courantes.",
+    "content": "Axiom est une collection complète d'utilitaires JavaScript/TypeScript soigneusement conçue pour les développeurs modernes. Cette bibliothèque offre 20 fonctions réparties en 5 catégories : manipulation de chaînes, nombres, dates, objets et tableaux. Développée avec TypeScript, Axiom fournit des définitions de types complètes, supporte les builds ESM et CommonJS, et ne possède aucune dépendance externe. Parfaite pour accélérer le développement d'applications web, mobiles ou backend avec des fonctions fiables et bien testées.",
+    "disabled": false,
+    "allowAuth": false,
+    "authType": "all",
+    "ctaText": "Visiter le Playground",
+    "ctaLink": "https://pgs-axiom.netlify.app",
+    "features": [
+      "20+ fonctions utilitaires pour JS/TS",
+      "Prise en charge complète de TypeScript",
+      "Tree-shaking optimisé (ESM/CJS)",
+      "Aucune dépendance externe",
+      "Inclut: slugify, formatDate, deepClone, unique, etc."
+    ]
+  }
+}

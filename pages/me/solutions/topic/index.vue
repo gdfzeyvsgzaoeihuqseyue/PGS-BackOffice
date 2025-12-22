@@ -35,6 +35,7 @@
                 <th class="px-6 py-4">Nom</th>
                 <th class="px-6 py-4">Slug</th>
                 <th class="px-6 py-4">Plateforme</th>
+                <th class="px-6 py-4 text-center">Questions</th>
                 <th class="px-6 py-4">Statut</th>
                 <th class="px-6 py-4 text-right">Actions</th>
               </tr>
@@ -56,6 +57,12 @@
                     {{ topic.platform.name || 'ID: ' + topic.platform }}
                   </span>
                   <span v-else class="text-slate-400 italic">Aucune</span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                  <span
+                    class="inline-flex items-center justify-center bg-slate-100 text-slate-600 rounded-full h-6 min-w-[24px] px-2 text-xs font-bold">
+                    {{ getFaqCount(topic.id) }}
+                  </span>
                 </td>
                 <td class="px-6 py-4 text-sm">
                   <span :class="[
@@ -98,13 +105,27 @@ useHead({
 })
 
 const topicStore = useFaqTopicStore()
-const { topics, loading, error } = storeToRefs(topicStore)
+import { useFaqStore } from '~/stores/faq'
+const faqStore = useFaqStore()
 
-const refresh = () => {
-  topicStore.fetchTopics()
+const { topics, loading, error } = storeToRefs(topicStore)
+const { faqs } = storeToRefs(faqStore)
+
+const refresh = async () => {
+  await Promise.all([
+    topicStore.fetchTopics(),
+    faqStore.fetchFaqs() // fetch FAQs to calculate counts
+  ])
 }
 
 refresh()
+
+const getFaqCount = (topicId) => {
+  return faqs.value.filter(f => {
+    const tId = typeof f.topic === 'object' ? f.topic?.id : f.topic
+    return tId === topicId
+  }).length
+}
 
 const remove = async (id) => {
   if (confirm('Supprimer ce sujet ?')) {

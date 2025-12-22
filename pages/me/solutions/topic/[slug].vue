@@ -57,14 +57,47 @@
       </div>
     </div>
 
+    <!-- FAQs List -->
+    <div class="mt-8 fade-in-up delay-100 max-w-2xl mx-auto">
+      <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center gap-2">
+        <IconHelp size="20" class="text-slate-500" />
+        Questions associées ({{ topicFaqs.length }})
+      </h3>
+
+      <div v-if="topicFaqs.length" class="space-y-3">
+        <div v-for="faq in topicFaqs" :key="faq.id"
+          class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+          <div class="flex justify-between items-start gap-3">
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm mb-1">{{ faq.question }}</h4>
+              <p class="text-xs text-slate-500 line-clamp-2">{{ faq.answer }}</p>
+            </div>
+            <NuxtLink :to="`/me/solutions/faq/${faq.id}`"
+              class="shrink-0 p-1.5 hover:bg-slate-100 rounded text-slate-400 hover:text-emerald-600 transition-colors">
+              <IconPencil size="16" />
+            </NuxtLink>
+          </div>
+        </div>
+      </div>
+      <div v-else class="text-center py-8 bg-slate-50 rounded-xl border border-dashed border-slate-300">
+        <p class="text-slate-500 text-sm italic">Aucune question dans ce sujet.</p>
+        <NuxtLink to="/me/solutions/faq/new"
+          class="mt-2 inline-flex items-center gap-1 text-emerald-600 text-sm font-bold hover:underline">
+          <IconPlus size="16" />
+          Ajouter une FAQ
+        </NuxtLink>
+      </div>
+    </div>
+
     <!-- Modal Edit -->
     <ManageTopicModal :is-open="isModalOpen" :topic="topic" @close="closeModal" @saved="handleSaved" />
   </div>
 </template>
 
 <script setup>
-import { IconArrowLeft, IconPencil, IconBookmarkQuestion } from '@tabler/icons-vue'
+import { IconArrowLeft, IconPencil, IconBookmarkQuestion, IconHelp, IconPlus } from '@tabler/icons-vue'
 import { useFaqTopicStore } from '~/stores/faq-topic'
+import { useFaqStore } from '~/stores/faq'
 
 definePageMeta({
   layout: 'admin'
@@ -73,8 +106,10 @@ definePageMeta({
 const route = useRoute()
 const router = useRouter()
 const topicStore = useFaqTopicStore()
+const faqStore = useFaqStore()
 
 const { currentTopic: topic, loading, error } = storeToRefs(topicStore)
+const { faqs } = storeToRefs(faqStore)
 
 // The file is named [slug].vue, so the param is 'slug'.
 // However, typically we use ID to fetch one.
@@ -115,4 +150,20 @@ const handleSaved = async () => {
     closeModal()
   }
 }
+
+// Compute FAQs for this topic
+// We assume the relation is filtered by topic.id or topic object match
+const topicFaqs = computed(() => {
+  if (!topic.value) return []
+  return faqs.value.filter(f => {
+    // Check if topic is object or ID
+    const tId = typeof f.topic === 'object' ? f.topic?.id : f.topic
+    return tId === topic.value.id
+  })
+})
+
+onMounted(async () => {
+  // Fetch FAQs to populate the list
+  faqStore.fetchFaqs()
+})
 </script>

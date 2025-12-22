@@ -170,7 +170,7 @@
           <ul v-if="platform?.faqTopics?.length" class="space-y-2">
             <li v-for="topic in platform.faqTopics" :key="topic.id"
               class="text-sm text-slate-600 hover:text-emerald-600 truncate">
-              <NuxtLink :to="`/me/solutions/topic/${topic.slug}`">• {{ topic.name || 'Sujet sans titre' }}</NuxtLink>
+              <NuxtLink :to="`/me/solutions/topic/${topic.id}`">• {{ topic.name || 'Sujet sans titre' }}</NuxtLink>
             </li>
           </ul>
           <div v-else class="text-sm text-slate-400 italic">Aucun sujet FAQ associé.</div>
@@ -210,7 +210,7 @@
           </div>
           <ul v-if="platform?.wiki?.length" class="space-y-2">
             <li v-for="w in platform.wiki" :key="w.id" class="text-sm text-slate-600 hover:text-emerald-600 truncate">
-              <a :href="w.url" target="_blank">• {{ w.name || 'Wiki sans nom' }}</a>
+              <NuxtLink :to="`/me/solutions/wiki/${w.id}`">• {{ w.name || 'Wiki sans nom' }}</NuxtLink>
             </li>
           </ul>
           <div v-else class="text-sm text-slate-400 italic">Aucun wiki associé.</div>
