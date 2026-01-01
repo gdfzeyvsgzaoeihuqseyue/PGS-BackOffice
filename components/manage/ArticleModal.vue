@@ -129,25 +129,22 @@ watch(() => props.isOpen, (newVal) => {
 const addTag = () => tagsList.value.push('')
 const removeTag = (index) => tagsList.value.splice(index, 1)
 
-const slugify = (text) => text.toString().toLowerCase()
-  .replace(/\s+/g, '-')
-  .replace(/[^\w\-]+/g, '')
-  .replace(/\-\-+/g, '-')
-  .replace(/^-+/, '')
-  .replace(/-+$/, '');
-
 const save = async () => {
   try {
     form.tags = tagsList.value.filter(t => t && t.trim() !== '')
     const payload = { ...form }
 
-    if (!props.article) {
-      payload.slug = slugify(form.title)
-    }
+    // Backend expects authorId/categoryId, not author/category
+    payload.authorId = payload.author
+    payload.categoryId = payload.category
+    delete payload.author
+    delete payload.category
 
     if (props.article) {
-      await blogStore.updateArticle(props.article.id, payload)
+     await blogStore.updateArticle(props.article.id, payload)
     } else {
+      delete payload.slug
+      
       await blogStore.addArticle(payload)
     }
     notify(props.article ? 'Article mis à jour' : 'Article créé')

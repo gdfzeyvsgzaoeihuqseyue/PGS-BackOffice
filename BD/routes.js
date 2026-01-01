@@ -2,49 +2,71 @@ module.exports = {
 
   /**
    * * ===============================================
-   * ADMIN
+   * SERVICES
    * * ===============================================
    */
-  'POST /api/v1/admin/solution/platform': {
-    action: 'solution/admin/platform/add-platform',
+  'POST /api/v1/admin/solution/create-service': {
+    policy: ['is-admin'],
+    action: 'solution/admin/service/create-service',
     swagger: {
-      tags: ['SOLUTION (PLATFORM) - ADMIN'],
+      tags: ['SOLUTION (SERVICE) - ADMIN'],
       'x-groups': ['full_access']
     }
   },
-  'PUT /api/v1/admin/solution/platform/:id': {
-    action: 'solution/admin/platform/update-platform',
+  'GET /api/v1/admin/solution/list-service': {
+    policy: ['is-admin'],
+    action: 'solution/admin/service/get-all-service',
     swagger: {
-      tags: ['SOLUTION (PLATFORM) - ADMIN'],
+      tags: ['SOLUTION (SERVICE) - ADMIN'],
       'x-groups': ['full_access']
     }
   },
-  'DELETE /api/v1/admin/solution/platform/:id': {
-    action: 'solution/admin/platform/delete-platform',
+  'GET /api/v1/admin/solution/get-service/:serviceId': {
+    policy: ['is-admin'],
+    action: 'solution/admin/service/get-one-service',
     swagger: {
-      tags: ['SOLUTION (PLATFORM) - ADMIN'],
+      tags: ['SOLUTION (SERVICE) - ADMIN'],
       'x-groups': ['full_access']
     }
   },
-
-
-  /**
-   * * ===============================================
-   * PUBLIC
-   * * ===============================================
-   */
-  'GET /api/v1/public/solution/platform': {
-    action: 'solution/public/platform/get-all-platform',
+  'PUT /api/v1/admin/solution/update-service/:serviceId': {
+    policy: ['is-admin'],
+    action: 'solution/admin/service/update-service',
     swagger: {
-      tags: ['SOLUTION (PLATFORM) - PUBLIC'],
-      'x-groups': ['restricted_endpoints']
+      tags: ['SOLUTION (SERVICE) - ADMIN'],
+      'x-groups': ['full_access']
     }
   },
-  'GET /api/v1/public/solution/platform/:identifier': {
-    action: 'solution/public/platform/get-one-platform',
+  'DELETE /api/v1/admin/solution/delete-service/:serviceId': {
+    policy: ['is-admin'],
+    action: 'solution/admin/service/delete-service',
     swagger: {
-      tags: ['SOLUTION (PLATFORM) - PUBLIC'],
-      'x-groups': ['restricted_endpoints']
+      tags: ['SOLUTION (SERVICE) - ADMIN'],
+      'x-groups': ['full_access']
+    }
+  },
+  'PATCH /api/v1/admin/solution/toggle-service-status/:serviceId': {
+    policy: ['is-admin'],
+    action: 'solution/admin/service/toggle-service-status',
+    swagger: {
+      tags: ['SOLUTION (SERVICE) - ADMIN'],
+      'x-groups': ['full_access']
+    }
+  },
+  'GET /api/v1/admin/solution/get-service-stats': {
+    policy: ['is-admin'],
+    action: 'solution/admin/service/get-services-stats',
+    swagger: {
+      tags: ['SOLUTION (SERVICE) - ADMIN'],
+      'x-groups': ['full_access']
+    }
+  },
+  'PATCH /api/v1/admin/solution/toggle-service-access/:serviceId': {
+    policy: ['is-admin'],
+    action: 'solution/admin/service/toggle-access',
+    swagger: {
+      tags: ['SOLUTION (SERVICE) - ADMIN'],
+      'x-groups': ['full_access']
     }
   },
 };

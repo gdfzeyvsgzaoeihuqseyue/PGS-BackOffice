@@ -140,7 +140,7 @@ export const useServiceStore = defineStore('service', () => {
 
   const toggleAccess = async (targetId: string, serviceId: string, targetType: 'user' | 'learner', isActive: boolean) => {
     try {
-      const { data, error } = await useAPI<{ access: any }>('/admin/solution/toggle-service-access/', {
+      const { data, error } = await useAPI<{ access: any }>(`/admin/solution/toggle-service-access/${serviceId}`, {
         method: 'PATCH',
         body: { targetId, serviceId, targetType, isActive }
       })

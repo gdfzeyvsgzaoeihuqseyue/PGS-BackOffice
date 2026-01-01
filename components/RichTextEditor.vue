@@ -1,11 +1,13 @@
 <template>
   <div
-    class="rich-text-editor border rounded-lg overflow-hidden bg-white focus-within:ring-2 focus-within:ring-emerald-500 transition-shadow">
+    class="rich-text-editor border rounded-lg bg-white focus-within:ring-2 focus-within:ring-emerald-500 transition-shadow">
 
-    <RichTextEditorToolbar :editor="editor" />
+    <div class="sticky top-0 z-10 bg-white border-b border-slate-100 rounded-t-lg">
+      <RichTextEditorToolbar :editor="editor" />
+    </div>
 
     <!-- Zone de contenu de l'éditeur -->
-    <editor-content :editor="editor" class="p-4 prose prose-primary max-w-none min-h-[150px] outline-none" />
+    <editor-content :editor="editor" class="p-4 prose prose-primary max-w-none min-h-[150px] outline-none rounded-b-lg" />
   </div>
 </template>
 

@@ -2,7 +2,7 @@
     "editor.tabSize": 2,
     "editor.insertSpaces": true,
     "editor.detectIndentation": true,
-    "editor.hover.enabled": false,
+    "editor.hover.enabled": "off",
     "terminal.integrated.env.windows": {},
     "liveServer.settings.port": 5550,
     "compile-hero.disable-compile-files-on-did-save-code": false,
