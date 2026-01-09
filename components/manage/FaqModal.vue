@@ -66,7 +66,7 @@ const topicStore = useFaqTopicStore()
 const { loading } = storeToRefs(faqStore)
 const { topics } = storeToRefs(topicStore)
 
-const isEditing = computed(() => !!props.faq)
+const isEditing = computed(() => !!props.faq?.id)
 
 const form = reactive({
   question: '',
@@ -88,9 +88,9 @@ watch(() => props.isOpen, (newVal) => {
       topicStore.fetchTopics()
     }
     if (props.faq) {
-      form.question = props.faq.question
-      form.answer = props.faq.answer
-      form.topic = typeof props.faq.topic === 'object' ? props.faq.topic.id : props.faq.topic
+      form.question = props.faq.question || ''
+      form.answer = props.faq.answer || ''
+      form.topic = typeof props.faq.topic === 'object' ? props.faq.topic?.id : props.faq.topic || null
       form.status = props.faq.status || 'active'
     } else {
       resetForm()
@@ -112,10 +112,17 @@ const closeModal = () => {
 
 const save = async () => {
   try {
+    const payload = {
+      question: form.question,
+      answer: form.answer,
+      topicId: form.topic, // Backend expects topicId
+      status: form.status
+    }
+
     if (isEditing.value) {
-      await faqStore.updateFaq(props.faq.id, form)
+      await faqStore.updateFaq(props.faq.id, payload)
     } else {
-      await faqStore.addFaq(form)
+      await faqStore.addFaq(payload)
     }
     notify(isEditing.value ? 'FAQ mise à jour' : 'FAQ créée')
     closeModal()

@@ -121,10 +121,18 @@ const closeModal = () => {
 
 const save = async () => {
   try {
+    const payload = {
+      name: form.name,
+      description: form.description,
+      platformId: form.platform,
+      status: form.status
+    }
+
     if (isEditing.value) {
-      await topicStore.updateTopic(props.topic.id, form)
+      if (form.slug) payload.slug = form.slug
+      await topicStore.updateTopic(props.topic.id, payload)
     } else {
-      await topicStore.addTopic(form)
+      await topicStore.addTopic(payload)
     }
     notify(isEditing.value ? 'Sujet mis à jour' : 'Sujet créé')
     closeModal()

@@ -81,7 +81,7 @@
       </div>
       <div v-else class="text-center py-8 bg-slate-50 rounded-xl border border-dashed border-slate-300">
         <p class="text-slate-500 text-sm italic">Aucune question dans ce sujet.</p>
-        <NuxtLink to="/me/solutions/faq/new"
+        <NuxtLink :to="`/me/solutions/faq/new?topicId=${topic?.id}`"
           class="mt-2 inline-flex items-center gap-1 text-emerald-600 text-sm font-bold hover:underline">
           <IconPlus size="16" />
           Ajouter une FAQ
@@ -111,10 +111,7 @@ const faqStore = useFaqStore()
 const { currentTopic: topic, loading, error } = storeToRefs(topicStore)
 const { faqs } = storeToRefs(faqStore)
 
-// The file is named [slug].vue, so the param is 'slug'.
-// However, typically we use ID to fetch one.
-// If the user navigates here with an ID or Slug, we try to fetch it.
-const identifier = route.params.slug
+const identifier = route.params.id
 const isNew = identifier === 'new'
 // const topic = ref(null) // REMOVED
 const isModalOpen = ref(false)

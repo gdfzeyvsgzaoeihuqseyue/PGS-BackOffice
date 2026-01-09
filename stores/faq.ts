@@ -7,16 +7,31 @@ export const useFaqStore = defineStore('faq', () => {
   const loading = ref(false)
   const error = ref<string | null>(null)
 
-  const fetchFaqs = async () => {
+  const pagination = ref({
+    page: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 0
+  })
+
+  const fetchFaqs = async (page = 1, limit = 10) => {
     loading.value = true
     error.value = null
     try {
-      const { data } = await useAPI<any>('/public/solution/faq')
+      const { data } = await useAPI<any>(`/public/solution/faq?page=${page}&limit=${limit}`)
       if (data.value) {
-        if (Array.isArray(data.value)) {
-          faqs.value = data.value
-        } else if (data.value.data) {
+        // Handle paginated response
+        if (data.value.data && Array.isArray(data.value.data)) {
           faqs.value = data.value.data
+          pagination.value = {
+            page: data.value.currentPage || page,
+            limit: limit,
+            total: data.value.nb || 0,
+            totalPages: data.value.totalPages || 0
+          }
+        } else if (Array.isArray(data.value)) {
+          faqs.value = data.value
+          pagination.value.total = data.value.length
         } else {
           faqs.value = []
         }
@@ -103,6 +118,7 @@ export const useFaqStore = defineStore('faq', () => {
   return {
     faqs,
     currentFaq,
+    pagination,
     loading,
     error,
     fetchFaqs,

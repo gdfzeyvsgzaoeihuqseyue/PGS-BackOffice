@@ -14,11 +14,12 @@
           </div>
           <div>
             <h2 class="text-2xl font-bold text-slate-800">
-              FAQ #{{ faq?.id.substring(0, 8) }}...
+              <span v-if="faq?.id">FAQ #{{ faq.id.substring(0, 8) }}...</span>
+              <span v-else>Nouvelle FAQ</span>
             </h2>
-            <div class="flex items-center gap-2 mt-1">
+            <div class="flex items-center gap-2 mt-1" v-if="faq?.topic">
               <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-xs font-bold">
-                {{ faq?.topic?.name || 'Sujet inconnu' }}
+                {{ typeof faq.topic === 'object' ? faq.topic.name : (faq.topic || 'Sujet inconnu') }}
               </span>
             </div>
           </div>
@@ -99,14 +100,16 @@ const { currentFaq: faq, loading, error } = storeToRefs(faqStore)
 
 const id = route.params.id
 const isNew = id === 'new'
-// const faq = ref(null) // REMOVED
 const isModalOpen = ref(false)
 
 onMounted(async () => {
   if (!isNew) {
     await faqStore.fetchFaq(id)
   } else {
-    faqStore.$patch({ currentFaq: null })
+    const topicId = route.query.topicId
+    faqStore.$patch({
+      currentFaq: topicId ? { topic: topicId } : null
+    })
     isModalOpen.value = true
   }
 })
