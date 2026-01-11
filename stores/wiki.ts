@@ -6,17 +6,30 @@ export const useWikiStore = defineStore('wiki', () => {
   const currentWiki = ref<SolutionWiki | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const pagination = ref({
+    page: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 0
+  })
 
-  const fetchWikis = async () => {
+  const fetchWikis = async (page = 1, limit = 10) => {
     loading.value = true
     error.value = null
     try {
-      const { data } = await useAPI<any>('/public/solution/wiki')
+      const { data } = await useAPI<any>(`/public/solution/wiki?page=${page}&limit=${limit}`)
       if (data.value) {
-        if (Array.isArray(data.value)) {
-          wikis.value = data.value
-        } else if (data.value.data) {
+        if (data.value.data && Array.isArray(data.value.data)) {
           wikis.value = data.value.data
+          pagination.value = {
+            page: data.value.currentPage || page,
+            limit: limit,
+            total: data.value.nb || 0,
+            totalPages: data.value.totalPages || 0
+          }
+        } else if (Array.isArray(data.value)) {
+          wikis.value = data.value
+          pagination.value.total = data.value.length
         } else {
           wikis.value = []
         }
@@ -32,7 +45,7 @@ export const useWikiStore = defineStore('wiki', () => {
     loading.value = true
     error.value = null
     try {
-      // Backend route says /:identifier, could be slug or ID. Admin uses ID. 
+      // Backend route says /:identifier, could be slug or ID. Admin uses ID.
       // We'll use ID here for consistency if we have it, or slug.
       // Usually fetchWiki(id) implies ID.
       const { data, error: apiError } = await useAPI<any>(`/public/solution/wiki/${id}`)
@@ -55,7 +68,7 @@ export const useWikiStore = defineStore('wiki', () => {
     loading.value = true
     try {
       await useAPI('/admin/solution/wiki', { method: 'POST', body: wiki })
-      await fetchWikis()
+      await fetchWikis(pagination.value.page)
     } catch (err: any) {
       throw new Error(err.message || 'Erreur lors de la création')
     } finally {
@@ -67,7 +80,7 @@ export const useWikiStore = defineStore('wiki', () => {
     loading.value = true
     try {
       await useAPI(`/admin/solution/wiki/${id}`, { method: 'PUT', body: updates })
-      await fetchWikis()
+      await fetchWikis(pagination.value.page)
       if (currentWiki.value && currentWiki.value.id === id) {
         Object.assign(currentWiki.value, updates)
       }
@@ -82,7 +95,7 @@ export const useWikiStore = defineStore('wiki', () => {
     loading.value = true
     try {
       await useAPI(`/admin/solution/wiki/${id}`, { method: 'DELETE' })
-      await fetchWikis()
+      await fetchWikis(pagination.value.page)
       if (currentWiki.value && currentWiki.value.id === id) {
         currentWiki.value = null
       }
@@ -96,6 +109,7 @@ export const useWikiStore = defineStore('wiki', () => {
   return {
     wikis,
     currentWiki,
+    pagination,
     loading,
     error,
     fetchWikis,
@@ -105,3 +119,4 @@ export const useWikiStore = defineStore('wiki', () => {
     deleteWiki
   }
 })
+

@@ -19,7 +19,7 @@ export const useServiceStore = defineStore('service', () => {
   })
 
   // Actions
-  const fetchServices = async (page = 1, limit = 1) => {
+  const fetchServices = async (page = 1, limit = 2) => {
     loading.value = true
     error.value = null
     try {

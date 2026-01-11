@@ -6,17 +6,30 @@ export const useFaqTopicStore = defineStore('faq-topic', () => {
   const currentTopic = ref<SolutionFaqTopic | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const pagination = ref({
+    page: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 0
+  })
 
-  const fetchTopics = async () => {
+  const fetchTopics = async (page = 1, limit = 10) => {
     loading.value = true
     error.value = null
     try {
-      const { data } = await useAPI<any>('/public/solution/faq-topic')
+      const { data } = await useAPI<any>(`/public/solution/faq-topic?page=${page}&limit=${limit}`)
       if (data.value) {
-        if (Array.isArray(data.value)) {
-          topics.value = data.value
-        } else if (data.value.data) {
+        if (data.value.data && Array.isArray(data.value.data)) {
           topics.value = data.value.data
+          pagination.value = {
+            page: data.value.currentPage || page,
+            limit: limit,
+            total: data.value.nb || 0,
+            totalPages: data.value.totalPages || 0
+          }
+        } else if (Array.isArray(data.value)) {
+          topics.value = data.value
+          pagination.value.total = data.value.length
         } else {
           topics.value = []
         }
@@ -52,7 +65,7 @@ export const useFaqTopicStore = defineStore('faq-topic', () => {
     loading.value = true
     try {
       await useAPI('/admin/solution/faq-topic', { method: 'POST', body: topic })
-      await fetchTopics()
+      await fetchTopics(pagination.value.page)
     } catch (err: any) {
       throw new Error(err.message || 'Erreur lors de la création')
     } finally {
@@ -64,7 +77,7 @@ export const useFaqTopicStore = defineStore('faq-topic', () => {
     loading.value = true
     try {
       await useAPI(`/admin/solution/faq-topic/${id}`, { method: 'PUT', body: updates })
-      await fetchTopics()
+      await fetchTopics(pagination.value.page)
       if (currentTopic.value && currentTopic.value.id === id) {
         Object.assign(currentTopic.value, updates)
       }
@@ -79,7 +92,7 @@ export const useFaqTopicStore = defineStore('faq-topic', () => {
     loading.value = true
     try {
       await useAPI(`/admin/solution/faq-topic/${id}`, { method: 'DELETE' })
-      await fetchTopics()
+      await fetchTopics(pagination.value.page)
       if (currentTopic.value && currentTopic.value.id === id) {
         currentTopic.value = null
       }
@@ -93,6 +106,7 @@ export const useFaqTopicStore = defineStore('faq-topic', () => {
   return {
     topics,
     currentTopic,
+    pagination,
     loading,
     error,
     fetchTopics,
@@ -102,3 +116,4 @@ export const useFaqTopicStore = defineStore('faq-topic', () => {
     deleteTopic
   }
 })
+

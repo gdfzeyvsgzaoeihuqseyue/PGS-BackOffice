@@ -11,7 +11,7 @@
 
         <div class="flex items-center gap-4">
           <div class="px-4 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm font-medium text-slate-600">
-            Total: <span class="font-bold text-slate-800">{{ topics.length }}</span>
+            Total: <span class="font-bold text-slate-800">{{ pagination.total }}</span>
           </div>
           <button @click="openModal(null)"
             class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 shadow-sm hover:shadow-md">
@@ -84,6 +84,25 @@
             </tbody>
           </table>
         </div>
+
+        <!-- Pagination Controls -->
+        <div class="flex items-center justify-between px-6 py-4 border-t border-slate-200 bg-slate-50"
+          v-if="pagination.totalPages > 1">
+          <div class="text-sm text-slate-500">
+            Page <span class="font-bold text-slate-800">{{ pagination.page }}</span> sur <span
+              class="font-bold text-slate-800">{{ pagination.totalPages }}</span>
+          </div>
+          <div class="flex gap-2">
+            <button @click="changePage(pagination.page - 1)" :disabled="pagination.page <= 1"
+              class="px-3 py-1 rounded-lg border border-slate-200 bg-white text-slate-600 text-sm font-medium hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+              Précédent
+            </button>
+            <button @click="changePage(pagination.page + 1)" :disabled="pagination.page >= pagination.totalPages"
+              class="px-3 py-1 rounded-lg border border-slate-200 bg-white text-slate-600 text-sm font-medium hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+              Suivant
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -108,14 +127,20 @@ const topicStore = useFaqTopicStore()
 import { useFaqStore } from '~/stores/faq'
 const faqStore = useFaqStore()
 
-const { topics, loading, error } = storeToRefs(topicStore)
+const { topics, loading, error, pagination } = storeToRefs(topicStore)
 const { faqs } = storeToRefs(faqStore)
 
 const refresh = async () => {
   await Promise.all([
-    topicStore.fetchTopics(),
+    topicStore.fetchTopics(pagination.value.page),
     faqStore.fetchFaqs() // fetch FAQs to calculate counts
   ])
+}
+
+const changePage = (page) => {
+  if (page > 0 && page <= pagination.value.totalPages) {
+    topicStore.fetchTopics(page)
+  }
 }
 
 refresh()

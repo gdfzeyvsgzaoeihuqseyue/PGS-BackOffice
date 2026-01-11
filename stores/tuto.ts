@@ -6,17 +6,30 @@ export const useTutoStore = defineStore('tuto', () => {
   const currentTuto = ref<SolutionTuto | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const pagination = ref({
+    page: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 0
+  })
 
-  const fetchTutos = async () => {
+  const fetchTutos = async (page = 1, limit = 10) => {
     loading.value = true
     error.value = null
     try {
-      const { data } = await useAPI<any>('/public/solution/tutorial')
+      const { data } = await useAPI<any>(`/public/solution/tutorial?page=${page}&limit=${limit}`)
       if (data.value) {
-        if (Array.isArray(data.value)) {
-          tutos.value = data.value
-        } else if (data.value.data) {
+        if (data.value.data && Array.isArray(data.value.data)) {
           tutos.value = data.value.data
+          pagination.value = {
+            page: data.value.currentPage || page,
+            limit: limit,
+            total: data.value.nb || 0,
+            totalPages: data.value.totalPages || 0
+          }
+        } else if (Array.isArray(data.value)) {
+          tutos.value = data.value
+          pagination.value.total = data.value.length
         } else {
           tutos.value = []
         }
@@ -53,7 +66,7 @@ export const useTutoStore = defineStore('tuto', () => {
     loading.value = true
     try {
       await useAPI('/admin/solution/tutorial', { method: 'POST', body: tuto })
-      await fetchTutos()
+      await fetchTutos(pagination.value.page)
     } catch (err: any) {
       throw new Error(err.message || 'Erreur lors de la création')
     } finally {
@@ -65,7 +78,7 @@ export const useTutoStore = defineStore('tuto', () => {
     loading.value = true
     try {
       await useAPI(`/admin/solution/tutorial/${id}`, { method: 'PUT', body: updates })
-      await fetchTutos()
+      await fetchTutos(pagination.value.page)
       if (currentTuto.value && currentTuto.value.id === id) {
         Object.assign(currentTuto.value, updates)
       }
@@ -80,7 +93,7 @@ export const useTutoStore = defineStore('tuto', () => {
     loading.value = true
     try {
       await useAPI(`/admin/solution/tutorial/${id}`, { method: 'DELETE' })
-      await fetchTutos()
+      await fetchTutos(pagination.value.page)
       if (currentTuto.value && currentTuto.value.id === id) {
         currentTuto.value = null
       }
@@ -94,6 +107,7 @@ export const useTutoStore = defineStore('tuto', () => {
   return {
     tutos,
     currentTuto,
+    pagination,
     loading,
     error,
     fetchTutos,
@@ -103,3 +117,4 @@ export const useTutoStore = defineStore('tuto', () => {
     deleteTuto
   }
 })
+
