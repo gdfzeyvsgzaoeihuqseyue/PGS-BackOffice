@@ -1,0 +1,66 @@
+{
+  "success": true,
+  "message": "Liste des événements récupérée avec succès.",
+  "nb": 3,
+  "nbOnPage": 3,
+  "currentPage": 1,
+  "totalPages": 1,
+  "data": [
+    {
+      "createdAt": 1756176930642,
+      "updatedAt": 1756176930642,
+      "id": "68ad2222315cc27a553f0090",
+      "type": "webinar",
+      "title": "Optimisation des processus avec PRO GESTION SOFT",
+      "description": "Découvrez comment optimiser vos processus métier avec nos solutions logicielles.",
+      "format": "online",
+      "date": "2025-09-02",
+      "time": "15:00",
+      "location": null,
+      "link": "https://example.com/webinaire-optimisation",
+      "ctaText": "S'inscrire au webinaire",
+      "ctaLink": "https://inscription.com/webinar",
+      "agenda": []
+    },
+    {
+      "createdAt": 1756174235604,
+      "updatedAt": 1756174235604,
+      "id": "68ad179b42e01e01e675734e",
+      "type": "event",
+      "title": "Next Summit 2025",
+      "description": "Rejoignez-nous pour notre conférence annuelle sur l'innovation technologique et la transformation digitale.",
+      "format": "hybride",
+      "date": "2025-09-19",
+      "time": "18:00",
+      "location": "Palais des congrès, Cotonou (Bénin)",
+      "link": "https://se.github.io/",
+      "ctaText": "S'inscrire à l'événement",
+      "ctaLink": "https://registry.com",
+      "agenda": [
+        "Conférences sur l'IA et l'automatisation",
+        "Ateliers pratiques sur nos solutions",
+        "Networking et cocktail"
+      ]
+    },
+    {
+      "createdAt": 1756177030610,
+      "updatedAt": 1756177030610,
+      "id": "68ad2286315cc27a553f0091",
+      "type": "event",
+      "title": "Atelier sur l'innovation locale",
+      "description": "Un atelier pratique pour les entrepreneurs de la région.",
+      "format": "présential",
+      "date": "2025-11-15",
+      "time": "09:30",
+      "location": "Siège PRO GESTION SOFT",
+      "link": null,
+      "ctaText": "Réserver ma place",
+      "ctaLink": "https://billetterie.com/atelier",
+      "agenda": [
+        "Session de brainstorming",
+        "Présentation des experts",
+        "Cocktail et networking"
+      ]
+    }
+  ]
+}

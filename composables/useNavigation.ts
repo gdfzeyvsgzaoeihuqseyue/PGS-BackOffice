@@ -2,7 +2,7 @@ import {
   IconUserEdit, IconUserShield, IconUserStar, IconNews, IconUserShare,
   IconDeviceAnalytics, IconFileDescription, IconUserBolt, IconDashboard,
   IconUsers, IconArticle, IconCategory, IconDeviceDesktop, IconBook,
-  IconHeartHandshake, IconQuote, IconVideo, IconWorld, IconBookmarkQuestion, IconHelp, IconServer
+  IconHeartHandshake, IconQuote, IconVideo, IconWorld, IconBookmarkQuestion, IconHelp, IconServer, IconPlus, IconCalendarEvent
 } from '@tabler/icons-vue'
 
 export const useNavigation = () => {
@@ -56,7 +56,16 @@ export const useNavigation = () => {
         { label: 'Témoignages', to: '/me/solutions/testi', icon: 'IconQuote' },
         { label: 'Services', to: '/me/solutions/services', icon: 'IconServer' }
       ]
-    }
+    },
+    {
+      slug: 'plus',
+      label: 'Plus',
+      to: '/me/plus',
+      icon: IconPlus,
+      items: [
+        { label: 'Événements', to: '/me/plus/events', icon: 'IconCalendarEvent' },
+      ]
+    },
   ]
 
   const getGroupBySlug = (slug: string) => {
