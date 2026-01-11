@@ -1,7 +1,7 @@
 <template>
   <div>
     <AppLoader v-if="loading" />
-    <AppError v-else-if="error" :message="error" @retry="blogStore.fetchCategories()" />
+    <AppError v-else-if="error" :message="error" @retry="refresh" />
     <div v-else>
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 fade-in-up">
         <div>
@@ -11,7 +11,7 @@
 
         <div class="flex items-center gap-4">
           <div class="px-4 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm font-medium text-slate-600">
-            Total: <span class="font-bold text-slate-800">{{ categories.length }}</span>
+            Total: <span class="font-bold text-slate-800">{{ categoriesPagination.total }}</span>
           </div>
           <button @click="openModal"
             class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 shadow-sm hover:shadow-md">
@@ -61,12 +61,31 @@
             </tbody>
           </table>
         </div>
+
+        <!-- Pagination Controls -->
+        <div class="flex items-center justify-between px-6 py-4 border-t border-slate-200 bg-slate-50"
+          v-if="categoriesPagination.totalPages > 1">
+          <div class="text-sm text-slate-500">
+            Page <span class="font-bold text-slate-800">{{ categoriesPagination.page }}</span> sur <span
+              class="font-bold text-slate-800">{{ categoriesPagination.totalPages }}</span>
+          </div>
+          <div class="flex gap-2">
+            <button @click="changePage(categoriesPagination.page - 1)" :disabled="categoriesPagination.page <= 1"
+              class="px-3 py-1 rounded-lg border border-slate-200 bg-white text-slate-600 text-sm font-medium hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+              Précédent
+            </button>
+            <button @click="changePage(categoriesPagination.page + 1)"
+              :disabled="categoriesPagination.page >= categoriesPagination.totalPages"
+              class="px-3 py-1 rounded-lg border border-slate-200 bg-white text-slate-600 text-sm font-medium hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+              Suivant
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Modal -->
-    <ManageCategoryModal :is-open="isModalOpen" :category="editingCategory" @close="closeModal"
-      @saved="blogStore.fetchCategories()" />
+    <ManageCategoryModal :is-open="isModalOpen" :category="editingCategory" @close="closeModal" @saved="refresh" />
   </div>
 </template>
 
@@ -83,9 +102,19 @@ useHead({
 })
 
 const blogStore = useBlogStore()
-const { categories, articles, loading, error } = storeToRefs(blogStore)
+const { categories, articles, loading, error, categoriesPagination } = storeToRefs(blogStore)
 
-blogStore.fetchCategories()
+const refresh = () => {
+  blogStore.fetchCategories(categoriesPagination.value.page)
+}
+
+const changePage = (page) => {
+  if (page > 0 && page <= categoriesPagination.value.totalPages) {
+    blogStore.fetchCategories(page)
+  }
+}
+
+refresh()
 blogStore.fetchArticles()
 
 const getArticleCount = (catId) => {

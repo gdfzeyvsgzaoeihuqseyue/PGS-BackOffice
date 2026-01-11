@@ -10,19 +10,44 @@ export const useBlogStore = defineStore('blog', {
     currentAuthor: null as BlogAuthor | null,
     currentCategory: null as BlogCategory | null,
     loading: false,
-    error: null as string | null
+    error: null as string | null,
+    articlesPagination: {
+      page: 1,
+      limit: 10,
+      total: 0,
+      totalPages: 0
+    },
+    authorsPagination: {
+      page: 1,
+      limit: 10,
+      total: 0,
+      totalPages: 0
+    },
+    categoriesPagination: {
+      page: 1,
+      limit: 10,
+      total: 0,
+      totalPages: 0
+    }
   }),
   actions: {
     // --- Articles ---
-    async fetchArticles() {
+    async fetchArticles(page = 1, limit = 10) {
       this.loading = true
       this.error = null
       try {
-        const { data } = await useAPI<any>('/public/blog/get-article')
-        if (data.value && data.value.data) {
+        const { data } = await useAPI<any>(`/public/blog/get-article?page=${page}&limit=${limit}`)
+        if (data.value && data.value.data && Array.isArray(data.value.data)) {
           this.articles = data.value.data
+          this.articlesPagination = {
+            page: data.value.currentPage || page,
+            limit: limit,
+            total: data.value.nb || 0,
+            totalPages: data.value.totalPages || 0
+          }
         } else if (Array.isArray(data.value)) {
           this.articles = data.value
+          this.articlesPagination.total = data.value.length
         }
       } catch (e: any) {
         this.error = e.message || 'Erreur lors du chargement des articles'
@@ -54,7 +79,7 @@ export const useBlogStore = defineStore('blog', {
     },
     async addArticle(article: Partial<BlogArticle>) {
       await useAPI('/admin/blog/add-article', { method: 'POST', body: article })
-      await this.fetchArticles()
+      await this.fetchArticles(this.articlesPagination.page)
     },
     async updateArticle(id: string, article: Partial<BlogArticle>) {
       await useAPI(`/admin/blog/update-article/${id}`, { method: 'PUT', body: article })
@@ -64,24 +89,31 @@ export const useBlogStore = defineStore('blog', {
         // But we need the slug or id.
         await this.fetchArticle(id, true)
       }
-      await this.fetchArticles()
+      await this.fetchArticles(this.articlesPagination.page)
     },
     async deleteArticle(id: string) {
       await useAPI(`/admin/blog/delete-article/${id}`, { method: 'DELETE' })
-      await this.fetchArticles()
+      await this.fetchArticles(this.articlesPagination.page)
       this.currentArticle = null
     },
 
     // --- Authors ---
-    async fetchAuthors() {
+    async fetchAuthors(page = 1, limit = 10) {
       this.loading = true
       this.error = null
       try {
-        const { data } = await useAPI<any>('/public/blog/get-author')
-        if (data.value && data.value.data) {
+        const { data } = await useAPI<any>(`/public/blog/get-author?page=${page}&limit=${limit}`)
+        if (data.value && data.value.data && Array.isArray(data.value.data)) {
           this.authors = data.value.data
+          this.authorsPagination = {
+            page: data.value.currentPage || page,
+            limit: limit,
+            total: data.value.nb || 0,
+            totalPages: data.value.totalPages || 0
+          }
         } else if (Array.isArray(data.value)) {
           this.authors = data.value
+          this.authorsPagination.total = data.value.length
         }
       } catch (e: any) {
         this.error = e.message || 'Erreur lors du chargement des auteurs'
@@ -111,31 +143,38 @@ export const useBlogStore = defineStore('blog', {
     },
     async addAuthor(author: Partial<BlogAuthor>) {
       await useAPI('/admin/blog/add-author', { method: 'POST', body: author })
-      await this.fetchAuthors()
+      await this.fetchAuthors(this.authorsPagination.page)
     },
     async updateAuthor(id: string, author: Partial<BlogAuthor>) {
       await useAPI(`/admin/blog/update-author/${id}`, { method: 'PUT', body: author })
       if (this.currentAuthor && this.currentAuthor.id === id) {
         await this.fetchAuthor(id)
       }
-      await this.fetchAuthors()
+      await this.fetchAuthors(this.authorsPagination.page)
     },
     async deleteAuthor(id: string) {
       await useAPI(`/admin/blog/delete-author/${id}`, { method: 'DELETE' })
-      await this.fetchAuthors()
+      await this.fetchAuthors(this.authorsPagination.page)
       this.currentAuthor = null
     },
 
     // --- Categories ---
-    async fetchCategories() {
+    async fetchCategories(page = 1, limit = 10) {
       this.loading = true
       this.error = null
       try {
-        const { data } = await useAPI<any>('/public/blog/get-category')
-        if (data.value && data.value.data) {
+        const { data } = await useAPI<any>(`/public/blog/get-category?page=${page}&limit=${limit}`)
+        if (data.value && data.value.data && Array.isArray(data.value.data)) {
           this.categories = data.value.data
+          this.categoriesPagination = {
+            page: data.value.currentPage || page,
+            limit: limit,
+            total: data.value.nb || 0,
+            totalPages: data.value.totalPages || 0
+          }
         } else if (Array.isArray(data.value)) {
           this.categories = data.value
+          this.categoriesPagination.total = data.value.length
         }
       } catch (e: any) {
         this.error = e.message || 'Erreur lors du chargement des catégories'
@@ -165,18 +204,18 @@ export const useBlogStore = defineStore('blog', {
     },
     async addCategory(item: Partial<BlogCategory>) {
       await useAPI('/admin/blog/add-category', { method: 'POST', body: item })
-      await this.fetchCategories()
+      await this.fetchCategories(this.categoriesPagination.page)
     },
     async updateCategory(id: string, item: Partial<BlogCategory>) {
       await useAPI(`/admin/blog/update-category/${id}`, { method: 'PUT', body: item })
       if (this.currentCategory && this.currentCategory.id === id) {
         await this.fetchCategory(id)
       }
-      await this.fetchCategories()
+      await this.fetchCategories(this.categoriesPagination.page)
     },
     async deleteCategory(id: string) {
       await useAPI(`/admin/blog/delete-category/${id}`, { method: 'DELETE' })
-      await this.fetchCategories()
+      await this.fetchCategories(this.categoriesPagination.page)
       this.currentCategory = null
     }
   }
