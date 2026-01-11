@@ -6,19 +6,32 @@ export const useDocStore = defineStore('doc', {
     docs: [] as SolutionDoc[],
     currentDoc: null as SolutionDoc | null,
     loading: false,
-    error: null as string | null
+    error: null as string | null,
+    pagination: {
+      page: 1,
+      limit: 10,
+      total: 0,
+      totalPages: 0
+    }
   }),
   actions: {
-    async fetchDocs() {
+    async fetchDocs(page = 1, limit = 10) {
       this.loading = true
       this.error = null
       try {
-        const { data } = await useAPI<any>('/public/solution/doc')
+        const { data } = await useAPI<any>(`/public/solution/doc?page=${page}&limit=${limit}`)
         if (data.value) {
-          if (Array.isArray(data.value)) {
-            this.docs = data.value
-          } else if (data.value.data) {
+          if (data.value.data && Array.isArray(data.value.data)) {
             this.docs = data.value.data
+            this.pagination = {
+              page: data.value.currentPage || page,
+              limit: limit,
+              total: data.value.nb || 0,
+              totalPages: data.value.totalPages || 0
+            }
+          } else if (Array.isArray(data.value)) {
+            this.docs = data.value
+            this.pagination.total = data.value.length
           }
         }
       } catch (e: any) {
@@ -49,19 +62,20 @@ export const useDocStore = defineStore('doc', {
     },
     async addDoc(doc: any) {
       await useAPI('/admin/solution/doc', { method: 'POST', body: doc })
-      await this.fetchDocs()
+      await this.fetchDocs(this.pagination.page)
     },
     async updateDoc(id: string, doc: any) {
       await useAPI(`/admin/solution/doc/${id}`, { method: 'PUT', body: doc })
       if (this.currentDoc && this.currentDoc.id === id) {
         await this.fetchDoc(id)
       }
-      await this.fetchDocs()
+      await this.fetchDocs(this.pagination.page)
     },
     async deleteDoc(id: string) {
       await useAPI(`/admin/solution/doc/${id}`, { method: 'DELETE' })
-      await this.fetchDocs()
+      await this.fetchDocs(this.pagination.page)
       this.currentDoc = null
     }
   }
 })
+

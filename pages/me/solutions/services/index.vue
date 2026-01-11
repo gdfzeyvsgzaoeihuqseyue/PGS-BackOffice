@@ -11,7 +11,7 @@
 
         <div class="flex items-center gap-4">
           <div class="px-4 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm font-medium text-slate-600">
-            Total: <span class="font-bold text-slate-800">{{ services.length }}</span>
+            Total: <span class="font-bold text-slate-800">{{ pagination.total }}</span>
           </div>
           <NuxtLink to="/me/solutions/services/stats"
             class="bg-white hover:bg-slate-50 text-slate-700 px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 shadow-sm border border-slate-200">
@@ -104,6 +104,25 @@
             </tbody>
           </table>
         </div>
+
+        <!-- Pagination Controls -->
+        <div class="flex items-center justify-between px-6 py-4 border-t border-slate-200 bg-slate-50"
+          v-if="pagination.totalPages > 1">
+          <div class="text-sm text-slate-500">
+            Page <span class="font-bold text-slate-800">{{ pagination.page }}</span> sur <span
+              class="font-bold text-slate-800">{{ pagination.totalPages }}</span>
+          </div>
+          <div class="flex gap-2">
+            <button @click="changePage(pagination.page - 1)" :disabled="pagination.page <= 1"
+              class="px-3 py-1 rounded-lg border border-slate-200 bg-white text-slate-600 text-sm font-medium hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+              Précédent
+            </button>
+            <button @click="changePage(pagination.page + 1)" :disabled="pagination.page >= pagination.totalPages"
+              class="px-3 py-1 rounded-lg border border-slate-200 bg-white text-slate-600 text-sm font-medium hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+              Suivant
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -130,11 +149,17 @@ useHead({
 })
 
 const serviceStore = useServiceStore()
-const { services, loading, error } = storeToRefs(serviceStore)
+const { services, loading, error, pagination } = storeToRefs(serviceStore)
 const { add: notify } = useToast()
 
 const refresh = () => {
-  serviceStore.fetchServices()
+  serviceStore.fetchServices(pagination.value.page)
+}
+
+const changePage = (page) => {
+  if (page > 0 && page <= pagination.value.totalPages) {
+    serviceStore.fetchServices(page)
+  }
 }
 
 refresh()

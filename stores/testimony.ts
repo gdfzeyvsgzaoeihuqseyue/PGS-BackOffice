@@ -6,17 +6,30 @@ export const useTestimonyStore = defineStore('testimony', () => {
   const currentTestimony = ref<SolutionTestimony | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const pagination = ref({
+    page: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 0
+  })
 
-  const fetchTestimonies = async () => {
+  const fetchTestimonies = async (page = 1, limit = 10) => {
     loading.value = true
     error.value = null
     try {
-      const { data } = await useAPI<any>('/public/solution/testimony')
+      const { data } = await useAPI<any>(`/public/solution/testimony?page=${page}&limit=${limit}`)
       if (data.value) {
-        if (Array.isArray(data.value)) {
-          testimonies.value = data.value
-        } else if (data.value.data) {
+        if (data.value.data && Array.isArray(data.value.data)) {
           testimonies.value = data.value.data
+          pagination.value = {
+            page: data.value.currentPage || page,
+            limit: limit,
+            total: data.value.nb || 0,
+            totalPages: data.value.totalPages || 0
+          }
+        } else if (Array.isArray(data.value)) {
+          testimonies.value = data.value
+          pagination.value.total = data.value.length
         } else {
           testimonies.value = []
         }
@@ -52,7 +65,7 @@ export const useTestimonyStore = defineStore('testimony', () => {
     loading.value = true
     try {
       await useAPI('/admin/solution/testimony', { method: 'POST', body: testimony })
-      await fetchTestimonies()
+      await fetchTestimonies(pagination.value.page)
     } catch (err: any) {
       throw new Error(err.message || 'Erreur lors de la création')
     } finally {
@@ -64,7 +77,7 @@ export const useTestimonyStore = defineStore('testimony', () => {
     loading.value = true
     try {
       await useAPI(`/admin/solution/testimony/${id}`, { method: 'PUT', body: updates })
-      await fetchTestimonies()
+      await fetchTestimonies(pagination.value.page)
       if (currentTestimony.value && currentTestimony.value.id === id) {
         Object.assign(currentTestimony.value, updates)
       }
@@ -79,7 +92,7 @@ export const useTestimonyStore = defineStore('testimony', () => {
     loading.value = true
     try {
       await useAPI(`/admin/solution/testimony/${id}`, { method: 'DELETE' })
-      await fetchTestimonies()
+      await fetchTestimonies(pagination.value.page)
       if (currentTestimony.value && currentTestimony.value.id === id) {
         currentTestimony.value = null
       }
@@ -93,6 +106,7 @@ export const useTestimonyStore = defineStore('testimony', () => {
   return {
     testimonies,
     currentTestimony,
+    pagination,
     loading,
     error,
     fetchTestimonies,
@@ -102,3 +116,4 @@ export const useTestimonyStore = defineStore('testimony', () => {
     deleteTestimony
   }
 })
+

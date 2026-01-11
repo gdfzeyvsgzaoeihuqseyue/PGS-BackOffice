@@ -6,17 +6,30 @@ export const usePartnerStore = defineStore('partner', () => {
   const currentPartner = ref<SolutionPartner | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const pagination = ref({
+    page: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 0
+  })
 
-  const fetchPartners = async () => {
+  const fetchPartners = async (page = 1, limit = 10) => {
     loading.value = true
     error.value = null
     try {
-      const { data } = await useAPI<any>('/public/solution/partner')
+      const { data } = await useAPI<any>(`/public/solution/partner?page=${page}&limit=${limit}`)
       if (data.value) {
-        if (Array.isArray(data.value)) {
-          partners.value = data.value
-        } else if (data.value.data) {
+        if (data.value.data && Array.isArray(data.value.data)) {
           partners.value = data.value.data
+          pagination.value = {
+            page: data.value.currentPage || page,
+            limit: limit,
+            total: data.value.nb || 0,
+            totalPages: data.value.totalPages || 0
+          }
+        } else if (Array.isArray(data.value)) {
+          partners.value = data.value
+          pagination.value.total = data.value.length
         } else {
           partners.value = []
         }
@@ -53,7 +66,7 @@ export const usePartnerStore = defineStore('partner', () => {
     loading.value = true
     try {
       await useAPI('/admin/solution/partner', { method: 'POST', body: partner })
-      await fetchPartners()
+      await fetchPartners(pagination.value.page)
     } catch (err: any) {
       throw new Error(err.message || 'Erreur lors de la création')
     } finally {
@@ -65,7 +78,7 @@ export const usePartnerStore = defineStore('partner', () => {
     loading.value = true
     try {
       await useAPI(`/admin/solution/partner/${id}`, { method: 'PUT', body: updates })
-      await fetchPartners()
+      await fetchPartners(pagination.value.page)
       if (currentPartner.value && currentPartner.value.id === id) {
         Object.assign(currentPartner.value, updates)
       }
@@ -80,7 +93,7 @@ export const usePartnerStore = defineStore('partner', () => {
     loading.value = true
     try {
       await useAPI(`/admin/solution/partner/${id}`, { method: 'DELETE' })
-      await fetchPartners()
+      await fetchPartners(pagination.value.page)
       if (currentPartner.value && currentPartner.value.id === id) {
         currentPartner.value = null
       }
@@ -94,6 +107,7 @@ export const usePartnerStore = defineStore('partner', () => {
   return {
     partners,
     currentPartner,
+    pagination,
     loading,
     error,
     fetchPartners,
@@ -103,3 +117,4 @@ export const usePartnerStore = defineStore('partner', () => {
     deletePartner
   }
 })
+

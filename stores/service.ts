@@ -11,15 +11,31 @@ export const useServiceStore = defineStore('service', () => {
   const stats = ref<ServiceStats | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const pagination = ref({
+    page: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 0
+  })
 
   // Actions
-  const fetchServices = async () => {
+  const fetchServices = async (page = 1, limit = 1) => {
     loading.value = true
     error.value = null
     try {
-      const { data } = await useAPI<{ services: Service[], pagination: any }>('/admin/solution/list-service')
+      const { data } = await useAPI<{ services: Service[], pagination: any }>(`/admin/solution/list-service?page=${page}&limit=${limit}`)
       if (data.value && data.value.services) {
         services.value = data.value.services
+        if (data.value.pagination) {
+          pagination.value = {
+            page: data.value.pagination.currentPage || page,
+            limit: limit,
+            total: data.value.pagination.nb || data.value.services.length,
+            totalPages: data.value.pagination.totalPages || 0
+          }
+        } else {
+          pagination.value.total = data.value.services.length
+        }
       }
     } catch (err: any) {
       error.value = err.message || 'Erreur lors du chargement des services'
@@ -170,6 +186,7 @@ export const useServiceStore = defineStore('service', () => {
     serviceUsers,
     serviceLearners,
     stats,
+    pagination,
     loading,
     error,
     fetchServices,
