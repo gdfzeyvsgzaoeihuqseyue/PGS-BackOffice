@@ -19,22 +19,18 @@ export const useServiceStore = defineStore('service', () => {
   })
 
   // Actions
-  const fetchServices = async (page = 1, limit = 2) => {
+  const fetchServices = async (page = 1, limit = 10) => {
     loading.value = true
     error.value = null
     try {
-      const { data } = await useAPI<{ services: Service[], pagination: any }>(`/admin/solution/list-service?page=${page}&limit=${limit}`)
-      if (data.value && data.value.services) {
-        services.value = data.value.services
-        if (data.value.pagination) {
-          pagination.value = {
-            page: data.value.pagination.currentPage || page,
-            limit: limit,
-            total: data.value.pagination.nb || data.value.services.length,
-            totalPages: data.value.pagination.totalPages || 0
-          }
-        } else {
-          pagination.value.total = data.value.services.length
+      const { data } = await useAPI<any>(`/admin/solution/list-service?page=${page}&limit=${limit}`)
+      if (data.value && data.value.data) {
+        services.value = data.value.data
+        pagination.value = {
+          page: data.value.currentPage || page,
+          limit: limit,
+          total: data.value.nb || 0,
+          totalPages: data.value.totalPages || 0
         }
       }
     } catch (err: any) {
